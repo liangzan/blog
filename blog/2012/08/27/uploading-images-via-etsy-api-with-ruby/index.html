@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Uploading images via Etsy API with Ruby - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="As I was building the photo genius app for Tailored, I was tasked with uploading images to Etsy via its API. There is little documentation on how to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Uploading Images via Etsy API With Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-27T07:51:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>As I was building the <a href="http://photogenius.tailoredapps.co/">photo genius app</a> for <a href="http://tailoredapps.co/">Tailored</a>, I was tasked with uploading images to <a href="http://etsy.com">Etsy</a> via its <a href="http://www.etsy.com/developers">API</a>. There is little documentation on how to do this. So I&#8217;m going to show you how to do it.</p>
+
+<!-- more -->
+
+
+<p>Etsy has an <a href="http://www.etsy.com/developers/documentation/reference/listingimage#section_uploading_images">api for image uploading</a>. But it requires a multipart form post. What if you stored your images somewhere like <a href="http://aws.amazon.com/s3/">S3</a> where it is easier to access via a url? Can we upload an image via a url? The trick is to make use of Ruby&#8217;s <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/open-uri/rdoc/OpenURI.html">OpenURI library</a> to open the file via url on the fly. The instructions below assumes you&#8217;re on a Rails app.</p>
+
+<p>First create a new file with the code below.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/open_uri_fix.rb</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Don&#39;t allow downloaded files to be created as StringIO. Force a tempfile to be created.</span>
+</span><span class='line'><span class="c1"># For the image publisher</span>
+</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the constant of <strong>StringMax</strong> in <strong>OpenURI</strong> to be 0. The <strong>StringMax</strong> constant is used to determine when to open the url as a <strong>File</strong> or <strong>StringIO</strong> object. If the file size is smaller than <strong>StringMax</strong>, <strong>OpenURI</strong> will use <strong>StringIO</strong>. <strong>StringIO</strong> will cause problems in the app as it is not compatible with multipart form posts.</p>
+
+<p>Assuming you have the <a href="http://rubygems.org/gems/etsy">etsy ruby gem</a> installed, here is how you could write the upload method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># script/etsy_upload.rb</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">api_upload</span><span class="p">(</span><span class="n">listing_id</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">replacement_image_url</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="n">listing_image_id</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/listings/</span><span class="si">#{</span><span class="n">listing_id</span><span class="si">}</span><span class="s2">/images&quot;</span>
+</span><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">listing_id</span><span class="p">:</span> <span class="n">listing_id</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">rank</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">multipart</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="n">replacement_image_url</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">image</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">replacement_image_url</span><span class="p">)})</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="n">listing_image_id</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">listing_image_id</span><span class="p">:</span> <span class="n">listing_image_id</span><span class="p">})</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">EtsyInterface</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">etsy_shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And here is how you could build a thin wrapper to make API calls. We&#8217;re assuming you have an etsy shop and etsy user object.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># lib/etsy_interface.rb</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">EtsyInterface</span>
+</span><span class='line'>  <span class="k">module</span> <span class="nn">Client</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Makes a request to Etsy API</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
+</span><span class='line'>    <span class="c1"># url    - The String which is the URL to query for</span>
+</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.get(&#39;foo&#39;, shop, &#39;/foo&#39;, {bar: &#39;bar&#39;})</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; {...}</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns the Hash</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Signature</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   &lt;mtd&gt;(args)</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># mtd - Either of the get, post, put or delete HTTP methods</span>
+</span><span class='line'>    <span class="sx">%w(get put post delete)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">mtd</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">define_method</span> <span class="n">mtd</span> <span class="k">do</span> <span class="o">|</span><span class="n">shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">pre_setup</span>
+</span><span class='line'>        <span class="no">Etsy</span><span class="o">::</span><span class="no">Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kp">protected</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Sets the constants of the Etsy class</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.pre_setup</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; nil</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns nothing</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">pre_setup</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span> <span class="k">unless</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_api_key</span> <span class="c1"># your etsy api key</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_secret</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_secret</span> <span class="c1"># your etsy secret</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Forms the query parameters for the request</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
+</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.access_params(shop, {bar: &#39;bar&#39;})</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; {access_token: &#39;d&#39;, access_secret: &#39;g&#39;, bar: &#39;bar&#39;}</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns the Hash</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="n">shop</span><span class="o">.</span><span class="n">etsy_user</span>
+</span><span class='line'>      <span class="n">access_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">access_token</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_token_for</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+</span><span class='line'>        <span class="n">access_secret</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_secret_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> Hope this helps!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-27T07:51:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/" title="Previous Post: How to write a command line application in Node.js">&laquo; How to write a command line application in Node.js</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/09/29/my-standing-desk-experiment/" title="Next Post: My Standing Desk Experiment">My Standing Desk Experiment &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

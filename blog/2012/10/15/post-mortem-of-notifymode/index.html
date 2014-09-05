@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Post mortem of Notifymode - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="In early 2012, I started Notifymode. Notifymode does application monitoring for Node.js apps. Notifymode could profile the functions and track CPU &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Post Mortem of Notifymode</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T06:31:00+00:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In early 2012, I started Notifymode. Notifymode does application monitoring for <a href="http://nodejs.org">Node.js</a> apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn&#8217;t take any money. So why did I choose to build Notifymode?</p>
+
+<!-- more -->
+
+
+<h2>Motivation behind Notifymode</h2>
+
+<p>I had a Node.js app: <a href="http://smugftp.com">SmugFTP</a>. I had performance problems. There were few tools to help me diagnose where the problem was. The best I could find was the V8 profiler. V8 profiler gave me a <a href="https://gist.github.com/833370">profiled report</a> which made no sense to me. I wanted a tool like <a href="http://newrelic.com">New Relic</a> for my Node.js apps. New Relic did not support Node.js. Why not build it for fun and profit?</p>
+
+<h2>I was <em>sure</em> it would be useful</h2>
+
+<p>How could analytics not be useful? How could Node.js not be gaining traction? In fact Node.js is gaining traction at a frightening pace. <a href="http://google.com/trends">Google Trends</a> shows the number of searches for Node.js outpacing <a href="http://rubyonrails.org">Rails</a>.</p>
+
+<script type="text/javascript" src="http://www.google.com.sg/trends/embed.js?hl=en-US&q=node.js,+ruby+on+rails&cmpt=q&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=500&h=330"></script>
+
+
+<p>I&#8217;m sure there would be more Node.js apps released to production in time to come. Analytics for an up-and-coming platform? How could this idea be wrong?</p>
+
+<p>I was confident that I am right. I don&#8217;t need to do any of that <a href="http://steveblank.com/category/customer-development/">customer development mumbo jumbo</a>. I should just build it. For the next 3 months, I poured time and energy into building Notifymode.</p>
+
+<p>You just need to add one line to your existing Node.js module to hook up to Notifymode&#8217;s agent.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;socket.io&#39;</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">profiler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;notifymode-client&#39;</span><span class="p">).</span><span class="nx">Profiler</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// one line here to hook up</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">profiledSocketIO</span> <span class="o">=</span> <span class="nx">profiler</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">io</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The agent pushes data to the server. Notifymode then shows the time each function took, memory and cpu load.</p>
+
+<h2>Build it and they will come</h2>
+
+<p>I submitted to <a href="http://news.ycombinator.com">Hacker News</a> and <a href="http://reddit.com">Reddit</a>, though it did not make either&#8217;s front page. I tweeted about it. My friends retweeted about it. I gave talks about it at the local Javascript meetup not once, but a few times. I wrote blog posts about using it with <a href="http://socket.io">Socket.io</a> and <a href="http://expressjs.com">Express</a>.</p>
+
+<p>The first few months was bad. I thought Notifymode was useful. I&#8217;m sure once people know about it, they will sign up. That was my first conjecture. So I started a <a href="http://node.jsreadme.com">technical blog</a> on Node.js. Ideally that will funnel users in. In the process I realized putting out quality articles regularly demands significant effort. Blogging is very hard. I could not capture enough organic traffic. It was discouraging.</p>
+
+<p>My next conjecture was: Notifymode is too general. Users probably wanted a specific agent which can push out app specific information. For example, Express users want to know the request time. Running times for individual functions is too granular to be useful. So I wrote customized agents for Express. I released it, blogged about it, and talked about it at the local Javascript meetup. Submitted to Hacker News and Reddit, and did not make either&#8217;s front page again. And I waited for the flood of users to wash me away.</p>
+
+<p>I kept Notifymode running for 6 months. At the last count, Notifymode had 20++ users. Some of them were spam bots(I did not put up a captcha). Some of them were friends. I couldn&#8217;t bear to count how many real users there were. It was discouraging.</p>
+
+<h2>Experience is merely the name men gave to their mistakes</h2>
+
+<blockquote><p>Tell me again was it love at first sight.<br/>When I walked by and you caught my eye.<br/>Didn&#8217;t you know love could shine this bright?</p><footer><strong>Owl City</strong> <cite><a href='http://en.wikipedia.org/wiki/Owl_City'>en.wikipedia.org/wiki/Owl_City/&hellip;</a></cite></footer></blockquote>
+
+
+<p><img class="right" src="http://farm4.staticflickr.com/3254/2408535634_f9953a5dbf_m.jpg" title="By Millzero Photography" ></p>
+
+<p>Do you believe in love at first sight? We fall so deep in love with our ideas that we have this unwavering faith that it will work out. Despite numerous warnings from <a href="http://www.startuplessonslearned.com">Dear Aunt Agony</a> that you should go out on a <a href="http://theleanstartup.com">few dates</a> first, you insist that this is The Idea that you are going to marry. Well if you don&#8217;t listen to Auntie Agony, you are most likely to end up in agony. Like me.</p>
+
+<p>I was lazy to arrange first dates with my Idea. We got married too hastily. Now I&#8217;m divorced. At least I don&#8217;t have to pay alimony. Don&#8217;t be like me. Here are some <a href="http://blog.asmartbear.com/">links</a> for <a href="http://www.bothsidesofthetable.com/">marriage</a> <a href="http://www.avc.com/a_vc/">advice</a>.</p>
+
+<p>Another thing I realized is: marketing is harder than coding. We geeks tend to view a product as 90% coding. The other 10% is the mumbo jumbo <a href="http://en.wikipedia.org/wiki/Search_engine_optimization">marketing</a> <a href="http://en.wikipedia.org/wiki/Search_engine_marketing">stuff</a>. In reality, coding is the 10% while the other mumbo jumbo stuff takes 90%. Why? Coding yet another <a href="http://pinterest.com">Pinterest</a> clone is easy. You know if you write this code in that logic, it will work. Getting 100 users? Where do you start finding them? It is hard because it is not definite. We geeks tend to dismiss anything non-intellectually stimulating as easy. Marketing, though technically easy, in reality is a lot of grunt work. No matter how useful your product is, nobody is going to use it if they have not heard of it. Notifymode taught me that I should have put in <a href="http://www.kalzumeus.com/2009/12/31/engineering-your-way-to-marketing-success/">more effort on marketing</a> early on.</p>
+
+<p>Granted, I&#8217;ve read this advice so many times from other <a href="http://blog.asmartbear.com/quotes-startup-founders.html">experienced</a> <a href="http://brooklynhacker.com/post/29901112213/what-a-hacker-learns-after-a-year-in-marketing">people</a>. Why do people still make the same mistakes? It&#8217;s like asking <a href="en.wikipedia.org/wiki/Marco_Polo">Marco Polo</a>, &#8220;How does Beijing looked like?&#8221;. Marco Polo could tell you stories about festivals or paint you nice pictures of the palace. It is an approximation. You have to experience the real thing to get it.</p>
+
+<h2>You&#8217;re supposed to fail sometimes</h2>
+
+<p>At least I tried. I picked up a host <a href="http://www.opscode.com/chef/">of</a> <a href="http://backbonejs.org/">technologies</a> along the way. I made mistakes, and I learned. The only thing which I thought I did right was not to seek funding. I&#8217;m not sure if I closed Notifymode too early. Could things have turned out better if I persisted? You never know.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T06:31:00+00:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/29/my-standing-desk-experiment/" title="Previous Post: My Standing Desk Experiment">&laquo; My Standing Desk Experiment</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/" title="Next Post: First impressions of the Ansible configuration management tool">First impressions of the Ansible configuration management tool &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

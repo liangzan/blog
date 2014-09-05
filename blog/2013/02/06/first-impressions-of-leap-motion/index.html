@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>First impressions of Leap Motion - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="For those who don&#8217;t know what Leap Motion is, take a look at this youtube video. I got the Leap Motion hardware and SDK by participating in &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">First Impressions of Leap Motion</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-06T17:10:00+00:00" pubdate data-updated="true">Feb 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For those who don&#8217;t know what <a href="http://www.leapmotion.com">Leap Motion</a> is, take a look at this youtube video.</p>
+
+<iframe width="560" height="315" src="http://www.youtube.com/embed/_d6KuiuteIA" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I got the Leap Motion hardware and SDK by participating in their <a href="https://leapmotion.com/developers">developer program</a>. I was the lucky few that was selected. They informed me through email. A few weeks later, the Leap motion device is mailed to me, free of charge. It came in a dull black cardbox box. Within the box lies the device, a cable, and a card bearing a message from the founders.</p>
+
+<!-- more -->
+
+
+<h2>First impressions of Leap</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-box.jpg" title="Leap Motion box" ></p>
+
+<p>It is very small and light. One side etched the Leap logo. The other lies the sensors. When you power the device, three red bulbs reveal themselves. That is where the magic happens. Powering the device will does nothing, you need to install the software. There is a SDK provided for Mac and Windows platforms. It comes with a set of examples and documentation to help you get started. Once you connect the device up, run the Leap app and you&#8217;ll be ready to go.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-unboxed.jpg" title="Leap Motion unboxed" ></p>
+
+<p>The Leap SDK gives you several debugging tools. There is a visualizer which displays a trace of your fingers as you move.</p>
+
+<iframe src="http://player.vimeo.com/video/57635349" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+
+<p> <p><a href="http://vimeo.com/57635349">Leap Motion Visualizer</a> from <a href="http://vimeo.com/user14137242">Graham Gaylor</a> on <a href="http://vimeo.com">Vimeo</a>.</p></p>
+
+<p>It is backed by a grid, so you can literally trace little grids with your finger. Accuracy is touted as Leap Motion&#8217;s strength. That is no lie. I can easily trace the small grid with my clumsy finger. It is nothing short of amazing. Besides your fingers, Leap traces anything that resembles a stick. I don&#8217;t sense a lag. Even if I move quickly, Leap is able to capture it. I could tell Leap is computationally intensive. My computer fans are always in ovedrive when I use Leap.</p>
+
+<p>You could play with the sample apps. They are mostly simple <em>hello world</em> style apps that shows you how to call the APIs. Sadly, there are no fruit ninja apps for you to play with. The Leap Motion team built an input emulator to interface with games like fruit ninja. They promised to open source it though. The Leap SDK provides bindings for Java, C++, C#, Obj-C, Python and Javascript. I believe more will come. The API itself is fairly primitive. It gives you access to the raw data. You will get data on the position of each pointer, the orientation and the movement. There are no gestures or other abstract APIs.</p>
+
+<h2>Development experience</h2>
+
+<p>Like a kid with a new toy, I was eager to build applications with it. I chose to try the Javascript API first. The Leap SDK runs a web socket server which allows the Javascript bindings to access the data. Usage of the API is boringly simple. It is an infinite loop which gives you a frame every iteration. The frame is a JSON object which contains the data on the pointers.</p>
+
+<p>The <a href="https://github.com/liangzan/leap-demo/tree/master/particles">first leap experiment</a> I did was to replicate Mike Bostock&#8217;s D3.js <a href="http://bl.ocks.org/1062544">particles</a>. I got a trail of particles to follow each pointer.</p>
+
+<p>Gestures naturally come to my mind. The SDK has no provision for gestues yet. I have to recognize it. And that is an <em>Articifial Intelligence</em> problem. I looked for gestures related libraries to build on. And I found the <a href="http://depts.washington.edu/aimgroup/proj/dollar/">$1 unistroke recognizer</a>. They had a Javascript implementation. I used it to recognize gestures in my <a href="https://github.com/liangzan/leap-demo/tree/master/gestures">next leap experiment</a>. It worked. But it has caveats.</p>
+
+<p>A gesture has a start and an end. Leap runs in an infinite loop. I had to define a start and end. In my gesture experiment, I defined 2 states: fist and point. The fist state literally means clenching into a fist. It acts as a blank state which I use to define the end points of the gesture movement. The point state means an extended finger. In that state, movement is captured. While my experiment is able to recognize gestures, it did not do so cleanly. When I change between a clenched fist to a pointing finger, there are some jitters unavoidably. That polluted my gesture shape. It is very hard to form a clean shape. There should be a better way to define the end point of a gesture.</p>
+
+<h2>Conclusion</h2>
+
+<p>As I presented my demo to the local javascript meetup group, everybody was visibly excited by Leap Motion. Leap Motion is an amazing product. Invariably, we wondered what potential applications could be built on Leap Motion. Games are an obvious application. Minority report styled navigation is another. For a long time we have been stuck with the keyboard and mouse. Then touch devices exploded onto the scene. After playing with Leap Motion, I firmly believe it is the dawn of another era of gestures styled devices. I&#8217;m living in exciting times.</p>
+
+<h2>Update</h2>
+
+<p>Follow the discussion on <a href="http://news.ycombinator.com/item?id=5179335">Hacker News</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-06T17:10:00+00:00" pubdate data-updated="true">Feb 6<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy/" title="Previous Post: How to learn enough web design to not look scammy">&laquo; How to learn enough web design to not look scammy</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/04/25/a-quiet-desktop/" title="Next Post: A quiet desktop">A quiet desktop &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

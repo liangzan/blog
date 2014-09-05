@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Customizing your Emacs Eshell prompt - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="If you use the shell in Emacs and you are not already using eshell, convert to eshell now! Eshell is the best terminal emulator available in Emacs. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Customizing Your Emacs Eshell Prompt</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-12T05:38:00+00:00" pubdate data-updated="true">Dec 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>If you use the shell in Emacs and you are not already using <a href="http://emacswiki.org/emacs/CategoryEshell">eshell</a>, convert to eshell now! Eshell is the best terminal emulator available in Emacs. If you need convincing, please read <a href="http://www.masteringemacs.org/articles/2010/12/13/complete-guide-mastering-eshell/">this article from Mastering Emacs</a>. Using <strong>grep</strong> in eshell is the killer feature for me. What the Master Emacs article didn&#8217;t elaborate is how to customize your eshell prompt. I&#8217;m going to share how to add colors and show the Git branch on your eshell prompt. This is how my prompt look like currently.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/eshell-prompt.png" title="Eshell prompt" ></p>
+
+<!-- more -->
+
+
+<h2>Adding colors</h2>
+
+<p>To add colors we need to change the property of the text. We make use of the <strong>propertize</strong> function. The snippet below changes the string to be green.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;some-string&quot;</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can take a look at the available styles you can apply to text by simply running <strong>M-x list-faces-display</strong>.</p>
+
+<h2>Showing the Git branch name</h2>
+
+<p>To get the current branch name from your Git repository, we make use of the function below. I copied this from <a href="http://www.jimmenard.com/">Jim Mernard&#8217;s</a> emacs <a href="https://github.com/jimm/elisp/blob/master/eshell-customize.el">configuration</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Installing</h2>
+
+<p>I customized Jim&#8217;s code to add colors. The end result look like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-history-size</span> <span class="mi">1024</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-regexp</span> <span class="s">&quot;^[^#$]*[#$] &quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;em-hist&quot;</span><span class="p">)</span>           <span class="c1">; So the history vars are defined</span>
+</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-save-history-on-exit</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-save-history-on-exit</span> <span class="nv">t</span><span class="p">))</span> <span class="c1">; Don&#39;t ask, just save</span>
+</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-ask-to-save-history</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-ask-to-save-history</span> <span class="ss">&#39;always</span><span class="p">))</span> <span class="c1">; For older(?) version</span>
+</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">eshell/ef</span> <span class="p">(</span><span class="nf">fname-regexp</span> <span class="nv">&amp;rest</span> <span class="nv">dir</span><span class="p">)</span> <span class="p">(</span><span class="nf">ef</span> <span class="nv">fname-regexp</span> <span class="nv">default-directory</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;; ---- path manipulation</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">pwd-repl-home</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let* </span><span class="p">((</span><span class="nf">home</span> <span class="p">(</span><span class="nf">expand-file-name</span> <span class="p">(</span><span class="nf">getenv</span> <span class="s">&quot;HOME&quot;</span><span class="p">)))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">home-len</span> <span class="p">(</span><span class="nb">length </span><span class="nv">home</span><span class="p">)))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">and</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">&gt;= </span><span class="p">(</span><span class="nb">length </span><span class="nv">pwd</span><span class="p">)</span> <span class="nv">home-len</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">equal</span> <span class="nv">home</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="mi">0</span> <span class="nv">home-len</span><span class="p">)))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;~&quot;</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="nv">home-len</span><span class="p">))</span>
+</span><span class='line'>      <span class="nv">pwd</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">propertize</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-function</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">lambda </span><span class="p">()</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">concat</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="p">((</span><span class="k">lambda </span><span class="p">(</span><span class="nf">p-lst</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">p-lst</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">(</span><span class="nf">concat</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">zerop</span> <span class="p">(</span><span class="nb">length </span><span class="nv">elm</span><span class="p">))</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>                                            <span class="p">(</span><span class="nb">substring </span><span class="nv">elm</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)))</span>
+</span><span class='line'>                            <span class="p">(</span><span class="nf">butlast</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">)</span>
+</span><span class='line'>                 <span class="s">&quot;/&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+</span><span class='line'>                            <span class="p">(</span><span class="nf">last</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">))</span>
+</span><span class='line'>              <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+</span><span class='line'>                         <span class="nv">p-lst</span>
+</span><span class='line'>                         <span class="s">&quot;/&quot;</span><span class="p">)))</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">split-string</span> <span class="p">(</span><span class="nf">pwd-repl-home</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">))</span> <span class="s">&quot;/&quot;</span><span class="p">))</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;yellow&quot;</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="k">or </span><span class="p">(</span><span class="nf">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">)))</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;# &quot;</span> <span class="ss">&#39;face</span> <span class="ss">&#39;default</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-highlight-prompt</span> <span class="nv">nil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To install, I put the code above in a new file called <strong>eshell_customizations.el</strong>. Then I loaded the script from my <strong>init.el</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;~/.emacs.d/scripts/eshell-customizations.el&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart your emacs and your eshell should look better now.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-12T05:38:00+00:00" pubdate data-updated="true">Dec 12<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/" title="Previous Post: First impressions of the Ansible configuration management tool">&laquo; First impressions of the Ansible configuration management tool</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy/" title="Next Post: How to learn enough web design to not look scammy">How to learn enough web design to not look scammy &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Solarized themed Arch Linux Setup - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">My Solarized Themed Arch Linux Setup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T15:36:00+00:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs-urxvt-xmonad.png" title="Arch linux solarized screenshot with emacs urxvt tmux xmonad" ></p>
+
+<p>The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your applications.</p>
+
+<!-- more -->
+
+
+<h2>OS: Arch Linux</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-blank-desktop.png" title="Arch linux xmonad solarized screenshot with blank desktop" ></p>
+
+<p>Obviously only Linux or BSD gives you this much freedom to customize your desktop. I&#8217;m using Arch Linux. Other distros should yield the same result. The advantage of using Arch Linux is it gives you a blank slate to work on. If you use all-in-one distros like <a href="http://www.ubuntu.com">Ubuntu</a>, you would have the extra work of stripping out the desktop environment.</p>
+
+<h2>Color theme: Solarized</h2>
+
+<p>There&#8217;re some very good color themes available. Here&#8217;re some very good ones.</p>
+
+<ul>
+<li><a href="http://ethanschoonover.com/solarized">Solarized</a></li>
+<li><a href="http://slinky.imukuppi.org/zenburnpage/">Zenburn</a></li>
+<li><a href="http://blog.toddwerth.com/entries/13">IR_Black</a></li>
+</ul>
+
+
+<p>Choose one which you like. I&#8217;m using Solarized. Not all color themes are created equally. Popular themes have more tooling support. For Solarized, it has been ported to vim, mutt, shell, and emacs. It makes it easier to apply the same color theme to other applications.</p>
+
+<h2>Font: Inconsolata</h2>
+
+<p>As with color themes, font is very much a personal preference. Choose a good monospaced font to use for all your apps. I&#8217;m using the <a href="http://levien.com/type/myfonts/inconsolata.html">Inconsolata</a> font.</p>
+
+<p>There are other good recommendations <a href="http://hivelogic.com/articles/top-10-programming-fonts/">here</a></p>
+
+<h2>Window manager: XMonad</h2>
+
+<p>I&#8217;m using <a href="http://xmonad.org/">XMonad</a>. I wanted a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling windows manager</a> as I wanted to maximise my screen estate. I chose XMonad because of the way it handles windows on multi monitors. Each screen shows an independent workspace. I have control over which application should appear on which screen. For example, I can show a movie on my second monitor while switching workspaces only on the laptop screen. The movie does not get affected. OS X, Windows, Gnome, KDE treats both screens as a single workspace. Nothing wrong with that. But I had to manually move apps from screen to screen and do a lot of Alt-Tab window cycling. With XMonad, I no longer need to do that. I just switch workspaces. XMonad allows you to configure apps to automatically go to designated workspaces. You get the added advantage of knowing exactly where which app is.</p>
+
+<p>This <a href="https://github.com/vicfryzel/xmonad-config">repository</a> is very well documented. My config is almost a carbon copy of it.</p>
+
+<h2>Status bar: Xmobar</h2>
+
+<p><a href="http://projects.haskell.org/xmobar/">Xmobar</a> works well with my Window Manager(Xmonad). Configuring it is very easy. You should be able to achieve the same result with <a href="https://sites.google.com/site/gotmor/dzen">dzen2</a> too. Dzen has more features though. Xmobar is a plain text status bar. Here&#8217;s my <a href="https://gist.github.com/1643647">.xmobarrc</a>. The gmail checker is a simple hand written <a href="https://gist.github.com/1643664">ruby script</a>. The colors used are picked from the solarized theme.</p>
+
+<h2>Termainal emulator: urxvt</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-urxvt.png" title="Arch linux xmonad solarized screenshot with urxvt" ></p>
+
+<p>I&#8217;m using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">urxvt</a> as my terminal emulator. urxvt is highly customizable. I don&#8217;t think the default terminal emulators that come with Gnome, KDE offer the same room for customizability as urxvt. It should not be a problem to install urxvt in your distro though. Just apply the color theme to your terminal. And it should merge nicely into the environment.</p>
+
+<p>Here is my <a href="https://gist.github.com/1643690">config</a> for urxvt</p>
+
+<h2>Text editor: Emacs</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs.png" title="Arch linux xmonad solarized screenshot with emacs" ></p>
+
+<p>Be it Vim or Emacs, you can easily apply a color theme for it. There&#8217;s the Solarized theme for Vim as well. Just follow the instructions and install the appropriate color theme for your text editor. For emacs, you need to use the color theme package. There&#8217;s a separate <a href="https://github.com/sellout/emacs-color-theme-solarized">solarized color theme package</a>. Install it and it&#8217;ll merge perfectly with the status bar.</p>
+
+<h2>OS integration</h2>
+
+<p>To take it further, I made my wallpaper integrate into the status bar. I also used dark themes for Chrome and Firefox. Similarly for web apps like Gmail, I try to use a dark theme to merge in with the desktop. This makes the entire computing experience very pleasing to the eye.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T15:36:00+00:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/07/23/how-smugftp-came-into-being/" title="Previous Post: How SmugFTP came into being">&laquo; How SmugFTP came into being</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/" title="Next Post: Customizing the Mac to behave like Xmonad">Customizing the Mac to behave like Xmonad &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,2202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Liang Zan - Blog]]></title>
+  <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
+  <link href="http://liangzan.github.com/blog/"/>
+  <updated>2014-09-05T03:34:40+00:00</updated>
+  <id>http://liangzan.github.com/blog/</id>
+  <author>
+    <name><![CDATA[Wong Liang Zan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to configure WebDAV using Apache on Ubuntu]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2014/09/04/how-to-configure-webdav-using-apache-on-ubuntu/"/>
+    <updated>2014-09-04T23:18:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2014/09/04/how-to-configure-webdav-using-apache-on-ubuntu</id>
+    <content type="html"><![CDATA[<p><a href="https://en.wikipedia.org/wiki/WebDAV">WebDAV</a> is an extension of the HTTP protocol that allows users to manage files on servers. There are many ways to manage files on a remote server. WebDAV has several benefits over other solutions such as <a href="https://en.wikipedia.org/wiki/File_Transfer_Protocol">FTP</a> or <a href="https://en.wikipedia.org/wiki/Samba_(software">Samba</a>). In this article, we will go through how to configure your Apache server to allow native WebDAV access from Windows, Mac and Linux with authentication.</p>
+
+<!-- more -->
+
+
+<h2>Why WebDAV?</h2>
+
+<p>WebDAV offers several advantages.</p>
+
+<ul>
+<li><p>Native integration on all major OSes(Windows, Mac, Linux). There is no need to install third party software to use WebDAV.</p></li>
+<li><p>Supports partial transfers.</p></li>
+<li><p>More choices for authentication. Being on HTTP means <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a>, <a href="https://en.wikipedia.org/wiki/Kerberos_(protocol">Kerberos</a>), <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a>, etc are possible.</p></li>
+</ul>
+
+
+<p>Depending on your situation, WebDAV may be the best solution for your needs.</p>
+
+<h2>Why Apache?</h2>
+
+<p>There are many web servers around that supports WebDAV on Linux. However, Apache has the most compliant implementation of the WebDAV protocol out there. At the time in writing, WebDAV on <a href="http://nginx.org/">Nginx</a> and <a href="http://www.lighttpd.net/">Lighttpd</a> work but only partially.</p>
+
+<h2>Install Apache</h2>
+
+<p>Let us get <a href="https://httpd.apache.org/">Apache</a> installed.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install apache2</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Apache web server should be installed and running.</p>
+
+<h2>Setting up WebDAV</h2>
+
+<p>There are 3 steps to set up WebDAV. We designate a location, enable the necessary modules and configure it.</p>
+
+<h3>Step 1: Preparing the directories</h3>
+
+<p>We need to designate a folder for serving WebDAV. We are creating a new directory in <code>/var/www</code> for that. You will also need to change the owner to <code>www-data</code>(or whichever your Apache user is) in order to allow Apache to write to it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkdir /var/www/webdav
+</span><span class='line'>sudo chown www-data:www-data /var/www/webdav</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Step 2: Enabling modules</h3>
+
+<p>Next we enable the modules using <a href="http://man.he.net/man8/a2enmod">a2enmod</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo a2enmod dav
+</span><span class='line'>sudo a2enmod dav_fs</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Apache modules are found under <code>/etc/apache2/modules-available</code>. This creates a symbolic link from <code>/etc/apache2/modules-available</code> to <code>/etc/apache2/modules-enabled</code>.</p>
+
+<h3>Configuration</h3>
+
+<p>We open the configuration file at <code>/etc/apache2/sites-available/000-default.conf</code> using your favorite text editor. Add the following configuration.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DavLockDB /var/www/DavLock
+</span><span class='line'>
+</span><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    Alias /webdav /var/www/webdav
+</span><span class='line'>
+</span><span class='line'>    &lt;Directory /var/www/webdav&gt;
+</span><span class='line'>        DAV On
+</span><span class='line'>    &lt;/Directory&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <a href="https://httpd.apache.org/docs/2.4/mod/mod_dav_fs.html">DavLockDB</a> directive designates the name of the DAV Lock database. It should be a path to a file. The file does not need to be created. The directory should be writeable by the Apache server.</p>
+
+<p>The <a href="https://httpd.apache.org/docs/2.4/mod/mod_alias.html">Alias</a> directive maps requests to <code>http://your.server/webdav</code> to the <code>/var/www/webdav</code> folder.</p>
+
+<p>The <a href="https://httpd.apache.org/docs/current/mod/core.html#directory">Directory</a> directive tells Apache to enable WebDAV for the <code>/var/www/webdav</code> folder. You can find out more about <a href="https://httpd.apache.org/docs/2.4/mod/mod_dav.html">mod_dav</a> from the Apache docs.</p>
+
+<p>If you restart the Apache server, you will have a working WebDAV server without authentication.</p>
+
+<p>Restart the Apache server like this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo service apache2 restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The WebDAV server should be found at <strong>http://&lt;your.server.com>/webdav</strong>. Try logging in without any credentials.</p>
+
+<h2>Adding authentication</h2>
+
+<p>A WebDAV server without authentication is not secure. In this section we&#8217;ll add authentication to your WebDAV server. There are many authentication schemes available. We are only going to touch on the 2 simplest schemes: Basic and Digest authentication.</p>
+
+<h3>Which to use? Basic or Digest authentication?</h3>
+
+<p>Take a look at this table which illustrates the compatibility of the various authentication schemes on different operating systems. Note that if you are serving HTTPS, we are assuming your ssl cert is valid(not self-signed).</p>
+
+<p><img src="http://i.imgur.com/Q01EN3F.png" alt="WebDAV compatibility" /></p>
+
+<p>If you are using <strong>HTTP</strong>, use <a href="https://en.wikipedia.org/wiki/Digest_access_authentication">Digest authentication</a> as it will work on all operating systems. If you are using <strong>HTTPS</strong>, you have the option of using <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic authentication</a>.</p>
+
+<p>We&#8217;re going to cover the <strong>Digest</strong> authentication version since it works on all the operating systems without the need for a SSL cert.</p>
+
+<h3>Digest authentication</h3>
+
+<p>Let us generate the file(called <strong>users.password</strong>) that stores the password for the users. In Digest authentication, there is the <strong>realm</strong> field which acts as a namespace for the users. We will use <strong>webdav</strong> as our <strong>realm</strong>. Our first user will be called <strong>alex</strong>.</p>
+
+<p>To generate the digest file, we have to install the dependencies.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install apache2-utils</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that, we generate the file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo htdigest -c /etc/apache2/users.password webdav alex</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There should be a password prompt for the password of <strong>alex</strong>.</p>
+
+<p>For subsequent addition of users, you should remove the <strong>c</strong> flag. Another example adding a user called <strong>bob</strong>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo htdigest /etc/apache2/users.password webdav bob</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We also need to allow Apache to read it. So we change the owner of the file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown www-data:www-data /etc/apache2/users.password</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the password file is created, we should make changes to the configuration at <code>/etc/apache2/sites-available/000-default.conf</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DavLockDB /var/www/DavLock
+</span><span class='line'>
+</span><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>    Alias /webdav /var/www/webdav
+</span><span class='line'>
+</span><span class='line'>    &lt;Directory /var/www/webdav&gt;
+</span><span class='line'>        DAV On
+</span><span class='line'>        AuthType Digest
+</span><span class='line'>        AuthName "webdav"
+</span><span class='line'>        AuthUserFile /etc/apache2/users.password
+</span><span class='line'>  Require valid-user
+</span><span class='line'>    &lt;/Directory&gt;
+</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <a href="https://httpd.apache.org/docs/current/mod/mod_authn_core.html">mod_authn</a> module contains the definitions for the authentication directives. In essence, we instruct Apache that for the <code>/var/www/webdav</code> directory, there should be authentication using the <strong>Digest</strong> scheme. The realm should be called <strong>webdav</strong>. Find the password from the file at <strong>/etc/apache2/users.password</strong>. Only valid users who authenticate themselves is able to acess that directory.</p>
+
+<p>Finally, enable the digest module and restart the server for the settings to take effect.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo a2enmod auth_digest
+</span><span class='line'>sudo service apache2 restart</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Testing it</h2>
+
+<p>We&#8217;ll demonstrate how to access your WebDAV server from the native file browsers of Mac, Windows and Linux(Ubuntu).</p>
+
+<h3>Mac</h3>
+
+<p>On Mac, open <strong>Finder</strong>. On the menu bar, find <strong>Go</strong> and select the option <strong>Connect to Server</strong>.</p>
+
+<p><img src="http://i.imgur.com/q6rsU9q.png" alt="WebDAV Mac Step 1" /></p>
+
+<p>Enter the server address. It should be <strong>http://&lt;your.server>/webdav</strong>. Press <strong>Connect</strong>.</p>
+
+<p><img src="http://i.imgur.com/h4mFZoK.png" alt="WebDAV Mac Step 2" /></p>
+
+<p>You will be prompted for a username and pssword. Enter them and press <strong>Connect</strong>.</p>
+
+<p><img src="http://i.imgur.com/BkhcR7I.png" alt="WebDAV Mac Step 3" /></p>
+
+<p>Once you have connected, the directory should appear in <strong>Finder</strong>.</p>
+
+<p><img src="http://i.imgur.com/HcuBGmq.png" alt="WebDAV Mac Step 4" /></p>
+
+<h3>Windows</h3>
+
+<p>On Windows, open <strong>File Explorer</strong>. On the left sidebar, you should find the <strong>Network</strong> icon.</p>
+
+<p><img src="http://i.imgur.com/KhKCetD.png" alt="WebDAV Windows Step 1" /></p>
+
+<p>Right click on the <strong>Network</strong> icon. It should show the context menu with the option <strong>Map network drive</strong>. Click on that.</p>
+
+<p><img src="http://i.imgur.com/KYLEwSv.png" alt="WebDAV Windows Step 2" /></p>
+
+<p>Enter the server address in the folder field. It should be <strong>http://&lt;your.server>/webdav</strong>. Select the <strong>Connect using different credentials</strong> if your login is different. Press <strong>Finish</strong>.</p>
+
+<p><img src="http://i.imgur.com/PbYhFXr.png" alt="WebDAV Windows Step 3" /></p>
+
+<p>You will be prompted for a username and password. Enter them and press <strong>OK</strong>.</p>
+
+<p><img src="http://i.imgur.com/d57Cul7.png" alt="WebDAV Windows Step 4" /></p>
+
+<p>Once you have connected, it should appear as a network drive on the left sidebar of your <strong>File Explorer</strong>.</p>
+
+<p><img src="http://i.imgur.com/CTPOwvI.png" alt="WebDAV Windows Step 5" /></p>
+
+<h3>Linux(Ubuntu)</h3>
+
+<p>We are using Ubuntu 14.04 as our Linux desktop operating system. On Ubuntu, open <strong>Files</strong>. THere is a <strong>Connect to Server</strong> option on the left sidebar. Click on that.</p>
+
+<p><img src="http://i.imgur.com/XqbJm4t.png" alt="WebDAV Linux Step 1" /></p>
+
+<p>Enter the server address. It should be <strong>dav://&lt;your.server>/webdav</strong>. Press <strong>Connect</strong>.</p>
+
+<p><img src="http://i.imgur.com/M3VuEE5.png" alt="WebDAV Linux Step 2" /></p>
+
+<p>You will be prompted for a username and password. Enter them and press <strong>Connect</strong>.</p>
+
+<p><img src="http://i.imgur.com/Sa5037A.png" alt="WebDAV Linux Step 3" /></p>
+
+<p>Once you have connected, the directory should appear under the <strong>Network</strong> listing.</p>
+
+<p><img src="http://i.imgur.com/FQtteVI.png" alt="WebDAV Linux Step 4" /></p>
+
+<h2>Conclusion</h2>
+
+<p>In this article, we have gone through how to set up a WebDAV server using Apache on Ubuntu 14.04. We have also discussed how to configure Digest authentication to secure the server. Lastly, we have shown you how to connect to the WebDAV server from all 3 major operating systems using their native file browsers.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Running a security disclosure program]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2014/03/25/running-a-security-disclosure-program/"/>
+    <updated>2014-03-25T05:59:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2014/03/25/running-a-security-disclosure-program</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://farm8.staticflickr.com/7308/11406985424_457c44045f_m.jpg" title="Security. By perspec_photo88" ></p>
+
+<p>A few months ago, I started a security disclosure program for my <a href="https://www.dropmyemail.com">employer</a>. It is definitely beneficial for us. I&#8217;d like to share some of our experiences running a security disclosure program.</p>
+
+<!-- more -->
+
+
+<h2>What is a security disclosure program</h2>
+
+<p>A security disclosure program is a program is an open invitation for security researchers to find vulnerabilities in your application. If they find something, they are encouraged to disclose to us and allow us time to fix it before going public. Your company may choose to offer a reward. It could be monetary or an acknowledgment on the Hall of Fame. Many companies run such programs. Good examples include Google, Facebook and Github.</p>
+
+<p>To the companies running such a program, it gains a group of enthusiastic volunteers who will scrutinize their apps for vulnerabilities. It is far more cost effective than having in-house employees do the same. For the security researchers, it is a form of marketing or income for them. It is a win-win scenario for both parties.</p>
+
+<h2>The influx</h2>
+
+<p>We first posted the security page detailing our disclosure program. Within days, security researchers found our program without us telling anybody about it. That is our first surprise. Very quickly, more and more security researchers came without prompting. There was a visible spike in our traffic. <a href="https://bugcrowd.com">BugCrowd</a> knew about our program and added us to their <a href="https://bugcrowd.com/list-of-bug-bounty-programs">list</a> of bounty programs. The security researchers come from all over the world. The quality of the reports varies widely. Through their reports we managed to uncover no less than 5-6 serious vulnerabilities. That alone was worth it.</p>
+
+<p>After the initial rush, things will begin to quiet down. You will feel more confident about the security of your app.</p>
+
+<h2>The cons</h2>
+
+<p>There are <em>a lot</em> of reports to respond to. It is very similar to handling support. It creates an additional load on the team. Every report has to be investigated and judged if it is a real vulnerability or not. Most of the time the reports cover fairly trivial vulnerabilities. Some may not agree with you on whether it is a real vulnerability or not. You definitely need someone in your team to be able to judge the vulnerabilities.</p>
+
+<p>During this period expect various parts of the app to break. We have researchers running automated tools against our apps. There was a huge spike in errors. No doubt it caused some inconveniences.</p>
+
+<p>I think rewards are a good motivator. Think carefully what reward you want to give. Not all rewards are the same. A Hall of Fame only requires a page update. Whereas a T-shirt costs you money to print, time to package and money for postage. Does your team have the time to send out dozens of shirts every week? Do you have enough shirts to give out? If it is a monetary reward, expect arguments with you on your judgment.</p>
+
+<h2>In retrospect</h2>
+
+<p>Security disclosure programs are definitely worth the cost of running it. But don&#8217;t take for granted that having such a program in place means your app is secure. Most of the security researchers only do a shallow dive. They don&#8217;t spend too much time since the payoff is not there. You should still get a professional security consultant to perform an audit.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Breaker 101: the experience so far]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/10/23/breaker-101-the-experience-so-far/"/>
+    <updated>2013-10-23T05:39:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/10/23/breaker-101-the-experience-so-far</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://farm8.staticflickr.com/7129/7712545428_8615dcb6d8_m.jpg" title="Lock. By Alexandre Dulaunoy" ></p>
+
+<p><a href="http://daeken.com/2013-06-11.1_Breaker_101__An_intensive_online_web_security_course.html">Breaker 101</a> is a course conducted by <a href="http://en.wikipedia.org/wiki/Cody_Brocious">Cody Brocious</a>. It aims to teach you the basics to <a href="http://en.wikipedia.org/wiki/Internet_security">web security</a>. I&#8217;ve always been curious about security. When the opportunity arose, I signed up without hesitation. It is not cheap though. But I thought the course would benefit me. It already did.</p>
+
+<!-- more -->
+
+
+<p>It has fundamentally transformed the way I code. I view things differently. When I code, I am security conscious. I&#8217;m spotting security vulnerabilities in my old code after taking the course. That alone is worth the price of the course. I&#8217;m now confident my apps aren&#8217;t easy to break.</p>
+
+<h2>The course</h2>
+
+<p>The course is conducted via a live video stream each week. Cody would go through the material. We ask questions after the class. We have an IRC channel and a forum. Those serve as additional aveneues to ask questions. We also have study groups that are formed organically. I have a small group for those located in Asia. We would discuss coursework.</p>
+
+<p>The bulk of the learning is done through the practicals. These are &#8216;capture the flag&#8217; style practicals. Each practical would focus on a class of vulnerabilities. There are about 5 vulerabilities in each practical. The practicals are web apps with vulnerabilities hidden in them. Our job is to find them, break them and write them in a report to be submitted. Most of the time, we can find most of the vulerabilities. There is a myth that good builders cannot be good breakers. I don&#8217;t think that is true. Most of the class are coders in their day jobs. And we were all able to find the vulnerabilities. The key approach is to understand how an app works. Then make use of hidden assumptions to break the app. Being coders give us an advantage. We can easily guess how it works.</p>
+
+<p>The course can be hectic. Personally, I had to take one to two days off to catch up. Going through the coursework does not feel like work. It is fun! Every time I spot a vulnerability, I get a quick endorphin rush. The sense of satisfaction is similar to that of building. The coursework is not easy but not impossibly difficult. There is a light amount of outside reading that you have to do. I never knew about <a href="https://www.owasp.org">OWASP</a> before this. Now I regard OWASP as the wikipedia of security. The exams is similar to the practical. Except it is time limited. The most boring part of the course is the report writing.</p>
+
+<p>Security cannot be covered in a mere 12 weeks. Breaker 101 did show us the way forward. Like any skill it needs practice to hone it. Reading books alone is not effective. You got to go out there and break things(legally of course). There are plenty of security courses around. But I prefer to be taught by real hackers. If you want to get into security, take Breaker 101. You won&#8217;t regret it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Three tips for managing complexity in Node.js projects]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/08/12/three-tips-for-managing-complexity-in-node-dot-js-projects/"/>
+    <updated>2013-08-12T05:33:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/08/12/three-tips-for-managing-complexity-in-node-dot-js-projects</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://farm7.staticflickr.com/6045/6310508350_8deb30151d_n.jpg" title="Complexity. By DigitalMums" ></p>
+
+<p>After working on various Node.js projects, I want to share three simple tips which helps to reduce complexity. If you are building an <a href="http://expressjs.com">Express</a> or <a href="https://github.com/mcavage/node-restify">Restify</a> project, ususally the framework does not tell you how to structure your application. You can put everything in one mega file, or you can(and should) extract different functionalities out.</p>
+
+<!-- more -->
+
+
+<h2>Folder structure</h2>
+
+<p>A clear folder structure helps you to find code. It is a form of documentation. There is no right or wrong. Do what suits your project best. I find the suggestions from <a href="https://gist.github.com/viatropos/1398757">this discussion</a> worth applying. In general I like to separate the main parts of the app:</p>
+
+<ul>
+<li>application logic</li>
+<li>assets</li>
+<li>view templates</li>
+<li>configuration</li>
+<li>tests</li>
+<li>logging</li>
+<li>third party vendor code</li>
+</ul>
+
+
+<p>As long as your folder structure separates these functions, it is good enough.</p>
+
+<h2>Index method</h2>
+
+<p>For example, when you are writing an API application, your controllers will increase as you add more functionality. You can break the controllers into their own file and place them all in a folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>|-- controllers
+</span><span class='line'>|   |-- threads.js
+</span><span class='line'>|   |-- posts.coffee
+</span><span class='line'>|   |-- users.coffee
+</span><span class='line'>|   |-- polls.coffee</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you need to make them available to the server. You can make use of <strong>index.js</strong>. Place an <strong>index.js</strong> in your controller folder</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>|-- controllers
+</span><span class='line'>|   |-- index.js
+</span><span class='line'>|   |-- threads.js
+</span><span class='line'>|   |-- posts.coffee
+</span><span class='line'>|   |-- users.coffee
+</span><span class='line'>|   |-- polls.coffee</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Write something like this. It finds all the files in the folder and adds them to the exports namespace.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm"> * Modules are automatically loaded once they are declared</span>
+</span><span class='line'><span class="cm"> * in the controller directory.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">file</span> <span class="o">!=</span> <span class="s1">&#39;index.js&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">));</span>
+</span><span class='line'>    <span class="nx">exports</span><span class="p">[</span><span class="nx">moduleName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span> <span class="o">+</span> <span class="nx">moduleName</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can get all the controllers in one variable. Which allows you to hook it to the server.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">controllers</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./app/controllers&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">server</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/v1/accounts&#39;</span><span class="p">,</span> <span class="nx">controllers</span><span class="p">.</span><span class="nx">accounts</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This technique helps to reduce the number of requires you need to write. Plus, making use of <strong>index.js</strong> makes it look cleaner as you only need to write the folder name. In general, when you face a situation where you have many similar functions, extract them into separate files, and use an index file to bind them together.</p>
+
+<h2>Passing the reference to an external file</h2>
+
+<p>If you haven&#8217;t noticed in Express already, there are several <a href="http://expressjs.com/api.html#middleware">middleware</a> initialization function calls when you initialize an Express server.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">());</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">multipart</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It quickly gets unwieldy as your projects grow. My ideal case is to initialize all the middleware configurations in a separate file. To do that, I pass the server reference over.</p>
+
+<p>On your former app file, use a single require for the external file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../config/middleware&#39;</span><span class="p">)(</span><span class="nx">app</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Export a single function which initializes all the middleware.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">multipart</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way, your app file will be much cleaner. It is a useful technique for extracting out large code blocks. Hope these three tips helps!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The library shopping checklist]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/07/13/the-library-shopping-checklist/"/>
+    <updated>2013-07-13T05:59:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/07/13/the-library-shopping-checklist</id>
+    <content type="html"><![CDATA[<p><img class="right" src="http://farm6.staticflickr.com/5062/5652699228_68587eb26c.jpg" title="Shopping. By Epsos.de" ></p>
+
+<p>Library shopping is like second nature to developers. A library refers to packaged code like <a href="http://rubygems.org">Ruby gems</a>, <a href="http://npmjs.org">NPM packages</a> or <a href="https://pypi.python.org/pypi">Python packages</a>. Along the years, I do these evaluations unconsciously. I thought it&#8217;d be good to put this mental checklist down in writing.</p>
+
+<!-- more -->
+
+
+<h2>Does the library fulfil your requirements?</h2>
+
+<p>My first filter is to look for libraries that fulfil what I need to do. Different libraries have different features. The clearer you are on what you need to do, the easier it will be to filter which library is more suitable.</p>
+
+<h2>Is the library maintained?</h2>
+
+<p>Is the last commit recent? If the last commit is less than 6 months old, I would view it as recent.</p>
+
+<p>Does the documentation or website say that the library is not maintained anymore? Sometimes authors do put up notices that a project is abandoned. Sometimes if the official library is not maintained, there may be forks that may have patches. You could use those instead.</p>
+
+<p>Are the issues fixed promptly? Take a look at how fast issues gets fixed. It is an indicator of how well maintained the library is.</p>
+
+<h2>Will the library be maintained?</h2>
+
+<p>Are there more than one contributor? If there are more than one, it is a good sign. A solo contributor is less preferable, as no peer pressure makes it easy to abandon a project.</p>
+
+<h2>Is the library compatible with your platform?</h2>
+
+<p>Are you on the JVM, on Windows or on Ruby 1.8.7? The library may not support your platform, so you must check.</p>
+
+<h2>Is the library well documented?</h2>
+
+<p>The documentation has to address these concerns before I would see it as well documented</p>
+
+<ul>
+<li>Does it have an API reference?</li>
+<li>Does it address how to install?</li>
+<li>Does it address how to uninstall?</li>
+<li>Does it address how to use it?</li>
+<li>Does it address how to update older versions?</li>
+<li>Does it explain how it works?</li>
+<li>Does it explain all the features?</li>
+<li>Does it have examples?</li>
+<li>Does it have a change log?</li>
+</ul>
+
+
+<p>You have to take into account the quality of the writing. Clarity and succintness is what I look for.</p>
+
+<p>You also have to take note if the documentation is out of touch with the changes in the code. Check for the commit dates of the documentation.</p>
+
+<h2>Is the library well written?</h2>
+
+<p>Read the code. Is it clean? Is this the quality of code you would like to have in your project?</p>
+
+<h2>Is the library well versioned?</h2>
+
+<p>Check the history of versioning. Does the library adhere to <a href="http://semver.org">Semantic Versioning</a>?</p>
+
+<p>Some libraries don&#8217;t. If they don&#8217;t, it makes updates harder.</p>
+
+<h2>Does the API help more than hinder?</h2>
+
+<p>Take a closer look at the usage of the library.</p>
+
+<p>Do you need to do a lot of configuration work to get it working? Or does it work out of the box?</p>
+
+<p>Does the API force you to change your existing code? Or does it fits in beautifully?</p>
+
+<p>Is the API intuitive?</p>
+
+<p>And there is a matter of taste. Does the API feel enjoyable to write in?</p>
+
+<h2>Does the library have tests?</h2>
+
+<p>Never choose a library that have no tests. You will end up as a guinea pig.</p>
+
+<h2>Is the library&#8217;s license permissive enough?</h2>
+
+<p>There are a variety of <a href="http://en.wikipedia.org/wiki/Software_license">software licenses</a>. Note which license the library is using. Can your project use a library that uses that particular license?</p>
+
+<h2>Is the library mature?</h2>
+
+<p>How long has the library existed? Is it years, months or weeks? Prefer the long-lived ones to the young ones.</p>
+
+<p>How many users are using the library?
+How many downloads, watchers does the library have?
+Are there blog posts covering the library?
+Does it have many contributors?
+Does it have many people reporting issues?</p>
+
+<p>Of course, the more mature the library is, the better.</p>
+
+<h2>Does the library have dependencies?</h2>
+
+<p>Certain libraries have heavy dependencies. Take for example, <a href="http://docs.opscode.com/chef_overview_server.html">Chef server</a> has <a href="http://couchdb.apache.org">Couchdb</a>, <a href="http://www.rabbitmq.com">RabbitMQ</a> and <a href="http://www.merbivore.com">Merb</a> as its dependencies. Generally, prefer libraries who install minimal extra dependencies.</p>
+
+<h2>Does the library break existing code?</h2>
+
+<p>Take a close look at how the library works. In the case of Ruby, a library may monkey patch common classes. It may break your code. So do be careful. If you have a comprehensive test suite, it is time to put it in use.</p>
+
+<h2>Is the library stable?</h2>
+
+<p>If the library has reached stability, and the API don&#8217;t change much, that is good. It means you don&#8217;t have much of a maintenance cost. There is no need to keep updating your code to keep up with the library.</p>
+
+<h2>Does the library have alternatives?</h2>
+
+<p>This is the cost of switching. Over the long term, there is always a chance that a library may get abandoned. What are the other alternatives? It is always good to have <em>competition</em> serving the same function.</p>
+
+<h2>Do you understand how it works?</h2>
+
+<p>You should always strive to understand how it works below the hood. This will help immensely when problems occur, or when you need to further customize it. Prefer libraries that does one thing well, than those who do many things.</p>
+
+<h2>Is the performance good?</h2>
+
+<p>If the function that the library is serving may be intensive, it would be good to pay attention to its performance. Libraries such as <a href="https://github.com/resque/resque">Resque</a> and <a href="http://sidekiq.org/">Sidekiq</a> serves similar functions. The only perceptible difference is their performance.</p>
+
+<h2>Is it simpler to use it or write it yourself?</h2>
+
+<p>If the functionality is simple enough, it might be a better choice to implement it yourself. Implementing yourself has the advantage that you understand how it works. And you&#8217;ll be free from hassle of keeping the library up to date.</p>
+
+<p>I hope this checklist helps to you to do your library shopping.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughts on Kinesis Freestyle 2]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/05/21/thoughts-on-kinesis-freestyle-2/"/>
+    <updated>2013-05-21T05:53:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/05/21/thoughts-on-kinesis-freestyle-2</id>
+    <content type="html"><![CDATA[<p><img src="http://www.kinesis-ergo.com/images/kb820pb-648x204.jpg" title="Kinesis Freestyle 2 with VIP3" ></p>
+
+<p>I recently purchased a <a href="http://www.kinesis-ergo.com/freestyle2.htm">Kinesis Freestyle 2</a>. I usually type in a text editor. I bought it because it is <a href="https://en.wikipedia.org/wiki/Human_factors_and_ergonomics">ergonomic</a>. As my primary editor is the infamous <a href="http://www.gnu.org/s/emacs">Emacs</a>, I&#8217;m wary of contracting the dreaded <a href="http://en.wikipedia.org/wiki/repetitive_strain_injury">RSI</a>. Emacs users <a href="http://www.emacswiki.org/emacs/RepeatedStrainInjury">tend to be susceptible</a> to it. In the months before this, I was conscious of the strain in my fingers and wrist after a long typing session. Disclaimer: I am not a RSI sufferer though.</p>
+
+<!-- more -->
+
+
+<p>The Freestyle is not my first ergonomic keyboard. My first ergonomic keyboard is the <a href="http://www.microsoft.com/hardware/en-us/p/natural-ergonomic-keyboard-4000">Microsoft Natural 4000</a>. Unfortunately I find the keys are too stiff. My impression is that typing on the Natural keyboard feels like twice the force needed for a Macbook keyboard. Not only did it added more strain, it cuts my typing speed. No complaints with the key layout though. In the end I kept the Natural mouse but ditched the keyboard. I wouldn&#8217;t recommend buying the Microsoft Natural keyboard.</p>
+
+<h2>Getting used to it</h2>
+
+<p>After 2 weeks of using the Kinesis Freestyle, I realised that I don&#8217;t feel the strain in my fingers anymore. Not even in my left <a href="http://en.wikipedia.org/wiki/Little_finger">pinky</a>. That is remarkable. For this benefit alone, it is worth the purchase. I think there are a few factors that contribute to it.</p>
+
+<p>First the activation force is smaller. Compared to the Macbook, the Freestyle feels softer. My fingers don&#8217;t need to strain themselves as much. I won&#8217;t deny that the tactile feel of the keyboard feels better. Second, the split allowed my shoulders to be more relaxed. It made me notice that my shoulder muscles gets slightly tensed up when I&#8217;m using the conventional keyboards. Splitting it allows my hands to be wide apart, which in turn eases my shoulders. Third, the slope allowed me to type at a 15 degree angle. My arm feels relaxed in the angled position. The setup makes your arm and shoulders more relaxed, which released the strain in my fingers and wrists. On the typing noise, it is louder than the typical Macbook keyboard, but less noisy than a mechanical keyboard. It is not so loud that your co-workers will notice.</p>
+
+<h2>Gripes with the layout</h2>
+
+<p><img src="http://www.kinesis-ergo.com/images/freestyle2-mac-layout-800x307.jpg" title="Kinesis Freestyle Mac Layout" ></p>
+
+<p>I took about 2 weeks to get back to my former typing speed. At first I wasn&#8217;t used to the new layout. My biggest gripe is the <strong>B</strong> key. It was found on the left half of the Freestyle keyboard. I&#8217;m used to typing <strong>B</strong> with my right hand. I&#8217;d often try to type the phantom <strong>B</strong> with the right hand. It took some getting used to, but I&#8217;m now typing <strong>B</strong> with my left hand. The position of the <strong>Command</strong> and <strong>Option</strong> key is different too. The <strong>Command</strong> key was directly below <strong>X</strong> and the <strong>Option</strong> key is directly below <strong>Z</strong> on the Macbook. On the Freestyle, it is shifted a little to the left. I&#8217;m using the <strong>Option</strong> and <strong>Command</strong> key for many of my keyboard shortcuts. My hands had to stretch further to the left. The <strong>Escape</strong> key is rather unconventional too. I feel that it was placed too far to the top left. I guess all these can be overcame as I get used to the layout.</p>
+
+<p>There is a whole bunch of keys which I hardly use. The 2 rows of cut, copy, paste keys on the left. And the single row of page up/down. Unfortunately, I cannot attach custom macros to those keys.</p>
+
+<h2>Conclusion</h2>
+
+<p>I don&#8217;t think using the Freestyle significantly improved my typing speed. But my hands and shoulders did feel much better when typing on it. Given that I spend long hours typing almost everyday, it is a worthwhile purchase.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A quiet desktop]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/04/25/a-quiet-desktop/"/>
+    <updated>2013-04-25T05:51:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/04/25/a-quiet-desktop</id>
+    <content type="html"><![CDATA[<p>Can you work in a noisy room? No. Noise distracts. When you are working, your are mentally juggling multiple objects all at once. Just one slight noise and everything drops. Luckily all the companies I worked at had quiet working places. Quiet working places are usually the norm. It is item number 8 in the famous <a href="http://www.joelonsoftware.com/articles/fog0000000043.html">Joel Test</a>. External noise is easy to identify. We even have laws against <a href="http://en.wikipedia.org/wiki/Noise_pollution">noise pollution</a>. Everyone agrees that it is harmful. What I find that we often allow noise to pollute our desktop without second thoughts. What do I mean by noise?</p>
+
+<!-- more -->
+
+
+<p><img class="right" src="https://s3.amazonaws.com/static.liangzan.net/blog/growl-notifications.png"></p>
+
+<p>Noise on the desktop is any <a href="http://en.wikipedia.org/wiki/Sensory_cue">visual or audio cues</a> that distracts you. Noise are generated by attention seeking apps. One example of an attention seeking app is <a href="http://growl.info/">Growl</a>. Growl is a centralised notification system for Mac. Notifications come in the form of a translucent box on your top right corner with text. I find it distracting. Ask yourself, how many of those notifications are worthy of your <em>immediate</em> attention? I don&#8217;t need to be informed when Bob came online on Skype, or Itunes is playing Justin Bieber, or when my download has finished. That is too much information. I think Growl notifications are useful and looks good too. It helps you to stay on top of things. But you need to restrict it to essential notifications. I have since removed Growl. It does not seem to hurt my responsiveness.</p>
+
+<p><img class="left" src="https://s3.amazonaws.com/static.liangzan.net/blog/campfire-tab.png"></p>
+
+<p>Another example of attention seeking apps are online group chats like <a href="http://campfirenow.com/">Campfire</a> or <a href="https://www.hipchat.com/">Hipchat</a>. When messages come, a bell goes off, the tab title shows the number of unread messages. Implicitly, it make me feel guilty for not reading everything. The larger the number grew, the worse I felt. I&#8217;d much prefer to hide the unread count, replacing it with a simple asterisk which indicates there is activity since I last read. Sounds should be turned off. In my experiences with group chats, most of the messages are <em>not important</em>. I don&#8217;t need to know them immediately. If everyone is in the same office, I don&#8217;t think it is necessary to use online group chats. Much better to talk in person.</p>
+
+<p><img src="http://farm1.staticflickr.com/142/388879822_f9bc08517a_o.jpg" title="Street with Neon lights. Photo by AndyCunningham." ></p>
+
+<p>The same goes for menu bar applets or shell status bars. Take control of them. Remove audio notifications. Prefer greyscale menu bar icons to colored ones so they fade to the background gracefully. Better still, remove them. Information for the sake of information is counter productive. To have a sense of how noisy your desktop really is, turn on your volume to the max, step away and observe from a distance. Note down which apps are trying to catch your attention by visual or audio cues. Then think, are those information important most of the time? If not, I can safely assure you your life would be more peaceful without them. Less is more.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[First impressions of Leap Motion]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/"/>
+    <updated>2013-02-06T17:10:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion</id>
+    <content type="html"><![CDATA[<p>For those who don&#8217;t know what <a href="http://www.leapmotion.com">Leap Motion</a> is, take a look at this youtube video.</p>
+
+<iframe width="560" height="315" src="http://www.youtube.com/embed/_d6KuiuteIA" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I got the Leap Motion hardware and SDK by participating in their <a href="https://leapmotion.com/developers">developer program</a>. I was the lucky few that was selected. They informed me through email. A few weeks later, the Leap motion device is mailed to me, free of charge. It came in a dull black cardbox box. Within the box lies the device, a cable, and a card bearing a message from the founders.</p>
+
+<!-- more -->
+
+
+<h2>First impressions of Leap</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-box.jpg" title="Leap Motion box" ></p>
+
+<p>It is very small and light. One side etched the Leap logo. The other lies the sensors. When you power the device, three red bulbs reveal themselves. That is where the magic happens. Powering the device will does nothing, you need to install the software. There is a SDK provided for Mac and Windows platforms. It comes with a set of examples and documentation to help you get started. Once you connect the device up, run the Leap app and you&#8217;ll be ready to go.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-unboxed.jpg" title="Leap Motion unboxed" ></p>
+
+<p>The Leap SDK gives you several debugging tools. There is a visualizer which displays a trace of your fingers as you move.</p>
+
+<iframe src="http://player.vimeo.com/video/57635349" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+
+<p> <p><a href="http://vimeo.com/57635349">Leap Motion Visualizer</a> from <a href="http://vimeo.com/user14137242">Graham Gaylor</a> on <a href="http://vimeo.com">Vimeo</a>.</p></p>
+
+<p>It is backed by a grid, so you can literally trace little grids with your finger. Accuracy is touted as Leap Motion&#8217;s strength. That is no lie. I can easily trace the small grid with my clumsy finger. It is nothing short of amazing. Besides your fingers, Leap traces anything that resembles a stick. I don&#8217;t sense a lag. Even if I move quickly, Leap is able to capture it. I could tell Leap is computationally intensive. My computer fans are always in ovedrive when I use Leap.</p>
+
+<p>You could play with the sample apps. They are mostly simple <em>hello world</em> style apps that shows you how to call the APIs. Sadly, there are no fruit ninja apps for you to play with. The Leap Motion team built an input emulator to interface with games like fruit ninja. They promised to open source it though. The Leap SDK provides bindings for Java, C++, C#, Obj-C, Python and Javascript. I believe more will come. The API itself is fairly primitive. It gives you access to the raw data. You will get data on the position of each pointer, the orientation and the movement. There are no gestures or other abstract APIs.</p>
+
+<h2>Development experience</h2>
+
+<p>Like a kid with a new toy, I was eager to build applications with it. I chose to try the Javascript API first. The Leap SDK runs a web socket server which allows the Javascript bindings to access the data. Usage of the API is boringly simple. It is an infinite loop which gives you a frame every iteration. The frame is a JSON object which contains the data on the pointers.</p>
+
+<p>The <a href="https://github.com/liangzan/leap-demo/tree/master/particles">first leap experiment</a> I did was to replicate Mike Bostock&#8217;s D3.js <a href="http://bl.ocks.org/1062544">particles</a>. I got a trail of particles to follow each pointer.</p>
+
+<p>Gestures naturally come to my mind. The SDK has no provision for gestues yet. I have to recognize it. And that is an <em>Articifial Intelligence</em> problem. I looked for gestures related libraries to build on. And I found the <a href="http://depts.washington.edu/aimgroup/proj/dollar/">$1 unistroke recognizer</a>. They had a Javascript implementation. I used it to recognize gestures in my <a href="https://github.com/liangzan/leap-demo/tree/master/gestures">next leap experiment</a>. It worked. But it has caveats.</p>
+
+<p>A gesture has a start and an end. Leap runs in an infinite loop. I had to define a start and end. In my gesture experiment, I defined 2 states: fist and point. The fist state literally means clenching into a fist. It acts as a blank state which I use to define the end points of the gesture movement. The point state means an extended finger. In that state, movement is captured. While my experiment is able to recognize gestures, it did not do so cleanly. When I change between a clenched fist to a pointing finger, there are some jitters unavoidably. That polluted my gesture shape. It is very hard to form a clean shape. There should be a better way to define the end point of a gesture.</p>
+
+<h2>Conclusion</h2>
+
+<p>As I presented my demo to the local javascript meetup group, everybody was visibly excited by Leap Motion. Leap Motion is an amazing product. Invariably, we wondered what potential applications could be built on Leap Motion. Games are an obvious application. Minority report styled navigation is another. For a long time we have been stuck with the keyboard and mouse. Then touch devices exploded onto the scene. After playing with Leap Motion, I firmly believe it is the dawn of another era of gestures styled devices. I&#8217;m living in exciting times.</p>
+
+<h2>Update</h2>
+
+<p>Follow the discussion on <a href="http://news.ycombinator.com/item?id=5179335">Hacker News</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to learn enough web design to not look scammy]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy/"/>
+    <updated>2013-01-07T16:07:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy</id>
+    <content type="html"><![CDATA[<p>I am a web developer by trade. I am not a designer. Like most backend engineers, I make things work. I don&#8217;t usually bother with making things pretty. Many people commented that I cannot design. I agree. I never had a penchant for design.</p>
+
+<!-- more -->
+
+
+<p>Today I have managed to learn enough design that my sites don&#8217;t look scammy. Some evidence at <a href="http://octopressthemes.com">Octopress Themes</a>. A year ago, I never entertained the thought that I can design a half decent looking site. I was always led to believe that I am not a creative. Therefore I should not do design at all. It is a good example of <a href="http://en.wikipedia.org/wiki/Learned_helplessness">learned helplessness</a>. Not being talented means you probably cannot become a top notch designer. It doesn&#8217;t mean you cannot design at all. If I can design half decent looking sites, so can you.</p>
+
+<h2>Plenty of resources</h2>
+
+<p>There are plenty of resources out there on how to learn design. Here are the ones which I find most relevant to engineers learning design.</p>
+
+<h3>Books</h3>
+
+<ul>
+<li><a href="http://www.amazon.com/Non-Designers-Design-Book-Robin-Williams/dp/0321193857/ref=sr_1_6?s=books&amp;ie=UTF8&amp;qid=1357551933&amp;sr=1-6">The Non-Designer&#8217;s Design book by Robin Williams</a></li>
+<li><a href="http://www.amazon.com/Design-Everyday-Things-Donald-Norman/dp/0465067107/">The Design of Everyday Things by Donald Norman</a></li>
+<li><a href="http://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1357552162&amp;sr=1-1&amp;keywords=dont+make+me+think">Don&#8217;t make me think by Steve Krug</a></li>
+</ul>
+
+
+<h3>Hacker news discussions</h3>
+
+<ul>
+<li><a href="http://news.ycombinator.com/item?id=1768358">Where to learn design</a></li>
+<li><a href="http://news.ycombinator.com/item?id=1839022">Visual design for hackers</a></li>
+<li><a href="http://news.ycombinator.com/item?id=66863">Best sources to learn design and usability</a></li>
+</ul>
+
+
+<h3>Newsletters</h3>
+
+<ul>
+<li><a href="http://seriffed.com/">Seriffed</a></li>
+<li><a href="http://sachagreif.com/">Sacha Grief</a></li>
+<li><a href="http://www.robertwilliamsdesign.com/newsletter/">Robert Williams</a></li>
+</ul>
+
+
+<h2>Learn by Copying</h2>
+
+<p>My next tip is: copy good designs. Choose a design which you like, and copy it. Copy does not mean cloning. Copying means stealing the ideas and incorporating in your design. Copying may sound dirty but designers in the fashion industry <a href="http://www.npr.org/2012/09/10/160746195/why-knockoffs-are-good-for-the-fashion-industry">does that</a> too. Take a few designs which you like, and improve them.</p>
+
+<h2>Copy from the best</h2>
+
+<p>Which brings me to the next tip. When you copy, copy from the best. If you copy homework from your friends, you copy from the top student correct? Similar logic applies. I often look(<em>steal</em>) for ideas from these sites. You could too.</p>
+
+<h3>Ideas</h3>
+
+<ul>
+<li><a href="http://dribbble.com">Dribbble</a></li>
+<li><a href="http://www.webcreme.com/">Web Creme</a></li>
+<li><a href="http://www.siteinspire.com/">Site Inspire</a></li>
+</ul>
+
+
+<h2>Be proficient in an image editor</h2>
+
+<p>An image editor to a designer is like the piano to a pianist. You cannot do without it. You often have to edit images to fit into the design. Being proficient won&#8217;t make you a good designer. It adds options to you. My suggestion is to pick up either one of these depending on your platform.</p>
+
+<ul>
+<li><a href="http://www.adobe.com/products/photoshop.html">Photoshop</a></li>
+<li><a href="http://www.pixelmator.com/">Pixelmator</a></li>
+<li><a href="http://www.gimp.org">Gimp</a></li>
+</ul>
+
+
+<h2>Do</h2>
+
+<p>My last tip is: do. There is no substitute for doing. The more you do the better you get. I hope my story can inspire you to believe that you can become half decent in design. I am still far from being decent in design though.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing your Emacs Eshell prompt]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/"/>
+    <updated>2012-12-12T05:38:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt</id>
+    <content type="html"><![CDATA[<p>If you use the shell in Emacs and you are not already using <a href="http://emacswiki.org/emacs/CategoryEshell">eshell</a>, convert to eshell now! Eshell is the best terminal emulator available in Emacs. If you need convincing, please read <a href="http://www.masteringemacs.org/articles/2010/12/13/complete-guide-mastering-eshell/">this article from Mastering Emacs</a>. Using <strong>grep</strong> in eshell is the killer feature for me. What the Master Emacs article didn&#8217;t elaborate is how to customize your eshell prompt. I&#8217;m going to share how to add colors and show the Git branch on your eshell prompt. This is how my prompt look like currently.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/eshell-prompt.png" title="Eshell prompt" ></p>
+
+<!-- more -->
+
+
+<h2>Adding colors</h2>
+
+<p>To add colors we need to change the property of the text. We make use of the <strong>propertize</strong> function. The snippet below changes the string to be green.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;some-string&quot;</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can take a look at the available styles you can apply to text by simply running <strong>M-x list-faces-display</strong>.</p>
+
+<h2>Showing the Git branch name</h2>
+
+<p>To get the current branch name from your Git repository, we make use of the function below. I copied this from <a href="http://www.jimmenard.com/">Jim Mernard&#8217;s</a> emacs <a href="https://github.com/jimm/elisp/blob/master/eshell-customize.el">configuration</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Installing</h2>
+
+<p>I customized Jim&#8217;s code to add colors. The end result look like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-history-size</span> <span class="mi">1024</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-regexp</span> <span class="s">&quot;^[^#$]*[#$] &quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;em-hist&quot;</span><span class="p">)</span>           <span class="c1">; So the history vars are defined</span>
+</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-save-history-on-exit</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-save-history-on-exit</span> <span class="nv">t</span><span class="p">))</span> <span class="c1">; Don&#39;t ask, just save</span>
+</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-ask-to-save-history</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-ask-to-save-history</span> <span class="ss">&#39;always</span><span class="p">))</span> <span class="c1">; For older(?) version</span>
+</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">eshell/ef</span> <span class="p">(</span><span class="nf">fname-regexp</span> <span class="nv">&amp;rest</span> <span class="nv">dir</span><span class="p">)</span> <span class="p">(</span><span class="nf">ef</span> <span class="nv">fname-regexp</span> <span class="nv">default-directory</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;; ---- path manipulation</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">pwd-repl-home</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let* </span><span class="p">((</span><span class="nf">home</span> <span class="p">(</span><span class="nf">expand-file-name</span> <span class="p">(</span><span class="nf">getenv</span> <span class="s">&quot;HOME&quot;</span><span class="p">)))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">home-len</span> <span class="p">(</span><span class="nb">length </span><span class="nv">home</span><span class="p">)))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">and</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">&gt;= </span><span class="p">(</span><span class="nb">length </span><span class="nv">pwd</span><span class="p">)</span> <span class="nv">home-len</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">equal</span> <span class="nv">home</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="mi">0</span> <span class="nv">home-len</span><span class="p">)))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;~&quot;</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="nv">home-len</span><span class="p">))</span>
+</span><span class='line'>      <span class="nv">pwd</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">propertize</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-function</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">lambda </span><span class="p">()</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">concat</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="p">((</span><span class="k">lambda </span><span class="p">(</span><span class="nf">p-lst</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">p-lst</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">(</span><span class="nf">concat</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">zerop</span> <span class="p">(</span><span class="nb">length </span><span class="nv">elm</span><span class="p">))</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>                                            <span class="p">(</span><span class="nb">substring </span><span class="nv">elm</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)))</span>
+</span><span class='line'>                            <span class="p">(</span><span class="nf">butlast</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">)</span>
+</span><span class='line'>                 <span class="s">&quot;/&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+</span><span class='line'>                            <span class="p">(</span><span class="nf">last</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">))</span>
+</span><span class='line'>              <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+</span><span class='line'>                         <span class="nv">p-lst</span>
+</span><span class='line'>                         <span class="s">&quot;/&quot;</span><span class="p">)))</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">split-string</span> <span class="p">(</span><span class="nf">pwd-repl-home</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">))</span> <span class="s">&quot;/&quot;</span><span class="p">))</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;yellow&quot;</span><span class="p">))</span>
+</span><span class='line'>         <span class="p">(</span><span class="k">or </span><span class="p">(</span><span class="nf">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">)))</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;# &quot;</span> <span class="ss">&#39;face</span> <span class="ss">&#39;default</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-highlight-prompt</span> <span class="nv">nil</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To install, I put the code above in a new file called <strong>eshell_customizations.el</strong>. Then I loaded the script from my <strong>init.el</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;~/.emacs.d/scripts/eshell-customizations.el&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart your emacs and your eshell should look better now.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[First impressions of the Ansible configuration management tool]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/"/>
+    <updated>2012-11-05T06:56:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool</id>
+    <content type="html"><![CDATA[<p>While working at <a href="http://www.action.io">Action.io</a>, we decided to use <a href="http://ansible.cc">Ansible</a> for managing our deployments. Previously we were using <a href="http://www.opscode.com/chef/">Opscode Chef</a>. We felt that Ansible suited our needs better. Let me illustrate why.</p>
+
+<!-- more -->
+
+
+<h2>What is Ansible?</h2>
+
+<p>Ansible is a <a href="http://en.wikipedia.org/wiki/Configuration_management">configuration management</a> tool. Like Opscode Chef or <a href="http://puppetlabs.com">PuppetLabs Puppet</a>, Ansible helps you to manage the configuration on your servers. Without a configuration tool, system administrators would install, configure and update server software by hand. Configuration management tools help to automate that.</p>
+
+<p>At the start, since all of us at Action.io were fluent in <a href="http://www.ruby-lang.org/">Ruby</a> and Chef, our natural choice was Chef. We written <a href="http://wiki.opscode.com/display/chef/Cookbooks">cookbooks</a> and <a href="http://wiki.opscode.com/display/chef/Recipes">recipes</a>, got hosted Chef running and were deploying with <a href="http://wiki.opscode.com/display/chef/Knife">Knife</a>. Happy days! But something didn&#8217;t feel right.</p>
+
+<h2>Chef did not suit us</h2>
+
+<p>Perhaps I am a Chef noob. I was never convinced on the pull workflow. After an update to the cookbooks on the Chef server, we had to wait for the Chef clients to poll for updates, to <em>pull</em> changes from the Chef server and update itself. It is The Wait that feels wrong. Why do I have to wait? I want my servers to get updated <em>now</em>. Not 5 minutes later. What I did everytime is to ssh in to the servers and run <code>sudo chef-client</code> to make the server pull changes immediately. I asked some of my peers who also use Chef. Remarkably, they did the same too.</p>
+
+<p>If me and my friends did that, it does not mean everyone does that. My point is the pull workflow does not feel intuitive. I&#8217;m not a veteran with 10 years of experience running hundreds of servers. Maybe there is a good reason to adopt a pull workflow. But for a small setup with less than 20 servers, it felt out of place.</p>
+
+<p>Our next pain point is: Chef is resource hungry. Running a chef client process takes up precious memory and CPU cycles. For Action.io&#8217;s case, those memory and CPU cycles could be better utilized for the users. Not waiting for an update that arrives Once In A While.</p>
+
+<h2>Arrives Ansible</h2>
+
+<p>Here is my sales pitch for Ansible. Ansible pushes updates(like <a href="https://github.com/capistrano/capistrano">Capistrano</a>). You need not wait for updates to happen. It cuts total deployment time. Especially in misson critical situations like An Outage. You&#8217;d prefer to be up in 5 minutes rather than 50 where 45 is spent waiting for the Chef client to poll(exaggeration of course). Sold?</p>
+
+<p>Ansible installs <em>nothing</em> on your servers. No idle client that does nothing but sit there and polls every hour. Think of the memory that Nginx could have used for serving requests. How about those CPU cycles that could be available for Postgresql to do indexing? Why keep that lazy bum around? Nginx and Postgresql will harbour resentment over time. Keep your star workers happy. Ansible keeps no such lazy bums. Sold?</p>
+
+<p>Ansible is easy to grasp. Reading an Ansible playbook is like reading your Bash history. Your playbooks are completely written in <a href="www.yaml.org">YAML</a>. YAML comes with less markup noise. It is a wise choice. The choice of using YAML allows Ansible to be language agnostic. Ansible does not need fluency in a particular programming language. Which means the learning curve is low and it is easy to get proficient quickly. Furthermore, the Ansible paradigm is &#8220;I ssh in and run command Foo&#8221;. That is exactly the same as hand building a server. Which means it should be dead easy to grasp. Another Big Plus is you know exactly what is going on. Ansible is running shell commands over ssh. The commands are not hidden under some abstract concept of knifes and puppets and flying saucers. Error messages will be clearer(hint: easy to debug -> less downtime -> more money). Being easy to learn means anybody could learn to deploy(hint: no need to hire a dedicated sys admin -> make your existing engineers work harder -> more money). Sold?</p>
+
+<h2>Being young is not always good</h2>
+
+<p>A sales pitch had to make you believe elephants could fly, wash your laundry and perhaps deploy your server as well. Being that I am not actually doing Sales, I can be honest with Ansible&#8217;s warts. And so the anti-sales pitch. Being a young project Ansible suffers from the common ailments of Poor Documentation and Non Existent Eco System. If I were using Chef, there are usually cookbooks available for common software. Not for Ansible. At Action.io, we hand wrote all of them. The mailing list is still the best chance where you can get your questions answered. Let&#8217;s be fair, it&#8217;s all part of growing pain. The Ansible eco system is not mature yet.</p>
+
+<p>So what do you think of Ansible? Would you use it? Ansible as a tool is mature, but the eco system is not. It wasn&#8217;t hard to hand write our playbooks. Nor did it take much time. A better eco system may bring ready made playbooks. We still have to customise it. To us, it is the other advantages that Ansible brought that made us decide to use it. I hope you are sold.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Post mortem of Notifymode]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode/"/>
+    <updated>2012-10-15T06:31:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/10/15/post-mortem-of-notifymode</id>
+    <content type="html"><![CDATA[<p>In early 2012, I started Notifymode. Notifymode does application monitoring for <a href="http://nodejs.org">Node.js</a> apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn&#8217;t take any money. So why did I choose to build Notifymode?</p>
+
+<!-- more -->
+
+
+<h2>Motivation behind Notifymode</h2>
+
+<p>I had a Node.js app: <a href="http://smugftp.com">SmugFTP</a>. I had performance problems. There were few tools to help me diagnose where the problem was. The best I could find was the V8 profiler. V8 profiler gave me a <a href="https://gist.github.com/833370">profiled report</a> which made no sense to me. I wanted a tool like <a href="http://newrelic.com">New Relic</a> for my Node.js apps. New Relic did not support Node.js. Why not build it for fun and profit?</p>
+
+<h2>I was <em>sure</em> it would be useful</h2>
+
+<p>How could analytics not be useful? How could Node.js not be gaining traction? In fact Node.js is gaining traction at a frightening pace. <a href="http://google.com/trends">Google Trends</a> shows the number of searches for Node.js outpacing <a href="http://rubyonrails.org">Rails</a>.</p>
+
+<script type="text/javascript" src="http://www.google.com.sg/trends/embed.js?hl=en-US&q=node.js,+ruby+on+rails&cmpt=q&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=500&h=330"></script>
+
+
+<p>I&#8217;m sure there would be more Node.js apps released to production in time to come. Analytics for an up-and-coming platform? How could this idea be wrong?</p>
+
+<p>I was confident that I am right. I don&#8217;t need to do any of that <a href="http://steveblank.com/category/customer-development/">customer development mumbo jumbo</a>. I should just build it. For the next 3 months, I poured time and energy into building Notifymode.</p>
+
+<p>You just need to add one line to your existing Node.js module to hook up to Notifymode&#8217;s agent.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;socket.io&#39;</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">profiler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;notifymode-client&#39;</span><span class="p">).</span><span class="nx">Profiler</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// one line here to hook up</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">profiledSocketIO</span> <span class="o">=</span> <span class="nx">profiler</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">io</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The agent pushes data to the server. Notifymode then shows the time each function took, memory and cpu load.</p>
+
+<h2>Build it and they will come</h2>
+
+<p>I submitted to <a href="http://news.ycombinator.com">Hacker News</a> and <a href="http://reddit.com">Reddit</a>, though it did not make either&#8217;s front page. I tweeted about it. My friends retweeted about it. I gave talks about it at the local Javascript meetup not once, but a few times. I wrote blog posts about using it with <a href="http://socket.io">Socket.io</a> and <a href="http://expressjs.com">Express</a>.</p>
+
+<p>The first few months was bad. I thought Notifymode was useful. I&#8217;m sure once people know about it, they will sign up. That was my first conjecture. So I started a <a href="http://node.jsreadme.com">technical blog</a> on Node.js. Ideally that will funnel users in. In the process I realized putting out quality articles regularly demands significant effort. Blogging is very hard. I could not capture enough organic traffic. It was discouraging.</p>
+
+<p>My next conjecture was: Notifymode is too general. Users probably wanted a specific agent which can push out app specific information. For example, Express users want to know the request time. Running times for individual functions is too granular to be useful. So I wrote customized agents for Express. I released it, blogged about it, and talked about it at the local Javascript meetup. Submitted to Hacker News and Reddit, and did not make either&#8217;s front page again. And I waited for the flood of users to wash me away.</p>
+
+<p>I kept Notifymode running for 6 months. At the last count, Notifymode had 20++ users. Some of them were spam bots(I did not put up a captcha). Some of them were friends. I couldn&#8217;t bear to count how many real users there were. It was discouraging.</p>
+
+<h2>Experience is merely the name men gave to their mistakes</h2>
+
+<blockquote><p>Tell me again was it love at first sight.<br/>When I walked by and you caught my eye.<br/>Didn&#8217;t you know love could shine this bright?</p><footer><strong>Owl City</strong> <cite><a href='http://en.wikipedia.org/wiki/Owl_City'>en.wikipedia.org/wiki/Owl_City/&hellip;</a></cite></footer></blockquote>
+
+
+<p><img class="right" src="http://farm4.staticflickr.com/3254/2408535634_f9953a5dbf_m.jpg" title="By Millzero Photography" ></p>
+
+<p>Do you believe in love at first sight? We fall so deep in love with our ideas that we have this unwavering faith that it will work out. Despite numerous warnings from <a href="http://www.startuplessonslearned.com">Dear Aunt Agony</a> that you should go out on a <a href="http://theleanstartup.com">few dates</a> first, you insist that this is The Idea that you are going to marry. Well if you don&#8217;t listen to Auntie Agony, you are most likely to end up in agony. Like me.</p>
+
+<p>I was lazy to arrange first dates with my Idea. We got married too hastily. Now I&#8217;m divorced. At least I don&#8217;t have to pay alimony. Don&#8217;t be like me. Here are some <a href="http://blog.asmartbear.com/">links</a> for <a href="http://www.bothsidesofthetable.com/">marriage</a> <a href="http://www.avc.com/a_vc/">advice</a>.</p>
+
+<p>Another thing I realized is: marketing is harder than coding. We geeks tend to view a product as 90% coding. The other 10% is the mumbo jumbo <a href="http://en.wikipedia.org/wiki/Search_engine_optimization">marketing</a> <a href="http://en.wikipedia.org/wiki/Search_engine_marketing">stuff</a>. In reality, coding is the 10% while the other mumbo jumbo stuff takes 90%. Why? Coding yet another <a href="http://pinterest.com">Pinterest</a> clone is easy. You know if you write this code in that logic, it will work. Getting 100 users? Where do you start finding them? It is hard because it is not definite. We geeks tend to dismiss anything non-intellectually stimulating as easy. Marketing, though technically easy, in reality is a lot of grunt work. No matter how useful your product is, nobody is going to use it if they have not heard of it. Notifymode taught me that I should have put in <a href="http://www.kalzumeus.com/2009/12/31/engineering-your-way-to-marketing-success/">more effort on marketing</a> early on.</p>
+
+<p>Granted, I&#8217;ve read this advice so many times from other <a href="http://blog.asmartbear.com/quotes-startup-founders.html">experienced</a> <a href="http://brooklynhacker.com/post/29901112213/what-a-hacker-learns-after-a-year-in-marketing">people</a>. Why do people still make the same mistakes? It&#8217;s like asking <a href="en.wikipedia.org/wiki/Marco_Polo">Marco Polo</a>, &#8220;How does Beijing looked like?&#8221;. Marco Polo could tell you stories about festivals or paint you nice pictures of the palace. It is an approximation. You have to experience the real thing to get it.</p>
+
+<h2>You&#8217;re supposed to fail sometimes</h2>
+
+<p>At least I tried. I picked up a host <a href="http://www.opscode.com/chef/">of</a> <a href="http://backbonejs.org/">technologies</a> along the way. I made mistakes, and I learned. The only thing which I thought I did right was not to seek funding. I&#8217;m not sure if I closed Notifymode too early. Could things have turned out better if I persisted? You never know.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Standing Desk Experiment]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/09/29/my-standing-desk-experiment/"/>
+    <updated>2012-09-29T21:47:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/09/29/my-standing-desk-experiment</id>
+    <content type="html"><![CDATA[<p>I was intrigued about <a href="http://en.wikipedia.org/wiki/Standing_desk">standing desks</a> ever since I read about them. Will it make me more productive at work? Will it burn more calories(and help me lose weight)? One month ago, I decided to build myself a standing desk. <em>Build</em> is an overstatement. My total cost outlay is exactly <strong>zero</strong>.</p>
+
+<!-- more -->
+
+
+<h2>The set up</h2>
+
+<p>The standing desk height is the key factor in the construction. It has to be high enough that my elbow can rest comfortably on the desk. I found 4 bricks outside my house and used them as a stand. I wasn&#8217;t sure if the desk would be high enough. Luckily it was. Another slice of luck came my way. I found an unused bar chair in my house.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/standing-desk-bar-chair.jpg" title="Bar chair for standing desk" ></p>
+
+<p>Was it high enough? It was. So here is my improvised standing desk. Built in half an hour. Cost exactly nothing. I can stand or sit whenever I want to.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/improvised-standing-desk.jpg" title="Improvised standing desk" ></p>
+
+<h2>Observations on my body</h2>
+
+<p>I spend an average of 8-9 hours standing every day. That is interspersed with breaks. My overall fitness is good. I usually jog a few times every week. I&#8217;m not overweight. It took me a week for my body to grow used to standing for long periods. Does your whole body feel stiff after sitting down for the whole day? I do. The first thing I noticed is the stiffness is gone.</p>
+
+<p>My back never felt better. Standing allows the back to be in its natural position. There is no stiffness through the day. It just ceases to be noticed. Given I do not have a history of back problems. I&#8217;m sure standing would have prevented future back problems.</p>
+
+<p>My feet bore the brunt of my weight. Over long periods of standing, I find that the <a href="http://en.wikipedia.org/wiki/Foot">hindfoot</a> gets sore. The <a href="http://en.wikipedia.org/wiki/Triceps_surae_muscle">muscles on the calf</a> and those on the <a href="http://en.wikipedia.org/wiki/Thigh">back of the thigh</a> feels tight. The tense sensation extends from the back of the thigh all the way to the hind foot. It is not that bad. You will notice the tightness when you walk after standing for a while. Stretching might help. My feet do not remain in the same position. They vary between resting on 1 foot or both. I tend to walk around more, simply because there is less friction. When you are seated, it requires effort to get up. When you&#8217;re already standing, there is no effort overhead.</p>
+
+<p>Getting a floor mat helps to reduce fatigue. There are a plenty of <a href="http://www.matsmatsmats.com/commercial-industrial/ind-anti-fatigue.html">fatigue mats</a> for sale. I found an unused mat in my house. It helps to reduce the soreness of the hindfoot significantly. I believe any soft surface would suffice. Decide for yourself if you need to buy one. My suggestion is to try a cheap one first.</p>
+
+<p>I noticed I tend to edge closer to the desk when I stand. That is bad for the eyes as it is too close to the computer screen. When you&#8217;re sitting down, there is a gap between you and the desk. To prevent that, I try to place my floor mat further away from the desk.</p>
+
+<h2>Are the benefits worth it?</h2>
+
+<p>How does standing desks make you more productive? Mentally, I feel more alert and clear when I&#8217;m standing. Physically, I don&#8217;t have to adjust my sitting positions every now and then. Sitting tends to encourage bad postures. Slouching backwards. Hunching forwards. It is easier to get into a comfortable position while you&#8217;re standing. There are only 3 positions. On both feet, or on either foot. As a result I don&#8217;t find myself getting bothered by my body when I&#8217;m working.</p>
+
+<p>Another much touted benefit is weight loss. It didn&#8217;t happen to me. My weight remained the same after a month. I&#8217;m supposed to be burning more calories as I stand. Perhaps I ate more during this period. I suppose it differs from person to person.</p>
+
+<p>I&#8217;m happy enough with standing desks that I&#8217;m going to continue using it. One suggestion. When you&#8217;re starting out, there is a temptation to sit down. Take the chair away. It does reduce the temptation. Hope your standing desk experiment works out!</p>
+
+<p><strong>Update:</strong> Follow the <a href="http://news.ycombinator.com/item?id=4591907">discussion</a> on Hacker News</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Uploading images via Etsy API with Ruby]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/"/>
+    <updated>2012-08-27T07:51:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby</id>
+    <content type="html"><![CDATA[<p>As I was building the <a href="http://photogenius.tailoredapps.co/">photo genius app</a> for <a href="http://tailoredapps.co/">Tailored</a>, I was tasked with uploading images to <a href="http://etsy.com">Etsy</a> via its <a href="http://www.etsy.com/developers">API</a>. There is little documentation on how to do this. So I&#8217;m going to show you how to do it.</p>
+
+<!-- more -->
+
+
+<p>Etsy has an <a href="http://www.etsy.com/developers/documentation/reference/listingimage#section_uploading_images">api for image uploading</a>. But it requires a multipart form post. What if you stored your images somewhere like <a href="http://aws.amazon.com/s3/">S3</a> where it is easier to access via a url? Can we upload an image via a url? The trick is to make use of Ruby&#8217;s <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/open-uri/rdoc/OpenURI.html">OpenURI library</a> to open the file via url on the fly. The instructions below assumes you&#8217;re on a Rails app.</p>
+
+<p>First create a new file with the code below.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/open_uri_fix.rb</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Don&#39;t allow downloaded files to be created as StringIO. Force a tempfile to be created.</span>
+</span><span class='line'><span class="c1"># For the image publisher</span>
+</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the constant of <strong>StringMax</strong> in <strong>OpenURI</strong> to be 0. The <strong>StringMax</strong> constant is used to determine when to open the url as a <strong>File</strong> or <strong>StringIO</strong> object. If the file size is smaller than <strong>StringMax</strong>, <strong>OpenURI</strong> will use <strong>StringIO</strong>. <strong>StringIO</strong> will cause problems in the app as it is not compatible with multipart form posts.</p>
+
+<p>Assuming you have the <a href="http://rubygems.org/gems/etsy">etsy ruby gem</a> installed, here is how you could write the upload method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># script/etsy_upload.rb</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">api_upload</span><span class="p">(</span><span class="n">listing_id</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">replacement_image_url</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="n">listing_image_id</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/listings/</span><span class="si">#{</span><span class="n">listing_id</span><span class="si">}</span><span class="s2">/images&quot;</span>
+</span><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">listing_id</span><span class="p">:</span> <span class="n">listing_id</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">rank</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">multipart</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="n">replacement_image_url</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">image</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">replacement_image_url</span><span class="p">)})</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="n">listing_image_id</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">listing_image_id</span><span class="p">:</span> <span class="n">listing_image_id</span><span class="p">})</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">EtsyInterface</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">etsy_shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And here is how you could build a thin wrapper to make API calls. We&#8217;re assuming you have an etsy shop and etsy user object.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># lib/etsy_interface.rb</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">EtsyInterface</span>
+</span><span class='line'>  <span class="k">module</span> <span class="nn">Client</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Makes a request to Etsy API</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
+</span><span class='line'>    <span class="c1"># url    - The String which is the URL to query for</span>
+</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.get(&#39;foo&#39;, shop, &#39;/foo&#39;, {bar: &#39;bar&#39;})</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; {...}</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns the Hash</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Signature</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   &lt;mtd&gt;(args)</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># mtd - Either of the get, post, put or delete HTTP methods</span>
+</span><span class='line'>    <span class="sx">%w(get put post delete)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">mtd</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">define_method</span> <span class="n">mtd</span> <span class="k">do</span> <span class="o">|</span><span class="n">shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">pre_setup</span>
+</span><span class='line'>        <span class="no">Etsy</span><span class="o">::</span><span class="no">Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kp">protected</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Sets the constants of the Etsy class</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.pre_setup</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; nil</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns nothing</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">pre_setup</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span> <span class="k">unless</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_api_key</span> <span class="c1"># your etsy api key</span>
+</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_secret</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_secret</span> <span class="c1"># your etsy secret</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Public: Forms the query parameters for the request</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
+</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Examples</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.access_params(shop, {bar: &#39;bar&#39;})</span>
+</span><span class='line'>    <span class="c1">#   # =&gt; {access_token: &#39;d&#39;, access_secret: &#39;g&#39;, bar: &#39;bar&#39;}</span>
+</span><span class='line'>    <span class="c1">#</span>
+</span><span class='line'>    <span class="c1"># Returns the Hash</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="n">shop</span><span class="o">.</span><span class="n">etsy_user</span>
+</span><span class='line'>      <span class="n">access_params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">access_token</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_token_for</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+</span><span class='line'>        <span class="n">access_secret</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_secret_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> Hope this helps!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to write a command line application in Node.js]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/"/>
+    <updated>2012-07-30T06:44:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js</id>
+    <content type="html"><![CDATA[<p>What is a <a href="http://en.wikipedia.org/wiki/Command-line_interface">command line</a> application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are <a href="http://www.mutt.org">mutt</a>, <a href="http://irssi.org">irssi</a>, <a href="htop.sourceforge.net">htop</a>.</p>
+
+<!-- more -->
+
+
+<p>You can write a command line application using most programming languages. Today, <a href="http://en.wikipedia.org/wiki/Type_system">dynamically typed</a> programming languagues are popular choices for writing such scripts. Reason being they tend to be shorter to write and easy to learn. A short startup time is also important. If a script only takes a fraction of a second to run, and startup time takes 5s, it makes the script feels slow. Examples are the <a href="http://stackoverflow.com/questions/844143/why-is-the-jvm-slow-to-start">JVM</a> languages. <a href="http://nodejs.org">Node.js</a> fits the bill for all these cases. Let&#8217;s take a look to see how we can write a command line application using <a href="http://nodejs.org">Node.js</a>.</p>
+
+<h3>Library shopping</h3>
+
+<p>In <a href="http://nodejs.org">Node.js</a>, there are many libraries that can help you to write a command line application. Which to choose? There are a few main features that all these libraries provide:</p>
+
+<ul>
+<li>Option parsing</li>
+<li>Interactive prompt</li>
+<li>Usage/help message helpers</li>
+<li>Interface elements(progress bars, coloring, password input, spinners, etc)</li>
+</ul>
+
+
+<p>Let us classify the libraries.</p>
+
+<h4>All in one</h4>
+
+<p>These libraries provides all the major features. <a href="https://github.com/chriso/cli">CLI</a> provides input parsing as well.</p>
+
+<ul>
+<li><a href="https://github.com/crcn/celeri">Celeri</a></li>
+<li><a href="https://github.com/chriso/cli">CLI</a></li>
+<li><a href="https://github.com/visionmedia/commander.js">Commander.js</a></li>
+<li><a href="https://github.com/harthur/nomnom">Nomnom</a></li>
+</ul>
+
+
+<h4>Specialist option parsers</h4>
+
+<p>These libraries only do option parsing</p>
+
+<ul>
+<li><a href="https://github.com/isaacs/nopt">Nopt</a></li>
+<li><a href="https://github.com/substack/node-optimist">Optimist</a></li>
+</ul>
+
+
+<h4>Interactive prompt</h4>
+
+<p>Interactive prompt is like a sub shell. You can run custom commands in it. Good examples are node interactive shell and <a href="http://en.wikipedia.org/wiki/Interactive_Ruby_Shell">irb</a>.</p>
+
+<ul>
+<li><a href="https://github.com/flatiron/prompt">Prompt</a></li>
+</ul>
+
+
+<h4>Interface elements</h4>
+
+<ul>
+<li><a href="https://github.com/TooTallNate/ansi.js">Ansi</a></li>
+<li><a href="https://github.com/substack/node-charm">Charm</a></li>
+<li><a href="https://github.com/Marak/colors.js">Colors</a></li>
+<li><a href="https://github.com/visionmedia/node-term-css">Term-CSS</a></li>
+</ul>
+
+
+<h2>Components of a command line application</h2>
+
+<p>We can break a command line application into separate components. Namely, the entry point, arguments and options, output, documentation, configuration and distribution. I&#8217;ll be using the <a href="https://github.com/liangzan/cli-app">twitter search app</a> as an example for illustrating the components.</p>
+
+<h3>Entry point</h3>
+
+<p>Entry point is the executable script which starts the program. Typically there&#8217;re 3 ways to run a command line application.</p>
+
+<p>One way is to indicate both the program loader and the path to the script. Assuming you have installed the example application and is now on the project root.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A shorter way is to indicate just the path to the script. Don&#8217;t forget to make the script executabe by changing the permissions. Another caveat is, if the path to the program loader is wrong, the program won&#8217;t run correctly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bin/birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is possible to do that because of the <a href="http://en.wikipedia.org/wiki/Shebang_(Unix">shebang</a>) line present on the first line of the script. The shebang line hints to the operating system which program loader to use. You are encouraged to use it in your own scripts.</p>
+
+<p>Here is an example of the shebang line used in the example application</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/usr/local/bin/node</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It can be even shorter if the script is placed in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The operating system will find the script and run it. The only caveat is you have to install the script there.</p>
+
+<p>If your program affects the whole system, install it in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a>). A good example is <a href="http://npmjs.org">NPM</a> and <a href="http://coffeescript.org">Coffeescript</a>.</p>
+
+<p>By convention, scripts meant to be executed are placed in the <strong>bin</strong> directory of your project.</p>
+
+<h3>Arguments and options</h3>
+
+<p>A complex command line application usually takes in arguments and options. An option(or flag or switch) is used by the program to modify the operation. In Unix like systems, it is usually indicated by a hyphen-minus followed by a letter or word. Using <strong>node</strong> as an example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node -v
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>node</strong> is the command and <strong>-v</strong> is the option.</p>
+
+<p>For the example application, I chose <a href="https://github.com/substack/node-optimist">Optimst</a> because of its simplicity. Accessing the options is very easy as illustrated below</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">resultTypeOpt</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">r</span> <span class="o">||</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">resulttype</span> <span class="o">||</span> <span class="s1">&#39;mixed&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the option and makes it accessible via the <strong>argv</strong> object. For example when running the command</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie -r foo bar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the arguments and options and returns <strong>argv</strong> in an object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_</span><span class="o">:</span> <span class="p">[</span> <span class="s1">&#39;bar&#39;</span> <span class="p">],</span>
+</span><span class='line'>  <span class="s1">&#39;$0&#39;</span><span class="o">:</span> <span class="s1">&#39;/path/to/bin/birdie&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">r</span><span class="o">:</span> <span class="s1">&#39;foo&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <strong>r</strong> option value is placed under the <strong>r</strong> property and the rest of the arguments are in the underscore array.</p>
+
+<h3>Output</h3>
+
+<p>If your command line application need to show output, you can do so using plain old <a href="http://nodejs.org/docs/latest/api/stdio.html">console.log</a>.</p>
+
+<p>Another option is to use <a href="https://github.com/flatiron/winston">Winston</a>. <a href="https://github.com/flatiron/winston">Winston</a> is a logging libarary that can be used to log to <a href="http://en.wikipedia.org/wiki/Standard_streams">STDOUT</a>. It is almost the same as <strong>console.log</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It comes with logging levels like <strong>info</strong>, <strong>warn</strong> and <strong>error</strong> which also comes in color. Applying them is as easy as</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&#8217;re plenty of other features to <a href="https://github.com/flatiron/winston">Winston</a>. Feel free to explore the library.</p>
+
+<p>If you want to add colors to your text output, you can make use of <a href="https://github.com/Marak/colors.js">Colors.js</a>. Applying colors is very easy.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">.</span><span class="nx">green</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That will output the text in green. <a href="https://github.com/Marak/colors.js">Colors.js</a> does that by overriding the <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/">Javascript String</a> <a href="http://stackoverflow.com/questions/572897/how-does-javascript-prototype-work">prototype</a>. So if you are also <a href="http://stackoverflow.com/questions/892595/javascript-prototypal-inheritance">overriding the String prototype</a>, be careful when using <a href="https://github.com/Marak/colors.js">Colors.js</a>.</p>
+
+<h3>Documentation</h3>
+
+<p>Typically a command line application comes with documentation in the form of <a href="http://en.wikipedia.org/wiki/Man_page">man pages</a>. In fact <a href="http://npmjs.org">NPM</a> does comes with man pages. <a href="http://npmjs.org">NPM</a> generates its man pages via the <a href="https://github.com/isaacs/ronnjs">RonnJS</a> package. It generates man pages from a <a href="http://daringfireball.net/projects/markdown/">Markdown</a> file. You can also use the <a href="https://github.com/rtomayko/ronn">Ronn</a> ruby gem directly. <a href="http://dailyjs.com">DailyJS</a> did a good <a href="http://dailyjs.com/2012/02/16/unix-node-community/">write up</a> on generating man pages in <a href="http://nodejs.org">Node.js</a>.</p>
+
+<p>Your application should also come with HTML documentation.</p>
+
+<h3>Configuration</h3>
+
+<p>If your command line application has a lot of options, a configuration file could help. Let&#8217;s take a look at <a href="https://github.com/visionmedia/mocha">Mocha</a>. Mocha has a <strong>mocha.opts</strong> file which you can state the common options that you want included.</p>
+
+<p>Adding a configuration file feature is as easy as reading from file. But do note that by convention, the option stated on the command line has higher precendence. Which means if I stated an option to print the output in green, but the option in the configuration file says it should be red, you should render it in green. Here&#8217;s the conventional order of precedence in overriding configurations.</p>
+
+<ol>
+<li>Command line options</li>
+<li>Configuration file options</li>
+<li>Application default options</li>
+</ol>
+
+
+<h3>Distribution</h3>
+
+<p>If you want to distribute your command line application, using <a href="http://npmjs.org">NPM</a> is the best option. <a href="http://npmjs.org">NPM</a> helps to install your executable script if you <a href="http://npmjs.org/doc/json.html#bin">add the bin option</a> in your package.json manifest.</p>
+
+<p>If the user installs the package locally like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install foo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The program&#8217;s executable script would be found in 2 places:</p>
+
+<ol>
+<li>./node_modules/.bin</li>
+<li>./node_modules/foo/bin</li>
+</ol>
+
+
+<p>NPM adds a symbolic link from the <strong>.bin</strong> directory to your script.</p>
+
+<p>If the user chose to install your package globally like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install -g foo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The package will install your executable script under the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories. More information can be found in the <a href="http://blog.nodejs.org/2011/03/23/npm-1-0-global-vs-local-installation/">global vs local</a> npm blog article.</p>
+
+<h2>Conclusion</h2>
+
+<p>Despite the relative youth of the <a href="http://nodejs.org">Node.js</a> eco-system, all the pieces required for building a command line application are already there. Feel free to give the <a href="https://github.com/liangzan/cli-app">example application</a> a run to see how easy it is to build one in <a href="http://nodejs.org">Node.js</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to use Coffeescript in your Node.js project]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project/"/>
+    <updated>2012-07-22T17:10:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project</id>
+    <content type="html"><![CDATA[<p><a href="http//coffeescript.org">Coffeescript</a> is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your <a href="http://nodejs.org">Node.js</a> project, you can do so easily. I&#8217;m going to write <a href="https://github.com/liangzan/use-coffeescript">a small project</a> as an example of how to use Coffeescript in your project.</p>
+
+<!-- more -->
+
+
+<h2>Querying for the weather</h2>
+
+<p>We will make use of Node.js to query for the weather information using Google&#8217;s unofficial weather API. It will be a simple command line script.</p>
+
+<h2>Installing Coffeescript</h2>
+
+<p>There are a variety of ways to install Coffeescript. Let&#8217;s make use of <strong>package.json</strong> to install our packages. You could add Coffeescript to your list of dependencies in <strong>package.json</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s2">&quot;dependencies&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;coffee-script&quot;</span><span class="o">:</span> <span class="s2">&quot;~1.3.3&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And run</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to install it. If not you can install it directly with <strong>npm</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install coffee-script
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also install it via your package manager. Most of them should provide a Coffeescript package.</p>
+
+<h2>Compiling Coffeescript</h2>
+
+<p>When you are done writing your code, you have to compile the Coffeescript file to Javascript. Compiling is as simple as running the following command</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>coffee -c foo.coffee
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That will output a <strong>foo.js</strong>.</p>
+
+<p>Once you have a lot of Coffeescript files, compiling by hand becomes tedious. Currently many open source Node.js projects prefer to use <a href="http://www.gnu.org/software/make/">GNU Make</a>. You can make use of <strong>make</strong> to compile your Coffeescript files into Javacript. Below is an example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>compile:
+</span><span class='line'>  @find src -name <span class="s1">&#39;*.coffee&#39;</span> | xargs ./node_modules/.bin/coffee -c -o bin
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Save the script as <strong>Makefile</strong>. This <strong>compile</strong> taget assumes three things. One, your Coffeescript files are under the <strong>src</strong> directory. Two, your <strong>coffee</strong> executable is found under <strong>node_modules</strong>. Three, you want your compiled Javscript files to be saved under the <strong>bin</strong> directory. Do replace if otherwise. Currently the convention is to put the Coffeescript files under the <strong>src</strong> directory. And then compile to the <strong>lib</strong> or <strong>bin</strong> directory. You can compile all your Coffeescript files by running the command below.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>make compile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The compiled files can be found under the <strong>bin</strong> directory.</p>
+
+<h2>Automating the compilation</h2>
+
+<p>As you develop the code, you will find the process of compilation tedious. There are ways to automate the compilation.</p>
+
+<h3>Guard</h3>
+
+<p><a href="https://github.com/guard/guard">Guard</a> is a <a href="http://ruby-lang.org/">Ruby</a> <a href="http://rubygems.org">gem</a> that can run scripts on file changes.</p>
+
+<p>Below is a sample Guardfile that watches Coffeescript files for changes and compiles them.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">guard</span> <span class="ss">:compile</span><span class="o">-</span><span class="n">coffeescript</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">watch</span><span class="p">(</span><span class="sr">%r{^src/*.coffee$}</span><span class="p">)</span> <span class="p">{</span> <span class="sb">`make compile`</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Compile on run</h3>
+
+<p>Another way is to compile before running the script. We can add a run target in the <strong>Makefile</strong> with a <strong>compile</strong> dependency. You can add the below to your <strong>Makefile</strong> to compile to Javascript before running the script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>run: compile
+</span><span class='line'>  node ./bin/index.js singapore
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can run the following to see the results.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>make run
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The only caveat is you cannot pass arguments to the script elegantly. There is a <a href="http://stackoverflow.com/questions/2214575/passing-arguments-to-make-run">workaround</a> though.</p>
+
+<h2>Conclusion</h2>
+
+<p>Using Coffeescript to develop your Node.js project is simple. Simply setup your project to compile your source and that is it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to use exports in NodeJS]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/06/04/how-to-use-exports-in-nodejs/"/>
+    <updated>2012-06-04T16:58:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/06/04/how-to-use-exports-in-nodejs</id>
+    <content type="html"><![CDATA[<p>In any substantial project, it is necessary to separate your code in different files. Node.js implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS API standard to load modules</a> from other files. Using <strong>exports</strong> can be a source of much confusion in Node.js. Let us explore how <strong>exports</strong> works.</p>
+
+<!-- more -->
+
+
+<h3>Use Case 1: Exporting as an Object of functions</h3>
+
+<p>The most common use case is to export your functions using <strong>exports</strong>.</p>
+
+<p>For example, I have a script that wants to use functions from another Node.js file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fridge</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./fridge&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">fridge</span><span class="p">.</span><span class="nx">bread</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">fridge</span><span class="p">.</span><span class="nx">egg</span><span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
+</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 egg: 1&#39; }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using <strong>require</strong>, Node.js will evaluate the file and load the functions defined in the <strong>exports</strong> object.</p>
+
+<p>Behind the scenes, <strong>exports</strong> is just an object. Here is how it works.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//var exports = {};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// exports = {</span>
+</span><span class='line'><span class="c1">//              bread: function bread() { ... },</span>
+</span><span class='line'><span class="c1">//              egg: &#39;egg: 1&#39;</span>
+</span><span class='line'><span class="c1">//           };</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can define variables and functions in the <strong>exports</strong> object. It is exposed and can be used in other files when it is <strong>required</strong>.</p>
+
+<p>What <strong>require</strong> does is to return the <strong>exports</strong> object defined in the file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
+</span><span class='line'><span class="c1">// subtituting require for the exports object</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fridge</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./fridge&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// var fridge = {</span>
+</span><span class='line'><span class="c1">//                bread: function() { ... },</span>
+</span><span class='line'><span class="c1">//                egg: &#39;egg: 1&#39;</span>
+</span><span class='line'><span class="c1">//              };</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The variable fridge has the properties defined in the <strong>exports</strong> object.</p>
+
+<p>You don&#8217;t have to use the same function name when exporting.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// originally the function is called bread</span>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">wholemealBread</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It returns the same result. Only the name defined in the <strong>exports</strong> object is used.</p>
+
+<h3>Use Case 2: Exporting with module.exports</h3>
+
+<p><strong>module.exports</strong> can be used to export the interfaces directly. For example,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
+</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When is this pattern used? It is used when you want to expose <strong>one</strong> variable. It could be a function, string, or any valid variable.</p>
+
+<p>The code below is valid and will yield the same result if you call bread as a variable.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
+</span><span class='line'><span class="c1">// assigning module.exports to a string</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
+</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code below is the equivalent of the first example of fridge.js using <strong>module.exports</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">bread</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">egg</span><span class="o">:</span> <span class="s1">&#39;egg: 1&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So what happens to the <strong>exports</strong> variable then? If <strong>module.exports</strong> is defined, the <strong>exports</strong> object will be ignored. For example, if I add another definition of bread</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="s1">&#39;wheat bread: 4&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
+</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It uses the definition defined in <strong>module.exports</strong>.</p>
+
+<p>What if you assign a function to <strong>exports</strong>?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">bread</span><span class="p">);</span>
+</span><span class='line'><span class="c1">// =&gt; {}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Why didn&#8217;t <strong>exports</strong> have the assigned string value? <strong>exports</strong> is actually a property inside the <strong>module</strong>.</p>
+
+<p>When you assign a function or string directly to <strong>exports</strong>, Javascript will treat <strong>exports</strong> as another variable. Not the <strong>exports</strong> property inside the module.</p>
+
+<p>When you change the property of <strong>exports</strong>, Javascript will access the <strong>exports</strong> property inside the module and apply the changes.</p>
+
+<p>A deeper explanation can be found in this <a href="http://stackoverflow.com/questions/518000/is-javascript-a-pass-by-reference-or-pass-by-value-language">Stackoverflow question</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing the Mac to behave like Xmonad]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/"/>
+    <updated>2012-06-03T05:48:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad</id>
+    <content type="html"><![CDATA[<p>About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working computer ready by the next day so that work does not get disrupted. Faced with less than a day of time, the logical choice is to get a new computer.</p>
+
+<p>For computers, I only have eyes for Thinkpads and Macs. I wanted a Thinkpad. But the <a href="http://www.seeseelooklook.com/index.php">prices of Thinkpads in Singapore</a> is ridiculously overpriced. It is about twice the <a href="http://www.lenovo.com/products/us/laptop/thinkpad/">price in the US</a>. As much as I wanted a Thinkpad, I decided on a Mac.</p>
+
+<p>No doubt the Mac desktop experience is good. But it can never compare to <a href="http://blog.liangzan.net/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">my Arch Linux setup</a> where <em>everything</em> is customized to <em>my liking</em>. I spent much effort getting my <a href="http://www.archlinux.org/">Arch Linux</a> to not only look good and to work effectively. Faced with the conclusion that the next few years of my computing life is going to be on a Mac, I decided to make life easier for myself.</p>
+
+<!-- more -->
+
+
+<h2>Mac window management is a pain</h2>
+
+<p>My biggest pain point on the Mac is windows management. Every window has to be resized with a mouse. Every window has to be moved with a mouse. And every window is never full screen. Every time I used my mouse to manually move a window, I thought to myself, &#8220;I could do that in Mod-Shift-E in Xmonad&#8221;. Another 3 seconds wasted moving windows. A good analogy is like mobile phones. Once you have experienced the convenience of mobile phones, you can never imagine going back to the no-mobile phone era. That is how good <a href="http://xmonad.org/">Xmonad</a> is.</p>
+
+<p>To mitigate my pain, I used a few techniques.</p>
+
+<h2>Sizeup to the rescue</h2>
+
+<p><a href="http://www.irradiatedsoftware.com/sizeup/">Sizeup</a> app from Irradiated software solved some of those problems. It behaves like a psuedo <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a>. It could make the app go full screen. It could make the app switch between monitors. All these are done with customizable key bindings. Besides that, it could tile multiple apps. I&#8217;m sold.</p>
+
+<h2>No more cmd-tab stuttering with Alfred</h2>
+
+<p>My next pain point is the <a href="http://en.wikipedia.org/wiki/Alt-Tab">Cmd-tab</a>(or on the PC: Alt-tab) stutter. I&#8217;m forced to do the Cmd-tab-tab-tab stutter <em>every time</em> I want to switch to an app. In Xmonad, I usually put my apps in their designated <a href="http://xmonad.org/tour.html#workspace">workspace</a>. If I want emacs, I type Mod-2. If I want the shell, I type Mod-1. On the Mac, If I want emacs, I type Cmd-tab-tab-tab-tab. Oops I missed it, and it is Cmd-tab-tab-tab-tab again. Painful.</p>
+
+<p><a href="http://www.alfredapp.com/">Alfred</a> app solved that problem for me. The <a href="http://www.alfredapp.com/powerpack/">powerpack</a> allows you to add custom keybindings to run custom scripts. Which I did. I bound Option-1 to an Apple script that activates iTerm. Below is a sample of the script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='applescript'><span class='line'><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&quot;Emacs&quot;</span> <span class="k">to</span> <span class="nb">activate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>EDIT: I realized Alfred can directly add a keybinding to the app. There is no need to write a custom apple script. Thanks to Jim Myhrberg for pointing it out.</p>
+
+<p>Alfred app also acts as a better replacement for <a href="http://tools.suckless.org/dmenu/">dmenu</a>. It looks better, and it has fuzzy matching. The default dmenu don&#8217;t have that.</p>
+
+<h2>Emacs frame switching with frame-tag.el</h2>
+
+<p>I do most of my work on Emacs with multiple monitors. I usually have multiple frames open. In Emacs terminology a <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Frames.html">frame</a> is equivalent to the window. When I activate Emacs on the Mac, all my frames get focus. On Xmonad, I just push the frame to a different workspace and the problem of frame switching goes away. On the Mac, I have to do another C-x 5-o stutter to get to the frame I want. Painful.</p>
+
+<p>Rather than whining about it, I solved my own problem. Being on Emacs means you can customize things. Hence I wrote <a href="https://github.com/liangzan/frame-tag.el">frame-tag.el</a>. It added M-1, M-2, etc keybindings to Emacs. That allowed me to switch to frames easily.</p>
+
+<h2>My last pain point</h2>
+
+<p>Sometimes I want to show one emacs frame together with the shell. I cannot do that with a single keybinding on the Mac. On Xmonad, I can easily do that since each frame occupies a different workspace. It is a mere selection of the workspace on different screens. On the Mac I still had to use the mouse to focus on the application. I tried some clumsy workarounds. That included <a href="http://www.bluem.net/en/mac/cliclick/">simulating mouse clicks</a> with key bindings. It didn&#8217;t work well.</p>
+
+<h2>In conclusion</h2>
+
+<p>A good developer may become productive on any platform. But these little performance enhancements adds up to make you faster. It matters. I feel that a customized Linux operating system is still the best choice for a friction free development experience.</p>
+
+<p>A few days ago, I had an epiphany. All these cross platform pain would go away naturally if I had shifted more of my workflow to <a href="http://c2.com/cgi/wiki?EmacsAsOperatingSystem">The Emacs OS</a>. Window management problems gone. Cmd-tab stuttering gone. And you can do everything with key bindings. But still I believe I&#8217;ll be back on Xmonad some day.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Solarized themed Arch Linux Setup]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/"/>
+    <updated>2012-01-19T15:36:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup</id>
+    <content type="html"><![CDATA[<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs-urxvt-xmonad.png" title="Arch linux solarized screenshot with emacs urxvt tmux xmonad" ></p>
+
+<p>The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your applications.</p>
+
+<!-- more -->
+
+
+<h2>OS: Arch Linux</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-blank-desktop.png" title="Arch linux xmonad solarized screenshot with blank desktop" ></p>
+
+<p>Obviously only Linux or BSD gives you this much freedom to customize your desktop. I&#8217;m using Arch Linux. Other distros should yield the same result. The advantage of using Arch Linux is it gives you a blank slate to work on. If you use all-in-one distros like <a href="http://www.ubuntu.com">Ubuntu</a>, you would have the extra work of stripping out the desktop environment.</p>
+
+<h2>Color theme: Solarized</h2>
+
+<p>There&#8217;re some very good color themes available. Here&#8217;re some very good ones.</p>
+
+<ul>
+<li><a href="http://ethanschoonover.com/solarized">Solarized</a></li>
+<li><a href="http://slinky.imukuppi.org/zenburnpage/">Zenburn</a></li>
+<li><a href="http://blog.toddwerth.com/entries/13">IR_Black</a></li>
+</ul>
+
+
+<p>Choose one which you like. I&#8217;m using Solarized. Not all color themes are created equally. Popular themes have more tooling support. For Solarized, it has been ported to vim, mutt, shell, and emacs. It makes it easier to apply the same color theme to other applications.</p>
+
+<h2>Font: Inconsolata</h2>
+
+<p>As with color themes, font is very much a personal preference. Choose a good monospaced font to use for all your apps. I&#8217;m using the <a href="http://levien.com/type/myfonts/inconsolata.html">Inconsolata</a> font.</p>
+
+<p>There are other good recommendations <a href="http://hivelogic.com/articles/top-10-programming-fonts/">here</a></p>
+
+<h2>Window manager: XMonad</h2>
+
+<p>I&#8217;m using <a href="http://xmonad.org/">XMonad</a>. I wanted a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling windows manager</a> as I wanted to maximise my screen estate. I chose XMonad because of the way it handles windows on multi monitors. Each screen shows an independent workspace. I have control over which application should appear on which screen. For example, I can show a movie on my second monitor while switching workspaces only on the laptop screen. The movie does not get affected. OS X, Windows, Gnome, KDE treats both screens as a single workspace. Nothing wrong with that. But I had to manually move apps from screen to screen and do a lot of Alt-Tab window cycling. With XMonad, I no longer need to do that. I just switch workspaces. XMonad allows you to configure apps to automatically go to designated workspaces. You get the added advantage of knowing exactly where which app is.</p>
+
+<p>This <a href="https://github.com/vicfryzel/xmonad-config">repository</a> is very well documented. My config is almost a carbon copy of it.</p>
+
+<h2>Status bar: Xmobar</h2>
+
+<p><a href="http://projects.haskell.org/xmobar/">Xmobar</a> works well with my Window Manager(Xmonad). Configuring it is very easy. You should be able to achieve the same result with <a href="https://sites.google.com/site/gotmor/dzen">dzen2</a> too. Dzen has more features though. Xmobar is a plain text status bar. Here&#8217;s my <a href="https://gist.github.com/1643647">.xmobarrc</a>. The gmail checker is a simple hand written <a href="https://gist.github.com/1643664">ruby script</a>. The colors used are picked from the solarized theme.</p>
+
+<h2>Termainal emulator: urxvt</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-urxvt.png" title="Arch linux xmonad solarized screenshot with urxvt" ></p>
+
+<p>I&#8217;m using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">urxvt</a> as my terminal emulator. urxvt is highly customizable. I don&#8217;t think the default terminal emulators that come with Gnome, KDE offer the same room for customizability as urxvt. It should not be a problem to install urxvt in your distro though. Just apply the color theme to your terminal. And it should merge nicely into the environment.</p>
+
+<p>Here is my <a href="https://gist.github.com/1643690">config</a> for urxvt</p>
+
+<h2>Text editor: Emacs</h2>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs.png" title="Arch linux xmonad solarized screenshot with emacs" ></p>
+
+<p>Be it Vim or Emacs, you can easily apply a color theme for it. There&#8217;s the Solarized theme for Vim as well. Just follow the instructions and install the appropriate color theme for your text editor. For emacs, you need to use the color theme package. There&#8217;s a separate <a href="https://github.com/sellout/emacs-color-theme-solarized">solarized color theme package</a>. Install it and it&#8217;ll merge perfectly with the status bar.</p>
+
+<h2>OS integration</h2>
+
+<p>To take it further, I made my wallpaper integrate into the status bar. I also used dark themes for Chrome and Firefox. Similarly for web apps like Gmail, I try to use a dark theme to merge in with the desktop. This makes the entire computing experience very pleasing to the eye.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How SmugFTP came into being]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2011/07/23/how-smugftp-came-into-being/"/>
+    <updated>2011-07-23T16:35:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2011/07/23/how-smugftp-came-into-being</id>
+    <content type="html"><![CDATA[<p><a href="http://smugftp.com">SmugFTP</a> is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.</p>
+
+<!-- more -->
+
+
+<p>I signed up for <a href="http://www.smugmug.com">Smugmug</a> after my wedding. My wedding photos were precious. My wife and I wanted to share it with our friends and family. We wanted to back our photos up. We chose Smugmug. Everything was good. Except the uploading. An upload usually take many hours. It&#8217;s common to leave you computer running overnight to complete the upload. The thing is, uploads fail. When it fails, it stops. So you have to check it periodically. If it fails, restart it. I actually felt a sense of relief and accomplishement once the uploads are complete. I wasn&#8217;t happy with the web uploaders. The default uploader doesn&#8217;t work. I chose the Java one. It felt clunky. The engineer in me knew that there&#8217;e got to be a better way to do this. So I went to the Smugmug wiki to find uploaders that others have written. Unfortunately there&#8217;s none that look good. Feeling disappointed, I went to the Smugmug user voice page. And there it was, a suggestion for FTP uploading. I wanted FTP. I voted. That was when I thought to myself, FTP is not too hard to build, why can&#8217;t I build it?</p>
+
+<p>And so I started building it. Smugmug had an API. After doing a little research, I knew FTP to Smugmug is possible. And not too hard too. The first beta release was out in a month. Immediately, there&#8217;s interest from other users. Slowly, word spreaded and the project grew. It was until after 6 months or so that I felt that SmugFTP is finally stable.</p>
+
+<p>There&#8217;re several things I learnt</p>
+
+<ol>
+<li>Testing is very important. Try to make the tests as similar as the actual environment</li>
+<li>Don&#8217;t be ashamed to release a buggy product. SmugFTP was buggy for a good 6 months. It caused many users inconveniences. But they still forgave me.</li>
+<li>Be nice to your users. If you&#8217;re nice, people reciprocate. I always apologised for failed uploads in the early days. And I went out of the way to fix the mess that the bugs created. All of them appreaciate it. And I had a fantastic relationship with some of my users as a result of that.</li>
+<li>Solve a real problem. If you&#8217;re solving a painful problem, users will find you. They will stick with you, forgive you and spread word for you. I find too many people are building stuff that do not solve actual problems.</li>
+<li>Development always take longer than you think. The production environment always have surprises for you.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

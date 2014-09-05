@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to write a command line application in Node.js - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="What is a command line application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Write a Command Line Application in Node.js</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T06:44:00+00:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>What is a <a href="http://en.wikipedia.org/wiki/Command-line_interface">command line</a> application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are <a href="http://www.mutt.org">mutt</a>, <a href="http://irssi.org">irssi</a>, <a href="htop.sourceforge.net">htop</a>.</p>
+
+<!-- more -->
+
+
+<p>You can write a command line application using most programming languages. Today, <a href="http://en.wikipedia.org/wiki/Type_system">dynamically typed</a> programming languagues are popular choices for writing such scripts. Reason being they tend to be shorter to write and easy to learn. A short startup time is also important. If a script only takes a fraction of a second to run, and startup time takes 5s, it makes the script feels slow. Examples are the <a href="http://stackoverflow.com/questions/844143/why-is-the-jvm-slow-to-start">JVM</a> languages. <a href="http://nodejs.org">Node.js</a> fits the bill for all these cases. Let&#8217;s take a look to see how we can write a command line application using <a href="http://nodejs.org">Node.js</a>.</p>
+
+<h3>Library shopping</h3>
+
+<p>In <a href="http://nodejs.org">Node.js</a>, there are many libraries that can help you to write a command line application. Which to choose? There are a few main features that all these libraries provide:</p>
+
+<ul>
+<li>Option parsing</li>
+<li>Interactive prompt</li>
+<li>Usage/help message helpers</li>
+<li>Interface elements(progress bars, coloring, password input, spinners, etc)</li>
+</ul>
+
+
+<p>Let us classify the libraries.</p>
+
+<h4>All in one</h4>
+
+<p>These libraries provides all the major features. <a href="https://github.com/chriso/cli">CLI</a> provides input parsing as well.</p>
+
+<ul>
+<li><a href="https://github.com/crcn/celeri">Celeri</a></li>
+<li><a href="https://github.com/chriso/cli">CLI</a></li>
+<li><a href="https://github.com/visionmedia/commander.js">Commander.js</a></li>
+<li><a href="https://github.com/harthur/nomnom">Nomnom</a></li>
+</ul>
+
+
+<h4>Specialist option parsers</h4>
+
+<p>These libraries only do option parsing</p>
+
+<ul>
+<li><a href="https://github.com/isaacs/nopt">Nopt</a></li>
+<li><a href="https://github.com/substack/node-optimist">Optimist</a></li>
+</ul>
+
+
+<h4>Interactive prompt</h4>
+
+<p>Interactive prompt is like a sub shell. You can run custom commands in it. Good examples are node interactive shell and <a href="http://en.wikipedia.org/wiki/Interactive_Ruby_Shell">irb</a>.</p>
+
+<ul>
+<li><a href="https://github.com/flatiron/prompt">Prompt</a></li>
+</ul>
+
+
+<h4>Interface elements</h4>
+
+<ul>
+<li><a href="https://github.com/TooTallNate/ansi.js">Ansi</a></li>
+<li><a href="https://github.com/substack/node-charm">Charm</a></li>
+<li><a href="https://github.com/Marak/colors.js">Colors</a></li>
+<li><a href="https://github.com/visionmedia/node-term-css">Term-CSS</a></li>
+</ul>
+
+
+<h2>Components of a command line application</h2>
+
+<p>We can break a command line application into separate components. Namely, the entry point, arguments and options, output, documentation, configuration and distribution. I&#8217;ll be using the <a href="https://github.com/liangzan/cli-app">twitter search app</a> as an example for illustrating the components.</p>
+
+<h3>Entry point</h3>
+
+<p>Entry point is the executable script which starts the program. Typically there&#8217;re 3 ways to run a command line application.</p>
+
+<p>One way is to indicate both the program loader and the path to the script. Assuming you have installed the example application and is now on the project root.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A shorter way is to indicate just the path to the script. Don&#8217;t forget to make the script executabe by changing the permissions. Another caveat is, if the path to the program loader is wrong, the program won&#8217;t run correctly.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bin/birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is possible to do that because of the <a href="http://en.wikipedia.org/wiki/Shebang_(Unix">shebang</a>) line present on the first line of the script. The shebang line hints to the operating system which program loader to use. You are encouraged to use it in your own scripts.</p>
+
+<p>Here is an example of the shebang line used in the example application</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/usr/local/bin/node</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It can be even shorter if the script is placed in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>birdie
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The operating system will find the script and run it. The only caveat is you have to install the script there.</p>
+
+<p>If your program affects the whole system, install it in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a>). A good example is <a href="http://npmjs.org">NPM</a> and <a href="http://coffeescript.org">Coffeescript</a>.</p>
+
+<p>By convention, scripts meant to be executed are placed in the <strong>bin</strong> directory of your project.</p>
+
+<h3>Arguments and options</h3>
+
+<p>A complex command line application usually takes in arguments and options. An option(or flag or switch) is used by the program to modify the operation. In Unix like systems, it is usually indicated by a hyphen-minus followed by a letter or word. Using <strong>node</strong> as an example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node -v
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>node</strong> is the command and <strong>-v</strong> is the option.</p>
+
+<p>For the example application, I chose <a href="https://github.com/substack/node-optimist">Optimst</a> because of its simplicity. Accessing the options is very easy as illustrated below</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">resultTypeOpt</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">r</span> <span class="o">||</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">resulttype</span> <span class="o">||</span> <span class="s1">&#39;mixed&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the option and makes it accessible via the <strong>argv</strong> object. For example when running the command</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie -r foo bar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the arguments and options and returns <strong>argv</strong> in an object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">_</span><span class="o">:</span> <span class="p">[</span> <span class="s1">&#39;bar&#39;</span> <span class="p">],</span>
+</span><span class='line'>  <span class="s1">&#39;$0&#39;</span><span class="o">:</span> <span class="s1">&#39;/path/to/bin/birdie&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">r</span><span class="o">:</span> <span class="s1">&#39;foo&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <strong>r</strong> option value is placed under the <strong>r</strong> property and the rest of the arguments are in the underscore array.</p>
+
+<h3>Output</h3>
+
+<p>If your command line application need to show output, you can do so using plain old <a href="http://nodejs.org/docs/latest/api/stdio.html">console.log</a>.</p>
+
+<p>Another option is to use <a href="https://github.com/flatiron/winston">Winston</a>. <a href="https://github.com/flatiron/winston">Winston</a> is a logging libarary that can be used to log to <a href="http://en.wikipedia.org/wiki/Standard_streams">STDOUT</a>. It is almost the same as <strong>console.log</strong>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It comes with logging levels like <strong>info</strong>, <strong>warn</strong> and <strong>error</strong> which also comes in color. Applying them is as easy as</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&#8217;re plenty of other features to <a href="https://github.com/flatiron/winston">Winston</a>. Feel free to explore the library.</p>
+
+<p>If you want to add colors to your text output, you can make use of <a href="https://github.com/Marak/colors.js">Colors.js</a>. Applying colors is very easy.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">.</span><span class="nx">green</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That will output the text in green. <a href="https://github.com/Marak/colors.js">Colors.js</a> does that by overriding the <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/">Javascript String</a> <a href="http://stackoverflow.com/questions/572897/how-does-javascript-prototype-work">prototype</a>. So if you are also <a href="http://stackoverflow.com/questions/892595/javascript-prototypal-inheritance">overriding the String prototype</a>, be careful when using <a href="https://github.com/Marak/colors.js">Colors.js</a>.</p>
+
+<h3>Documentation</h3>
+
+<p>Typically a command line application comes with documentation in the form of <a href="http://en.wikipedia.org/wiki/Man_page">man pages</a>. In fact <a href="http://npmjs.org">NPM</a> does comes with man pages. <a href="http://npmjs.org">NPM</a> generates its man pages via the <a href="https://github.com/isaacs/ronnjs">RonnJS</a> package. It generates man pages from a <a href="http://daringfireball.net/projects/markdown/">Markdown</a> file. You can also use the <a href="https://github.com/rtomayko/ronn">Ronn</a> ruby gem directly. <a href="http://dailyjs.com">DailyJS</a> did a good <a href="http://dailyjs.com/2012/02/16/unix-node-community/">write up</a> on generating man pages in <a href="http://nodejs.org">Node.js</a>.</p>
+
+<p>Your application should also come with HTML documentation.</p>
+
+<h3>Configuration</h3>
+
+<p>If your command line application has a lot of options, a configuration file could help. Let&#8217;s take a look at <a href="https://github.com/visionmedia/mocha">Mocha</a>. Mocha has a <strong>mocha.opts</strong> file which you can state the common options that you want included.</p>
+
+<p>Adding a configuration file feature is as easy as reading from file. But do note that by convention, the option stated on the command line has higher precendence. Which means if I stated an option to print the output in green, but the option in the configuration file says it should be red, you should render it in green. Here&#8217;s the conventional order of precedence in overriding configurations.</p>
+
+<ol>
+<li>Command line options</li>
+<li>Configuration file options</li>
+<li>Application default options</li>
+</ol>
+
+
+<h3>Distribution</h3>
+
+<p>If you want to distribute your command line application, using <a href="http://npmjs.org">NPM</a> is the best option. <a href="http://npmjs.org">NPM</a> helps to install your executable script if you <a href="http://npmjs.org/doc/json.html#bin">add the bin option</a> in your package.json manifest.</p>
+
+<p>If the user installs the package locally like this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install foo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The program&#8217;s executable script would be found in 2 places:</p>
+
+<ol>
+<li>./node_modules/.bin</li>
+<li>./node_modules/foo/bin</li>
+</ol>
+
+
+<p>NPM adds a symbolic link from the <strong>.bin</strong> directory to your script.</p>
+
+<p>If the user chose to install your package globally like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install -g foo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The package will install your executable script under the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories. More information can be found in the <a href="http://blog.nodejs.org/2011/03/23/npm-1-0-global-vs-local-installation/">global vs local</a> npm blog article.</p>
+
+<h2>Conclusion</h2>
+
+<p>Despite the relative youth of the <a href="http://nodejs.org">Node.js</a> eco-system, all the pieces required for building a command line application are already there. Feel free to give the <a href="https://github.com/liangzan/cli-app">example application</a> a run to see how easy it is to build one in <a href="http://nodejs.org">Node.js</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-30T06:44:00+00:00" pubdate data-updated="true">Jul 30<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project/" title="Previous Post: How to use Coffeescript in your Node.js project">&laquo; How to use Coffeescript in your Node.js project</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/" title="Next Post: Uploading images via Etsy API with Ruby">Uploading images via Etsy API with Ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

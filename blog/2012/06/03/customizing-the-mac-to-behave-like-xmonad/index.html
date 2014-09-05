@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Customizing the Mac to behave like Xmonad - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Customizing the Mac to Behave Like Xmonad</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-03T05:48:00+00:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working computer ready by the next day so that work does not get disrupted. Faced with less than a day of time, the logical choice is to get a new computer.</p>
+
+<p>For computers, I only have eyes for Thinkpads and Macs. I wanted a Thinkpad. But the <a href="http://www.seeseelooklook.com/index.php">prices of Thinkpads in Singapore</a> is ridiculously overpriced. It is about twice the <a href="http://www.lenovo.com/products/us/laptop/thinkpad/">price in the US</a>. As much as I wanted a Thinkpad, I decided on a Mac.</p>
+
+<p>No doubt the Mac desktop experience is good. But it can never compare to <a href="http://blog.liangzan.net/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">my Arch Linux setup</a> where <em>everything</em> is customized to <em>my liking</em>. I spent much effort getting my <a href="http://www.archlinux.org/">Arch Linux</a> to not only look good and to work effectively. Faced with the conclusion that the next few years of my computing life is going to be on a Mac, I decided to make life easier for myself.</p>
+
+<!-- more -->
+
+
+<h2>Mac window management is a pain</h2>
+
+<p>My biggest pain point on the Mac is windows management. Every window has to be resized with a mouse. Every window has to be moved with a mouse. And every window is never full screen. Every time I used my mouse to manually move a window, I thought to myself, &#8220;I could do that in Mod-Shift-E in Xmonad&#8221;. Another 3 seconds wasted moving windows. A good analogy is like mobile phones. Once you have experienced the convenience of mobile phones, you can never imagine going back to the no-mobile phone era. That is how good <a href="http://xmonad.org/">Xmonad</a> is.</p>
+
+<p>To mitigate my pain, I used a few techniques.</p>
+
+<h2>Sizeup to the rescue</h2>
+
+<p><a href="http://www.irradiatedsoftware.com/sizeup/">Sizeup</a> app from Irradiated software solved some of those problems. It behaves like a psuedo <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a>. It could make the app go full screen. It could make the app switch between monitors. All these are done with customizable key bindings. Besides that, it could tile multiple apps. I&#8217;m sold.</p>
+
+<h2>No more cmd-tab stuttering with Alfred</h2>
+
+<p>My next pain point is the <a href="http://en.wikipedia.org/wiki/Alt-Tab">Cmd-tab</a>(or on the PC: Alt-tab) stutter. I&#8217;m forced to do the Cmd-tab-tab-tab stutter <em>every time</em> I want to switch to an app. In Xmonad, I usually put my apps in their designated <a href="http://xmonad.org/tour.html#workspace">workspace</a>. If I want emacs, I type Mod-2. If I want the shell, I type Mod-1. On the Mac, If I want emacs, I type Cmd-tab-tab-tab-tab. Oops I missed it, and it is Cmd-tab-tab-tab-tab again. Painful.</p>
+
+<p><a href="http://www.alfredapp.com/">Alfred</a> app solved that problem for me. The <a href="http://www.alfredapp.com/powerpack/">powerpack</a> allows you to add custom keybindings to run custom scripts. Which I did. I bound Option-1 to an Apple script that activates iTerm. Below is a sample of the script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='applescript'><span class='line'><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&quot;Emacs&quot;</span> <span class="k">to</span> <span class="nb">activate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>EDIT: I realized Alfred can directly add a keybinding to the app. There is no need to write a custom apple script. Thanks to Jim Myhrberg for pointing it out.</p>
+
+<p>Alfred app also acts as a better replacement for <a href="http://tools.suckless.org/dmenu/">dmenu</a>. It looks better, and it has fuzzy matching. The default dmenu don&#8217;t have that.</p>
+
+<h2>Emacs frame switching with frame-tag.el</h2>
+
+<p>I do most of my work on Emacs with multiple monitors. I usually have multiple frames open. In Emacs terminology a <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Frames.html">frame</a> is equivalent to the window. When I activate Emacs on the Mac, all my frames get focus. On Xmonad, I just push the frame to a different workspace and the problem of frame switching goes away. On the Mac, I have to do another C-x 5-o stutter to get to the frame I want. Painful.</p>
+
+<p>Rather than whining about it, I solved my own problem. Being on Emacs means you can customize things. Hence I wrote <a href="https://github.com/liangzan/frame-tag.el">frame-tag.el</a>. It added M-1, M-2, etc keybindings to Emacs. That allowed me to switch to frames easily.</p>
+
+<h2>My last pain point</h2>
+
+<p>Sometimes I want to show one emacs frame together with the shell. I cannot do that with a single keybinding on the Mac. On Xmonad, I can easily do that since each frame occupies a different workspace. It is a mere selection of the workspace on different screens. On the Mac I still had to use the mouse to focus on the application. I tried some clumsy workarounds. That included <a href="http://www.bluem.net/en/mac/cliclick/">simulating mouse clicks</a> with key bindings. It didn&#8217;t work well.</p>
+
+<h2>In conclusion</h2>
+
+<p>A good developer may become productive on any platform. But these little performance enhancements adds up to make you faster. It matters. I feel that a customized Linux operating system is still the best choice for a friction free development experience.</p>
+
+<p>A few days ago, I had an epiphany. All these cross platform pain would go away naturally if I had shifted more of my workflow to <a href="http://c2.com/cgi/wiki?EmacsAsOperatingSystem">The Emacs OS</a>. Window management problems gone. Cmd-tab stuttering gone. And you can do everything with key bindings. But still I believe I&#8217;ll be back on Xmonad some day.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-03T05:48:00+00:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/" title="Previous Post: My Solarized themed Arch Linux Setup">&laquo; My Solarized themed Arch Linux Setup</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/06/04/how-to-use-exports-in-nodejs/" title="Next Post: How to use exports in NodeJS">How to use exports in NodeJS &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/06/first-impressions-of-leap-motion/">First impressions of Leap Motion</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>
