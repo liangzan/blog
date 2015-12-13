@@ -1,0 +1,64 @@
+<div class="highlight"><pre><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-history-size</span> <span class="mi">1024</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-regexp</span> <span class="s">&quot;^[^#$]*[#$] &quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">load </span><span class="s">&quot;em-hist&quot;</span><span class="p">)</span>			<span class="c1">; So the history vars are defined</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-save-history-on-exit</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-save-history-on-exit</span> <span class="nv">t</span><span class="p">))</span> <span class="c1">; Don&#39;t ask, just save</span>
+<span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+<span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-ask-to-save-history</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-ask-to-save-history</span> <span class="ss">&#39;always</span><span class="p">))</span> <span class="c1">; For older(?) version</span>
+<span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
+
+<span class="p">(</span><span class="nf">defun</span> <span class="nv">eshell/ef</span> <span class="p">(</span><span class="nf">fname-regexp</span> <span class="nv">&amp;rest</span> <span class="nv">dir</span><span class="p">)</span> <span class="p">(</span><span class="nf">ef</span> <span class="nv">fname-regexp</span> <span class="nv">default-directory</span><span class="p">))</span>
+
+
+<span class="c1">;;; ---- path manipulation</span>
+
+<span class="p">(</span><span class="nf">defun</span> <span class="nv">pwd-repl-home</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let* </span><span class="p">((</span><span class="nf">home</span> <span class="p">(</span><span class="nf">expand-file-name</span> <span class="p">(</span><span class="nf">getenv</span> <span class="s">&quot;HOME&quot;</span><span class="p">)))</span>
+	 <span class="p">(</span><span class="nf">home-len</span> <span class="p">(</span><span class="nb">length </span><span class="nv">home</span><span class="p">)))</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">and</span>
+	 <span class="p">(</span><span class="nb">&gt;= </span><span class="p">(</span><span class="nb">length </span><span class="nv">pwd</span><span class="p">)</span> <span class="nv">home-len</span><span class="p">)</span>
+	 <span class="p">(</span><span class="nf">equal</span> <span class="nv">home</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="mi">0</span> <span class="nv">home-len</span><span class="p">)))</span>
+	<span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;~&quot;</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="nv">home-len</span><span class="p">))</span>
+      <span class="nv">pwd</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+<span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+      <span class="p">(</span><span class="nf">propertize</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+              <span class="s">&quot;]&quot;</span><span class="p">)</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
+      <span class="p">)))</span>
+
+<span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-function</span>
+      <span class="p">(</span><span class="k">lambda </span><span class="p">()</span>
+        <span class="p">(</span><span class="nf">concat</span>
+         <span class="p">(</span><span class="nf">propertize</span> <span class="p">((</span><span class="k">lambda </span><span class="p">(</span><span class="nf">p-lst</span><span class="p">)</span>
+            <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">p-lst</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">(</span><span class="nf">concat</span>
+                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">zerop</span> <span class="p">(</span><span class="nb">length </span><span class="nv">elm</span><span class="p">))</span> <span class="s">&quot;&quot;</span>
+                                            <span class="p">(</span><span class="nb">substring </span><span class="nv">elm</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)))</span>
+                            <span class="p">(</span><span class="nf">butlast</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+                            <span class="s">&quot;/&quot;</span><span class="p">)</span>
+                 <span class="s">&quot;/&quot;</span>
+                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+                            <span class="p">(</span><span class="nf">last</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
+                            <span class="s">&quot;/&quot;</span><span class="p">))</span>
+              <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
+                         <span class="nv">p-lst</span>
+                         <span class="s">&quot;/&quot;</span><span class="p">)))</span>
+          <span class="p">(</span><span class="nf">split-string</span> <span class="p">(</span><span class="nf">pwd-repl-home</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">))</span> <span class="s">&quot;/&quot;</span><span class="p">))</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;yellow&quot;</span><span class="p">))</span>
+         <span class="p">(</span><span class="k">or </span><span class="p">(</span><span class="nf">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">)))</span>
+         <span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;# &quot;</span> <span class="ss">&#39;face</span> <span class="ss">&#39;default</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-highlight-prompt</span> <span class="nv">nil</span><span class="p">)</span>
+</pre>
+</div>

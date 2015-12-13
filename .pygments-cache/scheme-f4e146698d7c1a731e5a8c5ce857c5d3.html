@@ -1,0 +1,15 @@
+<div class="highlight"><pre><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
+  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
+<span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
+  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
+             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
+      <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
+              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
+                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
+                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
+              <span class="s">&quot;]&quot;</span><span class="p">)</span>
+      <span class="p">)))</span>
+</pre>
+</div>

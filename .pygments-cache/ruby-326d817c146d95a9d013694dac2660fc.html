@@ -1,0 +1,68 @@
+<div class="highlight"><pre><span class="c1"># lib/etsy_interface.rb</span>
+<span class="k">module</span> <span class="nn">EtsyInterface</span>
+  <span class="k">module</span> <span class="nn">Client</span>
+
+    <span class="c1"># Public: Makes a request to Etsy API</span>
+    <span class="c1">#</span>
+    <span class="c1"># shop   - The EtsyShop instance</span>
+    <span class="c1"># url    - The String which is the URL to query for</span>
+    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+    <span class="c1">#</span>
+    <span class="c1"># Examples</span>
+    <span class="c1">#</span>
+    <span class="c1">#   EtsyInterface::Client.get(&#39;foo&#39;, shop, &#39;/foo&#39;, {bar: &#39;bar&#39;})</span>
+    <span class="c1">#   # =&gt; {...}</span>
+    <span class="c1">#</span>
+    <span class="c1"># Returns the Hash</span>
+    <span class="c1">#</span>
+    <span class="c1"># Signature</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;mtd&gt;(args)</span>
+    <span class="c1">#</span>
+    <span class="c1"># mtd - Either of the get, post, put or delete HTTP methods</span>
+    <span class="sx">%w(get put post delete)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">mtd</span><span class="o">|</span>
+      <span class="n">define_method</span> <span class="n">mtd</span> <span class="k">do</span> <span class="o">|</span><span class="n">shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span><span class="o">|</span>
+        <span class="n">pre_setup</span>
+        <span class="no">Etsy</span><span class="o">::</span><span class="no">Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="kp">protected</span>
+
+    <span class="c1"># Public: Sets the constants of the Etsy class</span>
+    <span class="c1">#</span>
+    <span class="c1"># Examples</span>
+    <span class="c1">#</span>
+    <span class="c1">#   EtsyInterface::Client.pre_setup</span>
+    <span class="c1">#   # =&gt; nil</span>
+    <span class="c1">#</span>
+    <span class="c1"># Returns nothing</span>
+    <span class="k">def</span> <span class="nf">pre_setup</span>
+      <span class="no">Etsy</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span> <span class="k">unless</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span>
+      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_api_key</span> <span class="c1"># your etsy api key</span>
+      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_secret</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_secret</span> <span class="c1"># your etsy secret</span>
+    <span class="k">end</span>
+
+    <span class="c1"># Public: Forms the query parameters for the request</span>
+    <span class="c1">#</span>
+    <span class="c1"># shop   - The EtsyShop instance</span>
+    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
+    <span class="c1">#</span>
+    <span class="c1"># Examples</span>
+    <span class="c1">#</span>
+    <span class="c1">#   EtsyInterface::Client.access_params(shop, {bar: &#39;bar&#39;})</span>
+    <span class="c1">#   # =&gt; {access_token: &#39;d&#39;, access_secret: &#39;g&#39;, bar: &#39;bar&#39;}</span>
+    <span class="c1">#</span>
+    <span class="c1"># Returns the Hash</span>
+    <span class="k">def</span> <span class="nf">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="n">shop</span><span class="o">.</span><span class="n">etsy_user</span>
+      <span class="n">access_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">access_token</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_token_for</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+        <span class="n">access_secret</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_secret_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+      <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+</div>

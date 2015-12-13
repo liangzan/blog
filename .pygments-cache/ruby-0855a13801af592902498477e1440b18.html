@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="c1"># config/initializers/open_uri_fix.rb</span>
+<span class="c1">#</span>
+<span class="c1"># Don&#39;t allow downloaded files to be created as StringIO. Force a tempfile to be created.</span>
+<span class="c1"># For the image publisher</span>
+<span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
+<span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
+</pre>
+</div>
