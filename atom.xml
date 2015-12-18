@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2015-12-13T18:12:40+08:00</updated>
+  <updated>2015-12-19T07:54:07+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The randomness idea filter]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2015/12/19/the-randomness-idea-filter/"/>
+    <updated>2015-12-19T06:38:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2015/12/19/the-randomness-idea-filter</id>
+    <content type="html"><![CDATA[<p>I use this filter to decide whether a product or feature is worth pursuing. I call it the randomness idea filter. How badly is this product or feature affected by randomness?</p>
+
+<!-- more -->
+
+
+<h2>Works vs somewhat works</h2>
+
+<p>Take the lamp for example. It has one switch. Flick it, and it fills the room with light. It works. It works well and it works all the time. Observe, it has one input(that is the switch) and one expected output.</p>
+
+<p>Now, let&#8217;s take the other extreme: Siri.</p>
+
+<p>My one year old: <em>dah blu bum</em></p>
+
+<p>Siri: Calling Uncle Tom now.</p>
+
+<p>Not to say that Siri does not work. It works, some of the time. It works if you speak clearly, with a clear intention like call someone plus a multitude of other conditions. Under limited kinds of inputs, Siri will work well. Like the lamp.</p>
+
+<p>The more variety the input has, the harder it is to get the outcome right.</p>
+
+<h2>Is it random or not</h2>
+
+<p>Even if there are lots of different input, as long as you can predict those input, you can be reasonably sure you can get the result right. The tricky part is, is your input predictable?</p>
+
+<p>For example, your product does database migration from MySQL to PostgresSQL. That is a hard problem to solve. There are lots of cases to cater for. But they are predictable. There are only that many data types and that many ways it can change to. With effort, it is possible to cater for more than 95% of the cases.</p>
+
+<p>Siri can&#8217;t. Even for a universal language like English, people speak it in so many tongues. Worse, spoken languages keep evolving. The inputs are random. How much effort is needed to cover all the bases? Such products are not going to be expected to work very well.</p>
+
+<p>Unless, your users don&#8217;t expect a straight result. Like a Google search. It is OK to give a somewhat good result. But for Siri, it is not OK to call the wrong person.</p>
+
+<p>When there is randomness in the input and the expected result is a straight yes no result, throw away the idea. There are many other better things you can work on. When thinking if I should pursue an idea, I always do this check. I hope it helps you too.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Entering the logistics industry]]></title>
@@ -2128,73 +2166,6 @@ Does it have many people reporting issues?</p>
 <p>A good developer may become productive on any platform. But these little performance enhancements adds up to make you faster. It matters. I feel that a customized Linux operating system is still the best choice for a friction free development experience.</p>
 
 <p>A few days ago, I had an epiphany. All these cross platform pain would go away naturally if I had shifted more of my workflow to <a href="http://c2.com/cgi/wiki?EmacsAsOperatingSystem">The Emacs OS</a>. Window management problems gone. Cmd-tab stuttering gone. And you can do everything with key bindings. But still I believe I&#8217;ll be back on Xmonad some day.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My Solarized themed Arch Linux Setup]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup/"/>
-    <updated>2012-01-19T15:36:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/01/19/my-solarized-themed-arch-linux-setup</id>
-    <content type="html"><![CDATA[<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs-urxvt-xmonad.png" title="Arch linux solarized screenshot with emacs urxvt tmux xmonad" ></p>
-
-<p>The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your applications.</p>
-
-<!-- more -->
-
-
-<h2>OS: Arch Linux</h2>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-blank-desktop.png" title="Arch linux xmonad solarized screenshot with blank desktop" ></p>
-
-<p>Obviously only Linux or BSD gives you this much freedom to customize your desktop. I&#8217;m using Arch Linux. Other distros should yield the same result. The advantage of using Arch Linux is it gives you a blank slate to work on. If you use all-in-one distros like <a href="http://www.ubuntu.com">Ubuntu</a>, you would have the extra work of stripping out the desktop environment.</p>
-
-<h2>Color theme: Solarized</h2>
-
-<p>There&#8217;re some very good color themes available. Here&#8217;re some very good ones.</p>
-
-<ul>
-<li><a href="http://ethanschoonover.com/solarized">Solarized</a></li>
-<li><a href="http://slinky.imukuppi.org/zenburnpage/">Zenburn</a></li>
-<li><a href="http://blog.toddwerth.com/entries/13">IR_Black</a></li>
-</ul>
-
-
-<p>Choose one which you like. I&#8217;m using Solarized. Not all color themes are created equally. Popular themes have more tooling support. For Solarized, it has been ported to vim, mutt, shell, and emacs. It makes it easier to apply the same color theme to other applications.</p>
-
-<h2>Font: Inconsolata</h2>
-
-<p>As with color themes, font is very much a personal preference. Choose a good monospaced font to use for all your apps. I&#8217;m using the <a href="http://levien.com/type/myfonts/inconsolata.html">Inconsolata</a> font.</p>
-
-<p>There are other good recommendations <a href="http://hivelogic.com/articles/top-10-programming-fonts/">here</a></p>
-
-<h2>Window manager: XMonad</h2>
-
-<p>I&#8217;m using <a href="http://xmonad.org/">XMonad</a>. I wanted a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling windows manager</a> as I wanted to maximise my screen estate. I chose XMonad because of the way it handles windows on multi monitors. Each screen shows an independent workspace. I have control over which application should appear on which screen. For example, I can show a movie on my second monitor while switching workspaces only on the laptop screen. The movie does not get affected. OS X, Windows, Gnome, KDE treats both screens as a single workspace. Nothing wrong with that. But I had to manually move apps from screen to screen and do a lot of Alt-Tab window cycling. With XMonad, I no longer need to do that. I just switch workspaces. XMonad allows you to configure apps to automatically go to designated workspaces. You get the added advantage of knowing exactly where which app is.</p>
-
-<p>This <a href="https://github.com/vicfryzel/xmonad-config">repository</a> is very well documented. My config is almost a carbon copy of it.</p>
-
-<h2>Status bar: Xmobar</h2>
-
-<p><a href="http://projects.haskell.org/xmobar/">Xmobar</a> works well with my Window Manager(Xmonad). Configuring it is very easy. You should be able to achieve the same result with <a href="https://sites.google.com/site/gotmor/dzen">dzen2</a> too. Dzen has more features though. Xmobar is a plain text status bar. Here&#8217;s my <a href="https://gist.github.com/1643647">.xmobarrc</a>. The gmail checker is a simple hand written <a href="https://gist.github.com/1643664">ruby script</a>. The colors used are picked from the solarized theme.</p>
-
-<h2>Termainal emulator: urxvt</h2>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-urxvt.png" title="Arch linux xmonad solarized screenshot with urxvt" ></p>
-
-<p>I&#8217;m using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">urxvt</a> as my terminal emulator. urxvt is highly customizable. I don&#8217;t think the default terminal emulators that come with Gnome, KDE offer the same room for customizability as urxvt. It should not be a problem to install urxvt in your distro though. Just apply the color theme to your terminal. And it should merge nicely into the environment.</p>
-
-<p>Here is my <a href="https://gist.github.com/1643690">config</a> for urxvt</p>
-
-<h2>Text editor: Emacs</h2>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs.png" title="Arch linux xmonad solarized screenshot with emacs" ></p>
-
-<p>Be it Vim or Emacs, you can easily apply a color theme for it. There&#8217;s the Solarized theme for Vim as well. Just follow the instructions and install the appropriate color theme for your text editor. For emacs, you need to use the color theme package. There&#8217;s a separate <a href="https://github.com/sellout/emacs-color-theme-solarized">solarized color theme package</a>. Install it and it&#8217;ll merge perfectly with the status bar.</p>
-
-<h2>OS integration</h2>
-
-<p>To take it further, I made my wallpaper integrate into the status bar. I also used dark themes for Chrome and Firefox. Similarly for web apps like Gmail, I try to use a dark theme to merge in with the desktop. This makes the entire computing experience very pleasing to the eye.</p>
 ]]></content>
   </entry>
   
