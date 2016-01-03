@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>how to deploy a standalone server app - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Deploy a Standalone Server App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-27T16:34:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is <a href="http://www.ansible.com/">Ansible</a> and a dash of shell scripts. The process is very much influenced by <a href="http://capistranorb.com/">Capistrano</a>, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back.</p>
+
+<!-- more -->
+
+
+<h2>Deploying in one step</h2>
+
+<p>I want to run one command to deploy my application on a remote server. It would have to be a script that can run a series of commands on a remote server. There are plenty of tools available. I chose Ansible. I like Ansible as it is easy to understand. It is like C, close enough to the metal, but gives a light enough abstraction to make it productive.</p>
+
+<p>What the script does is, it transfers the file over(assuming you built it locally). A symbolic link to the new file is created. And then the application is started.</p>
+
+<p>Here is the Ansible script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="nn">---</span>
+</span><span class='line'><span class="c1"># connector deployment</span>
+</span><span class='line'>
+</span><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">deploys the application</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">all</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">remote_user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ubuntu</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">vars</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">timestamp</span><span class="p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">copies the jar file over</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">copy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">src=../build/app.jar dest=/home/ubuntu/app-.jar</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">unlink the current app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">file</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">path=/home/ubuntu/app.jar state=absent</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">link to the newly deployed app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">file</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">path=/home/ubuntu/app.jar src=/home/ubuntu/app-.jar state=link</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">stops running app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=app state=stopped</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">starts the app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=app state=started</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">send notification message via slack</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">module</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">slack</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;your slack token&gt;</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">msg</span><span class="p-Indicator">:</span> <span class="s">&quot;app</span><span class="nv"> </span><span class="s">completed</span><span class="nv"> </span><span class="s">deployment.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Versioning your deployments</h2>
+
+<p>I want a way to version my deployments. Versioning gives you the option to roll back. There are 2 mechanism which I used. The symbolic link and the timestamp. I stole the ideas unashamedly from Capistrano.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Symbolic_link">Symbolic links</a> is used to point to the desired version of the app to run. This allows you to run whichever version of the app. Timestamp tells you when this file is deployed. I find it good enough for differentiating.</p>
+
+<p>The relevant commands are all found in the Ansible script above. The <code>timestamp</code> variable captures the time of the deployment. We then append the timestamp to the newly deployed file. The symbolic linking are done using Ansible.</p>
+
+<p>As you deploy more often, you need to clear the old files which are unused. For that, I wrote a shell script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># leaves 5 copies of the standalone app</span>
+</span><span class='line'><span class="nv">total_files</span><span class="o">=</span><span class="k">$(</span>find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | wc -l<span class="k">)</span>
+</span><span class='line'><span class="nv">file_num_to_remove</span><span class="o">=</span><span class="sb">`</span>expr <span class="nv">$total_files</span> - 5<span class="sb">`</span>
+</span><span class='line'>find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | tail -n <span class="nv">$file_num_to_remove</span> | xargs rm
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It first finds all the jar files in the current directory. Next it sorts them by date modified with the most recent first. We want to keep the last five deployments. So it finds how many files it should remove by subtracting the total by five. Once we know how many files to remove, we can find them using <code>tail</code> and remove them by passing the file name into <code>xargs</code>. 5 is an arbitrary number that you can change.</p>
+
+<p>After deployment, the application is deployed as an <a href="http://upstart.ubuntu.com/">Upstart</a> service and monitored via <a href="https://www.librato.com/">Librato</a>.</p>
+
+<h2>Room for improvement</h2>
+
+<p>I see a few ways it can be improved.</p>
+
+<p>The versioning makes use of timestamp. It can be richer. If there is semantic tagging, we could also use that in addition to timestamps. We will be able to tell which version this file contains.</p>
+
+<p>The transfer time over the network is the bottleneck of the process. If you have a build server like <a href="https://jenkins-ci.org/">Jenkins</a>, it would be faster to deploy from it.</p>
+
+<p>I do hope this is helpful to whoever who reads this. Do share your thoughts on how this can be improved.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-27T16:34:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2015</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/19/the-randomness-idea-filter/" title="Previous Post: The randomness idea filter">&laquo; The randomness idea filter</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <p style="margin: 0;">
+    <!-- Begin MailChimp Signup Form -->
+    <div id="mc_embed_signup">
+      <form action="http://liangzan.us2.list-manage.com/subscribe/post?u=43276f0c5e7dec4cff937d081&amp;id=2162acfafd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+	<div class="mc-field-group">
+     	  <label for="mce-EMAIL" style="margin: 8px 0;">Enter your email to receive updates</label>
+     	  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" style="width: 100%; height: 24px; font-size: 14px;" placeholder="you@email.com">
+	</div>
+	<div id="mce-responses" class="clear">
+     	  <div class="response" id="mce-error-response" style="display:none"></div>
+     	  <div class="response" id="mce-success-response" style="display:none"></div>
+	</div>
+	<div class="clear">
+	  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button" style="background-color: #5DA423; border: 1px solid #396516; width: auto; background: #2BA6CB; border: 1px solid #1E728C; -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset; color: white; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; line-height: 1; margin: 8px 0 0 0; outline: none; padding: 10px 20px 11px; position: relative; text-align: center; text-decoration: none; -webkit-transition: background-color 0.15s ease-in-out; -moz-transition: background-color 0.15s ease-in-out; -o-transition: background-color 0.15s ease-in-out; transition: background-color 0.15s ease-in-out;">
+	</div>
+      </form>
+    </div>
+    <!--End mc_embed_signup-->
+  </p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP came into being</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>

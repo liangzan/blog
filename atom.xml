@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2015-12-19T08:00:28+08:00</updated>
+  <updated>2016-01-03T15:20:39+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,132 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[how to deploy a standalone server app]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app/"/>
+    <updated>2015-12-27T16:34:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2015/12/27/how-to-deploy-a-standalone-server-app</id>
+    <content type="html"><![CDATA[<p>This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is <a href="http://www.ansible.com/">Ansible</a> and a dash of shell scripts. The process is very much influenced by <a href="http://capistranorb.com/">Capistrano</a>, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back.</p>
+
+<!-- more -->
+
+
+<h2>Deploying in one step</h2>
+
+<p>I want to run one command to deploy my application on a remote server. It would have to be a script that can run a series of commands on a remote server. There are plenty of tools available. I chose Ansible. I like Ansible as it is easy to understand. It is like C, close enough to the metal, but gives a light enough abstraction to make it productive.</p>
+
+<p>What the script does is, it transfers the file over(assuming you built it locally). A symbolic link to the new file is created. And then the application is started.</p>
+
+<p>Here is the Ansible script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="nn">---</span>
+</span><span class='line'><span class="c1"># connector deployment</span>
+</span><span class='line'>
+</span><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">deploys the application</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">all</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">remote_user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ubuntu</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">vars</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">timestamp</span><span class="p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">copies the jar file over</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">copy</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">src=../build/app.jar dest=/home/ubuntu/app-.jar</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">unlink the current app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">file</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">path=/home/ubuntu/app.jar state=absent</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">link to the newly deployed app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">file</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">path=/home/ubuntu/app.jar src=/home/ubuntu/app-.jar state=link</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">stops running app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=app state=stopped</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">starts the app</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=app state=started</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">send notification message via slack</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">module</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">slack</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;your slack token&gt;</span>
+</span><span class='line'>        <span class="l-Scalar-Plain">msg</span><span class="p-Indicator">:</span> <span class="s">&quot;app</span><span class="nv"> </span><span class="s">completed</span><span class="nv"> </span><span class="s">deployment.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Versioning your deployments</h2>
+
+<p>I want a way to version my deployments. Versioning gives you the option to roll back. There are 2 mechanism which I used. The symbolic link and the timestamp. I stole the ideas unashamedly from Capistrano.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Symbolic_link">Symbolic links</a> is used to point to the desired version of the app to run. This allows you to run whichever version of the app. Timestamp tells you when this file is deployed. I find it good enough for differentiating.</p>
+
+<p>The relevant commands are all found in the Ansible script above. The <code>timestamp</code> variable captures the time of the deployment. We then append the timestamp to the newly deployed file. The symbolic linking are done using Ansible.</p>
+
+<p>As you deploy more often, you need to clear the old files which are unused. For that, I wrote a shell script.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/env bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># leaves 5 copies of the standalone app</span>
+</span><span class='line'><span class="nv">total_files</span><span class="o">=</span><span class="k">$(</span>find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | wc -l<span class="k">)</span>
+</span><span class='line'><span class="nv">file_num_to_remove</span><span class="o">=</span><span class="sb">`</span>expr <span class="nv">$total_files</span> - 5<span class="sb">`</span>
+</span><span class='line'>find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | tail -n <span class="nv">$file_num_to_remove</span> | xargs rm
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It first finds all the jar files in the current directory. Next it sorts them by date modified with the most recent first. We want to keep the last five deployments. So it finds how many files it should remove by subtracting the total by five. Once we know how many files to remove, we can find them using <code>tail</code> and remove them by passing the file name into <code>xargs</code>. 5 is an arbitrary number that you can change.</p>
+
+<p>After deployment, the application is deployed as an <a href="http://upstart.ubuntu.com/">Upstart</a> service and monitored via <a href="https://www.librato.com/">Librato</a>.</p>
+
+<h2>Room for improvement</h2>
+
+<p>I see a few ways it can be improved.</p>
+
+<p>The versioning makes use of timestamp. It can be richer. If there is semantic tagging, we could also use that in addition to timestamps. We will be able to tell which version this file contains.</p>
+
+<p>The transfer time over the network is the bottleneck of the process. If you have a build server like <a href="https://jenkins-ci.org/">Jenkins</a>, it would be faster to deploy from it.</p>
+
+<p>I do hope this is helpful to whoever who reads this. Do share your thoughts on how this can be improved.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The randomness idea filter]]></title>
@@ -2111,63 +2237,6 @@ Does it have many people reporting issues?</p>
 <p>When you change the property of <strong>exports</strong>, Javascript will access the <strong>exports</strong> property inside the module and apply the changes.</p>
 
 <p>A deeper explanation can be found in this <a href="http://stackoverflow.com/questions/518000/is-javascript-a-pass-by-reference-or-pass-by-value-language">Stackoverflow question</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Customizing the Mac to behave like Xmonad]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/"/>
-    <updated>2012-06-03T05:48:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad</id>
-    <content type="html"><![CDATA[<p>About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working computer ready by the next day so that work does not get disrupted. Faced with less than a day of time, the logical choice is to get a new computer.</p>
-
-<p>For computers, I only have eyes for Thinkpads and Macs. I wanted a Thinkpad. But the <a href="http://www.seeseelooklook.com/index.php">prices of Thinkpads in Singapore</a> is ridiculously overpriced. It is about twice the <a href="http://www.lenovo.com/products/us/laptop/thinkpad/">price in the US</a>. As much as I wanted a Thinkpad, I decided on a Mac.</p>
-
-<p>No doubt the Mac desktop experience is good. But it can never compare to <a href="http://blog.liangzan.net/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">my Arch Linux setup</a> where <em>everything</em> is customized to <em>my liking</em>. I spent much effort getting my <a href="http://www.archlinux.org/">Arch Linux</a> to not only look good and to work effectively. Faced with the conclusion that the next few years of my computing life is going to be on a Mac, I decided to make life easier for myself.</p>
-
-<!-- more -->
-
-
-<h2>Mac window management is a pain</h2>
-
-<p>My biggest pain point on the Mac is windows management. Every window has to be resized with a mouse. Every window has to be moved with a mouse. And every window is never full screen. Every time I used my mouse to manually move a window, I thought to myself, &#8220;I could do that in Mod-Shift-E in Xmonad&#8221;. Another 3 seconds wasted moving windows. A good analogy is like mobile phones. Once you have experienced the convenience of mobile phones, you can never imagine going back to the no-mobile phone era. That is how good <a href="http://xmonad.org/">Xmonad</a> is.</p>
-
-<p>To mitigate my pain, I used a few techniques.</p>
-
-<h2>Sizeup to the rescue</h2>
-
-<p><a href="http://www.irradiatedsoftware.com/sizeup/">Sizeup</a> app from Irradiated software solved some of those problems. It behaves like a psuedo <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a>. It could make the app go full screen. It could make the app switch between monitors. All these are done with customizable key bindings. Besides that, it could tile multiple apps. I&#8217;m sold.</p>
-
-<h2>No more cmd-tab stuttering with Alfred</h2>
-
-<p>My next pain point is the <a href="http://en.wikipedia.org/wiki/Alt-Tab">Cmd-tab</a>(or on the PC: Alt-tab) stutter. I&#8217;m forced to do the Cmd-tab-tab-tab stutter <em>every time</em> I want to switch to an app. In Xmonad, I usually put my apps in their designated <a href="http://xmonad.org/tour.html#workspace">workspace</a>. If I want emacs, I type Mod-2. If I want the shell, I type Mod-1. On the Mac, If I want emacs, I type Cmd-tab-tab-tab-tab. Oops I missed it, and it is Cmd-tab-tab-tab-tab again. Painful.</p>
-
-<p><a href="http://www.alfredapp.com/">Alfred</a> app solved that problem for me. The <a href="http://www.alfredapp.com/powerpack/">powerpack</a> allows you to add custom keybindings to run custom scripts. Which I did. I bound Option-1 to an Apple script that activates iTerm. Below is a sample of the script.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='applescript'><span class='line'><span class="k">tell</span> <span class="nb">application</span> <span class="s2">&quot;Emacs&quot;</span> <span class="k">to</span> <span class="nb">activate</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>EDIT: I realized Alfred can directly add a keybinding to the app. There is no need to write a custom apple script. Thanks to Jim Myhrberg for pointing it out.</p>
-
-<p>Alfred app also acts as a better replacement for <a href="http://tools.suckless.org/dmenu/">dmenu</a>. It looks better, and it has fuzzy matching. The default dmenu don&#8217;t have that.</p>
-
-<h2>Emacs frame switching with frame-tag.el</h2>
-
-<p>I do most of my work on Emacs with multiple monitors. I usually have multiple frames open. In Emacs terminology a <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Frames.html">frame</a> is equivalent to the window. When I activate Emacs on the Mac, all my frames get focus. On Xmonad, I just push the frame to a different workspace and the problem of frame switching goes away. On the Mac, I have to do another C-x 5-o stutter to get to the frame I want. Painful.</p>
-
-<p>Rather than whining about it, I solved my own problem. Being on Emacs means you can customize things. Hence I wrote <a href="https://github.com/liangzan/frame-tag.el">frame-tag.el</a>. It added M-1, M-2, etc keybindings to Emacs. That allowed me to switch to frames easily.</p>
-
-<h2>My last pain point</h2>
-
-<p>Sometimes I want to show one emacs frame together with the shell. I cannot do that with a single keybinding on the Mac. On Xmonad, I can easily do that since each frame occupies a different workspace. It is a mere selection of the workspace on different screens. On the Mac I still had to use the mouse to focus on the application. I tried some clumsy workarounds. That included <a href="http://www.bluem.net/en/mac/cliclick/">simulating mouse clicks</a> with key bindings. It didn&#8217;t work well.</p>
-
-<h2>In conclusion</h2>
-
-<p>A good developer may become productive on any platform. But these little performance enhancements adds up to make you faster. It matters. I feel that a customized Linux operating system is still the best choice for a friction free development experience.</p>
-
-<p>A few days ago, I had an epiphany. All these cross platform pain would go away naturally if I had shifted more of my workflow to <a href="http://c2.com/cgi/wiki?EmacsAsOperatingSystem">The Emacs OS</a>. Window management problems gone. Cmd-tab stuttering gone. And you can do everything with key bindings. But still I believe I&#8217;ll be back on Xmonad some day.</p>
 ]]></content>
   </entry>
   

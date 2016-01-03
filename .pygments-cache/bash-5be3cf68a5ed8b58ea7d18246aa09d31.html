@@ -1,0 +1,8 @@
+<div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="c"># leaves 5 copies of the standalone app</span>
+<span class="nv">total_files</span><span class="o">=</span><span class="k">$(</span>find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | wc -l<span class="k">)</span>
+<span class="nv">file_num_to_remove</span><span class="o">=</span><span class="sb">`</span>expr <span class="nv">$total_files</span> - 5<span class="sb">`</span>
+find -name <span class="s1">&#39;*.jar&#39;</span> -type f -print0 | xargs -0 ls -t | tail -n <span class="nv">$file_num_to_remove</span> | xargs rm
+</pre>
+</div>
