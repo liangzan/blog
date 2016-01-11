@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-01-03T15:20:39+08:00</updated>
+  <updated>2016-01-12T05:01:43+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[the tyranny of billing]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/01/12/the-tyranny-of-billing/"/>
+    <updated>2016-01-12T03:45:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/01/12/the-tyranny-of-billing</id>
+    <content type="html"><![CDATA[<p>Billing is a critical function of any business. It is more than just collection of money. What better way than to tell a story.</p>
+
+<p>We use the product of a fictitious company, ABC Widgets. The product is critical to our business. If the product fails to run properly, it causes a cascading effect to the company. We are happy with the product. It solves our problems. The price is reasonable. ABC Widgets bills us using the pre-paid model. In short, pay before you use. No payment, the service is cut. That is fair. We did not disagree.</p>
+
+<p>Things were fine for months. One day, we received complaints from our customers that something was wrong. We investigated. It turned out that ABC Widget&#8217;s service stopped running. We reached their support. Our pre-paid account ran out of money. And our business critical service was cut. Our account was usually charged automatically when credits run low. This time it failed to charge.</p>
+
+<p>We topped up our accounts manually. It did charge. Why wasn&#8217;t we notified? ABC Widgets replied they did email us. Twice. Sent automatically to our placeholder email: admin@so-and-so.com. They even pasted the email contents. It is our fault. We did not pay. They warned us. Not once, but twice. So, they were morally right to cut off our business critical service.</p>
+
+<p>We were unhappy. But things has been going well this far. Besides, it did look like our fault. We let things past. A few months later, we received complaints from our customers. The account ran out of credits again. Our service was terminated. We are very unhappy. How can our accounts fail to top up again? We demand to know why. They replied it happens from time to time. And they apologized. We changed our notification email to point to a real person this time. We need to be actively monitoring our emails in case it happened again.</p>
+
+<p>A sharp reader will see that the point of failure was the auto-charging of the accounts. It failed which led to the series of unfortunate events. Correct. So, it is a technical problem. Wrong. It is not simply a technical problem. It is a failure to understand the needs of the customer. This is how customers are lost.</p>
+
+<p>The same incident happened for the third time. This time, we did not even receive the notification email. We decided to switch vendors. Our trust in them was lost. ABC Widgets lost a customer not because the product was no good, but because of they failed to understand our needs.</p>
+
+<p>When you sell a business critical service, it has to run. In the case of ABC Widgets, the product is running fine. However their billing did not cater to the needs of their customers. You should lightly never lightly cut the service of a customer especially when it is business critical. Repeat that. You should never <strong>lightly</strong> cut the service when it is business critical. How much effort did ABC Widget take to build a stellar product? A lot. How much effort did ABC Widgets take to reach their customers that there are problems in billing? 2 automated emails. Is that the best they can do? They don&#8217;t understand that it is critical, and it cannot be cut off like that.</p>
+
+<p>If I were them, I would have customer service call the customer asking in person if they would like to cut the service. One phone call is enough. Is that a lot of effort? A switch to post-paid would solve it as well. We would have continued with ABC Widgets. Please don&#8217;t subject your customers to the tyranny of your billing system. They would be grateful.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[how to deploy a standalone server app]]></title>
@@ -1911,332 +1936,6 @@ Does it have many people reporting issues?</p>
 <h2>Conclusion</h2>
 
 <p>Using Coffeescript to develop your Node.js project is simple. Simply setup your project to compile your source and that is it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to use exports in NodeJS]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/06/04/how-to-use-exports-in-nodejs/"/>
-    <updated>2012-06-04T16:58:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/06/04/how-to-use-exports-in-nodejs</id>
-    <content type="html"><![CDATA[<p>In any substantial project, it is necessary to separate your code in different files. Node.js implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS API standard to load modules</a> from other files. Using <strong>exports</strong> can be a source of much confusion in Node.js. Let us explore how <strong>exports</strong> works.</p>
-
-<!-- more -->
-
-
-<h3>Use Case 1: Exporting as an Object of functions</h3>
-
-<p>The most common use case is to export your functions using <strong>exports</strong>.</p>
-
-<p>For example, I have a script that wants to use functions from another Node.js file.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">fridge</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./fridge&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">fridge</span><span class="p">.</span><span class="nx">bread</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">fridge</span><span class="p">.</span><span class="nx">egg</span><span class="p">};</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
-</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 egg: 1&#39; }</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using <strong>require</strong>, Node.js will evaluate the file and load the functions defined in the <strong>exports</strong> object.</p>
-
-<p>Behind the scenes, <strong>exports</strong> is just an object. Here is how it works.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//var exports = {};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// exports = {</span>
-</span><span class='line'><span class="c1">//              bread: function bread() { ... },</span>
-</span><span class='line'><span class="c1">//              egg: &#39;egg: 1&#39;</span>
-</span><span class='line'><span class="c1">//           };</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can define variables and functions in the <strong>exports</strong> object. It is exposed and can be used in other files when it is <strong>required</strong>.</p>
-
-<p>What <strong>require</strong> does is to return the <strong>exports</strong> object defined in the file.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
-</span><span class='line'><span class="c1">// subtituting require for the exports object</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">fridge</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./fridge&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// var fridge = {</span>
-</span><span class='line'><span class="c1">//                bread: function() { ... },</span>
-</span><span class='line'><span class="c1">//                egg: &#39;egg: 1&#39;</span>
-</span><span class='line'><span class="c1">//              };</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The variable fridge has the properties defined in the <strong>exports</strong> object.</p>
-
-<p>You don&#8217;t have to use the same function name when exporting.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// originally the function is called bread</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">wholemealBread</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">egg</span> <span class="o">=</span> <span class="s1">&#39;egg: 1&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It returns the same result. Only the name defined in the <strong>exports</strong> object is used.</p>
-
-<h3>Use Case 2: Exporting with module.exports</h3>
-
-<p><strong>module.exports</strong> can be used to export the interfaces directly. For example,</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
-</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When is this pattern used? It is used when you want to expose <strong>one</strong> variable. It could be a function, string, or any valid variable.</p>
-
-<p>The code below is valid and will yield the same result if you call bread as a variable.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
-</span><span class='line'><span class="c1">// assigning module.exports to a string</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
-</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The code below is the equivalent of the first example of fridge.js using <strong>module.exports</strong>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// fridge.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">bread</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">bread</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">egg</span><span class="o">:</span> <span class="s1">&#39;egg: 1&#39;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So what happens to the <strong>exports</strong> variable then? If <strong>module.exports</strong> is defined, the <strong>exports</strong> object will be ignored. For example, if I add another definition of bread</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">bread</span> <span class="o">=</span> <span class="s1">&#39;wheat bread: 4&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// make_sandwich.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">makeSandwich</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="nx">sandwich</span><span class="o">:</span> <span class="nx">bread</span> <span class="o">+</span> <span class="s1">&#39; with some eggs&#39;</span><span class="p">};</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">makeSandwich</span><span class="p">());</span>
-</span><span class='line'><span class="c1">// =&gt; { sandwich: &#39;bread: 2 with some eggs&#39; }</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It uses the definition defined in <strong>module.exports</strong>.</p>
-
-<p>What if you assign a function to <strong>exports</strong>?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bread.js</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span> <span class="o">=</span> <span class="s1">&#39;bread: 2&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">bread</span> <span class="o">=</span> <span class="nx">require</span> <span class="p">(</span><span class="s1">&#39;./bread&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">bread</span><span class="p">);</span>
-</span><span class='line'><span class="c1">// =&gt; {}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Why didn&#8217;t <strong>exports</strong> have the assigned string value? <strong>exports</strong> is actually a property inside the <strong>module</strong>.</p>
-
-<p>When you assign a function or string directly to <strong>exports</strong>, Javascript will treat <strong>exports</strong> as another variable. Not the <strong>exports</strong> property inside the module.</p>
-
-<p>When you change the property of <strong>exports</strong>, Javascript will access the <strong>exports</strong> property inside the module and apply the changes.</p>
-
-<p>A deeper explanation can be found in this <a href="http://stackoverflow.com/questions/518000/is-javascript-a-pass-by-reference-or-pass-by-value-language">Stackoverflow question</a>.</p>
 ]]></content>
   </entry>
   
