@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-01-12T05:01:43+08:00</updated>
+  <updated>2016-01-12T05:03:28+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -19,6 +19,9 @@
     <updated>2016-01-12T03:45:00+08:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/01/12/the-tyranny-of-billing</id>
     <content type="html"><![CDATA[<p>Billing is a critical function of any business. It is more than just collection of money. What better way than to tell a story.</p>
+
+<!-- more -->
+
 
 <p>We use the product of a fictitious company, ABC Widgets. The product is critical to our business. If the product fails to run properly, it causes a cascading effect to the company. We are happy with the product. It solves our problems. The price is reasonable. ABC Widgets bills us using the pre-paid model. In short, pay before you use. No payment, the service is cut. That is fair. We did not disagree.</p>
 
