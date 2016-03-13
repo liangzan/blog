@@ -1,0 +1,7 @@
+<div class="highlight"><pre><span class="k">val</span> <span class="n">capital</span> <span class="k">=</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">upcasedCapital</span> <span class="k">=</span> <span class="n">capital</span> <span class="k">match</span> <span class="o">{</span>
+   <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">toUpperCase</span>
+   <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
+<span class="o">}</span>
+</pre>
+</div>
