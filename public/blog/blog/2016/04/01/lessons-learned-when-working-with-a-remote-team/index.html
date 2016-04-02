@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Prefer lifting to destructuring in Scala - Liang Zan - Blog</title>
+  <title>Lessons learned when working with a remote team - Liang Zan - Blog</title>
   <meta name="author" content="Wong Liang Zan">
 
   
-  <meta name="description" content="This is one of the few things which I discovered along the way as I was learning Scala. Always prefer lifting a function than destructuring. For &hellip;">
+  <meta name="description" content="I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/">
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Prefer Lifting to Destructuring in Scala</h1>
+      <h1 class="entry-title">Lessons Learned When Working With a Remote Team</h1>
     
     
       <p class="meta">
@@ -99,54 +99,37 @@
   
 
 
-<time datetime="2016-03-13T15:56:00+08:00" pubdate data-updated="true">Mar 13<span>th</span>, 2016</time>
+<time datetime="2016-04-01T06:42:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>This is one of the few things which I discovered along the way as I was learning Scala. Always prefer lifting a function than destructuring.</p>
+<div class="entry-content"><p>I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from outsourcing. I would consider a remote team part of the company.</p>
 
 <!-- more -->
 
 
-<p>For example, I have a function which returns the capital given the two letter country code.</p>
+<h2>Remote vs Local</h2>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>As a former remote worker, I like working remotely. I understand the draw of working remotely. Less distractions. Flexible time. Work life balance. Access to larger pool of candidates. There are also advantages to working together in an office. There is no better form of communication than speaking in person.</p>
 
+<p>Both forms of working have their strengths and weaknesses. Use whichever that fits your situation.</p>
 
-<p>This function returns an <code>Option[String]</code> type. If the capital exists, it returns the capital as a <code>String</code> contained in the <code>Option</code> monad. If not, it returns a <code>None</code>.</p>
+<h2>Hire experienced workers</h2>
 
-<p>I want to upper case the results returned. This was what I was doing in my early days.</p>
+<p>In a perfect world, everybody would like to hire experienced workers. For remote work, I&#8217;d see it as critical. The candidate should have the skills to perform the work needed. Not learn on the job. Why so? Learning is handicapped when a person is remote. He or she will not be able to learn as effectively because communication is degraded. Relying on instant messaging, emails or phone calls is not as effective. It takes up more of both the mentor&#8217;s time and the worker&#8217;s time.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">capital</span> <span class="k">=</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="o">)</span>
-</span><span class='line'><span class="k">val</span> <span class="n">upcasedCapital</span> <span class="k">=</span> <span class="n">capital</span> <span class="k">match</span> <span class="o">{</span>
-</span><span class='line'>   <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">toUpperCase</span>
-</span><span class='line'>   <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<h2>Define clear tasks</h2>
 
+<p>In a perfect world you would like to know in advance the work needed to be done. That doesn&#8217;t happen in the real world. For remote workers, I&#8217;d entrust tasks which have been done before. Not open-ended projects. Why so? Because you need to be fair to the remote worker. Deny it or not, there is a mistrust of workers you don&#8217;t see at the desk. Is he working or watching Youtube at home? It helps immensely when you assign a task that you know how to do it. You would know how long it should take. If it takes too long, you know it is time to come in. If it is faster, congratulations, you have someone contributing effectively. Another factor is how independent the work is. The more independent, the better. It cuts down the need for communication. Communication is always the bottleneck for remote work.</p>
 
-<p>Then I realised lifting the <code>Option</code> type is a more idiomatic way.</p>
+<h2>Communication is a necessity</h2>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">capital</span> <span class="k">=</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="o">)</span>
-</span><span class='line'><span class="k">val</span> <span class="n">upcasedCapital</span> <span class="k">=</span> <span class="n">capital</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">c</span> <span class="k">=&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">toUpperCase</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>Communication should happen regularly at defined times. It is up to the team&#8217;s preference. I feel that there should happen at least once every 2 days or so. I find that most developers I know, don&#8217;t have the inclination to update their progress regularly without prompting. It should be the manager&#8217;s responsibility to ask for it.</p>
 
-
-<p>It is not necessary to destructure the type only to put it back again. Look how short it is, and clear its intention is. It did exactly the same things the earlier code snippet did.</p>
-
-<p>When you see a lot of destructuring using pattern matching in a Scala code, it is almost always a code smell. Always prefer lifting over destructuring.</p>
+<p>Remote working goes against many culture norms especially in Asia. If the management is not open to new ideas, it may be an uphill cause. Company culture matters when deciding if you want to do it. In conclusion, if the work is well defined and the worker have experience doing it, no harm going remote. If not, better not.</p>
 </div>
 
 
@@ -169,7 +152,7 @@
   
 
 
-<time datetime="2016-03-13T15:56:00+08:00" pubdate data-updated="true">Mar 13<span>th</span>, 2016</time>
+<time datetime="2016-04-01T06:42:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2016</time>
       
 
 
@@ -177,7 +160,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/" >Tweet</a>
   
   
   
@@ -186,10 +169,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2016/01/12/the-tyranny-of-billing/" title="Previous Post: the tyranny of billing">&laquo; the tyranny of billing</a>
+        <a class="basic-alignment left" href="/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/" title="Previous Post: Prefer lifting to destructuring in Scala">&laquo; Prefer lifting to destructuring in Scala</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/" title="Next Post: Lessons learned when working with a remote team">Lessons learned when working with a remote team &raquo;</a>
       
     </p>
   </footer>
@@ -327,8 +308,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/';
-        var disqus_url = 'http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/';
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/';
         var disqus_script = 'embed.js';
       
     (function () {

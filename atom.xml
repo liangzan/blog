@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-03-13T16:16:43+08:00</updated>
+  <updated>2016-04-02T17:13:56+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Lessons learned when working with a remote team]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/"/>
+    <updated>2016-04-01T06:42:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team</id>
+    <content type="html"><![CDATA[<p>I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from outsourcing. I would consider a remote team part of the company.</p>
+
+<!-- more -->
+
+
+<h2>Remote vs Local</h2>
+
+<p>As a former remote worker, I like working remotely. I understand the draw of working remotely. Less distractions. Flexible time. Work life balance. Access to larger pool of candidates. There are also advantages to working together in an office. There is no better form of communication than speaking in person.</p>
+
+<p>Both forms of working have their strengths and weaknesses. Use whichever that fits your situation.</p>
+
+<h2>Hire experienced workers</h2>
+
+<p>In a perfect world, everybody would like to hire experienced workers. For remote work, I&#8217;d see it as critical. The candidate should have the skills to perform the work needed. Not learn on the job. Why so? Learning is handicapped when a person is remote. He or she will not be able to learn as effectively because communication is degraded. Relying on instant messaging, emails or phone calls is not as effective. It takes up more of both the mentor&#8217;s time and the worker&#8217;s time.</p>
+
+<h2>Define clear tasks</h2>
+
+<p>In a perfect world you would like to know in advance the work needed to be done. That doesn&#8217;t happen in the real world. For remote workers, I&#8217;d entrust tasks which have been done before. Not open-ended projects. Why so? Because you need to be fair to the remote worker. Deny it or not, there is a mistrust of workers you don&#8217;t see at the desk. Is he working or watching Youtube at home? It helps immensely when you assign a task that you know how to do it. You would know how long it should take. If it takes too long, you know it is time to come in. If it is faster, congratulations, you have someone contributing effectively. Another factor is how independent the work is. The more independent, the better. It cuts down the need for communication. Communication is always the bottleneck for remote work.</p>
+
+<h2>Communication is a necessity</h2>
+
+<p>Communication should happen regularly at defined times. It is up to the team&#8217;s preference. I feel that there should happen at least once every 2 days or so. I find that most developers I know, don&#8217;t have the inclination to update their progress regularly without prompting. It should be the manager&#8217;s responsibility to ask for it.</p>
+
+<p>Remote working goes against many culture norms especially in Asia. If the management is not open to new ideas, it may be an uphill cause. Company culture matters when deciding if you want to do it. In conclusion, if the work is well defined and the worker have experience doing it, no harm going remote. If not, better not.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Prefer lifting to destructuring in Scala]]></title>
@@ -1634,243 +1666,6 @@ Does it have many people reporting issues?</p>
 
 
 <p> Hope this helps!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to write a command line application in Node.js]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js/"/>
-    <updated>2012-07-30T06:44:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js</id>
-    <content type="html"><![CDATA[<p>What is a <a href="http://en.wikipedia.org/wiki/Command-line_interface">command line</a> application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are <a href="http://www.mutt.org">mutt</a>, <a href="http://irssi.org">irssi</a>, <a href="htop.sourceforge.net">htop</a>.</p>
-
-<!-- more -->
-
-
-<p>You can write a command line application using most programming languages. Today, <a href="http://en.wikipedia.org/wiki/Type_system">dynamically typed</a> programming languagues are popular choices for writing such scripts. Reason being they tend to be shorter to write and easy to learn. A short startup time is also important. If a script only takes a fraction of a second to run, and startup time takes 5s, it makes the script feels slow. Examples are the <a href="http://stackoverflow.com/questions/844143/why-is-the-jvm-slow-to-start">JVM</a> languages. <a href="http://nodejs.org">Node.js</a> fits the bill for all these cases. Let&#8217;s take a look to see how we can write a command line application using <a href="http://nodejs.org">Node.js</a>.</p>
-
-<h3>Library shopping</h3>
-
-<p>In <a href="http://nodejs.org">Node.js</a>, there are many libraries that can help you to write a command line application. Which to choose? There are a few main features that all these libraries provide:</p>
-
-<ul>
-<li>Option parsing</li>
-<li>Interactive prompt</li>
-<li>Usage/help message helpers</li>
-<li>Interface elements(progress bars, coloring, password input, spinners, etc)</li>
-</ul>
-
-
-<p>Let us classify the libraries.</p>
-
-<h4>All in one</h4>
-
-<p>These libraries provides all the major features. <a href="https://github.com/chriso/cli">CLI</a> provides input parsing as well.</p>
-
-<ul>
-<li><a href="https://github.com/crcn/celeri">Celeri</a></li>
-<li><a href="https://github.com/chriso/cli">CLI</a></li>
-<li><a href="https://github.com/visionmedia/commander.js">Commander.js</a></li>
-<li><a href="https://github.com/harthur/nomnom">Nomnom</a></li>
-</ul>
-
-
-<h4>Specialist option parsers</h4>
-
-<p>These libraries only do option parsing</p>
-
-<ul>
-<li><a href="https://github.com/isaacs/nopt">Nopt</a></li>
-<li><a href="https://github.com/substack/node-optimist">Optimist</a></li>
-</ul>
-
-
-<h4>Interactive prompt</h4>
-
-<p>Interactive prompt is like a sub shell. You can run custom commands in it. Good examples are node interactive shell and <a href="http://en.wikipedia.org/wiki/Interactive_Ruby_Shell">irb</a>.</p>
-
-<ul>
-<li><a href="https://github.com/flatiron/prompt">Prompt</a></li>
-</ul>
-
-
-<h4>Interface elements</h4>
-
-<ul>
-<li><a href="https://github.com/TooTallNate/ansi.js">Ansi</a></li>
-<li><a href="https://github.com/substack/node-charm">Charm</a></li>
-<li><a href="https://github.com/Marak/colors.js">Colors</a></li>
-<li><a href="https://github.com/visionmedia/node-term-css">Term-CSS</a></li>
-</ul>
-
-
-<h2>Components of a command line application</h2>
-
-<p>We can break a command line application into separate components. Namely, the entry point, arguments and options, output, documentation, configuration and distribution. I&#8217;ll be using the <a href="https://github.com/liangzan/cli-app">twitter search app</a> as an example for illustrating the components.</p>
-
-<h3>Entry point</h3>
-
-<p>Entry point is the executable script which starts the program. Typically there&#8217;re 3 ways to run a command line application.</p>
-
-<p>One way is to indicate both the program loader and the path to the script. Assuming you have installed the example application and is now on the project root.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A shorter way is to indicate just the path to the script. Don&#8217;t forget to make the script executabe by changing the permissions. Another caveat is, if the path to the program loader is wrong, the program won&#8217;t run correctly.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bin/birdie
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It is possible to do that because of the <a href="http://en.wikipedia.org/wiki/Shebang_(Unix">shebang</a>) line present on the first line of the script. The shebang line hints to the operating system which program loader to use. You are encouraged to use it in your own scripts.</p>
-
-<p>Here is an example of the shebang line used in the example application</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/usr/local/bin/node</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It can be even shorter if the script is placed in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>birdie
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The operating system will find the script and run it. The only caveat is you have to install the script there.</p>
-
-<p>If your program affects the whole system, install it in the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a>). A good example is <a href="http://npmjs.org">NPM</a> and <a href="http://coffeescript.org">Coffeescript</a>.</p>
-
-<p>By convention, scripts meant to be executed are placed in the <strong>bin</strong> directory of your project.</p>
-
-<h3>Arguments and options</h3>
-
-<p>A complex command line application usually takes in arguments and options. An option(or flag or switch) is used by the program to modify the operation. In Unix like systems, it is usually indicated by a hyphen-minus followed by a letter or word. Using <strong>node</strong> as an example.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>node -v
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>node</strong> is the command and <strong>-v</strong> is the option.</p>
-
-<p>For the example application, I chose <a href="https://github.com/substack/node-optimist">Optimst</a> because of its simplicity. Accessing the options is very easy as illustrated below</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">resultTypeOpt</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">r</span> <span class="o">||</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">resulttype</span> <span class="o">||</span> <span class="s1">&#39;mixed&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the option and makes it accessible via the <strong>argv</strong> object. For example when running the command</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>node bin/birdie -r foo bar
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the arguments and options and returns <strong>argv</strong> in an object like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nx">_</span><span class="o">:</span> <span class="p">[</span> <span class="s1">&#39;bar&#39;</span> <span class="p">],</span>
-</span><span class='line'>  <span class="s1">&#39;$0&#39;</span><span class="o">:</span> <span class="s1">&#39;/path/to/bin/birdie&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">r</span><span class="o">:</span> <span class="s1">&#39;foo&#39;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <strong>r</strong> option value is placed under the <strong>r</strong> property and the rest of the arguments are in the underscore array.</p>
-
-<h3>Output</h3>
-
-<p>If your command line application need to show output, you can do so using plain old <a href="http://nodejs.org/docs/latest/api/stdio.html">console.log</a>.</p>
-
-<p>Another option is to use <a href="https://github.com/flatiron/winston">Winston</a>. <a href="https://github.com/flatiron/winston">Winston</a> is a logging libarary that can be used to log to <a href="http://en.wikipedia.org/wiki/Standard_streams">STDOUT</a>. It is almost the same as <strong>console.log</strong>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It comes with logging levels like <strong>info</strong>, <strong>warn</strong> and <strong>error</strong> which also comes in color. Applying them is as easy as</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">winston</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There&#8217;re plenty of other features to <a href="https://github.com/flatiron/winston">Winston</a>. Feel free to explore the library.</p>
-
-<p>If you want to add colors to your text output, you can make use of <a href="https://github.com/Marak/colors.js">Colors.js</a>. Applying colors is very easy.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">.</span><span class="nx">green</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That will output the text in green. <a href="https://github.com/Marak/colors.js">Colors.js</a> does that by overriding the <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/">Javascript String</a> <a href="http://stackoverflow.com/questions/572897/how-does-javascript-prototype-work">prototype</a>. So if you are also <a href="http://stackoverflow.com/questions/892595/javascript-prototypal-inheritance">overriding the String prototype</a>, be careful when using <a href="https://github.com/Marak/colors.js">Colors.js</a>.</p>
-
-<h3>Documentation</h3>
-
-<p>Typically a command line application comes with documentation in the form of <a href="http://en.wikipedia.org/wiki/Man_page">man pages</a>. In fact <a href="http://npmjs.org">NPM</a> does comes with man pages. <a href="http://npmjs.org">NPM</a> generates its man pages via the <a href="https://github.com/isaacs/ronnjs">RonnJS</a> package. It generates man pages from a <a href="http://daringfireball.net/projects/markdown/">Markdown</a> file. You can also use the <a href="https://github.com/rtomayko/ronn">Ronn</a> ruby gem directly. <a href="http://dailyjs.com">DailyJS</a> did a good <a href="http://dailyjs.com/2012/02/16/unix-node-community/">write up</a> on generating man pages in <a href="http://nodejs.org">Node.js</a>.</p>
-
-<p>Your application should also come with HTML documentation.</p>
-
-<h3>Configuration</h3>
-
-<p>If your command line application has a lot of options, a configuration file could help. Let&#8217;s take a look at <a href="https://github.com/visionmedia/mocha">Mocha</a>. Mocha has a <strong>mocha.opts</strong> file which you can state the common options that you want included.</p>
-
-<p>Adding a configuration file feature is as easy as reading from file. But do note that by convention, the option stated on the command line has higher precendence. Which means if I stated an option to print the output in green, but the option in the configuration file says it should be red, you should render it in green. Here&#8217;s the conventional order of precedence in overriding configurations.</p>
-
-<ol>
-<li>Command line options</li>
-<li>Configuration file options</li>
-<li>Application default options</li>
-</ol>
-
-
-<h3>Distribution</h3>
-
-<p>If you want to distribute your command line application, using <a href="http://npmjs.org">NPM</a> is the best option. <a href="http://npmjs.org">NPM</a> helps to install your executable script if you <a href="http://npmjs.org/doc/json.html#bin">add the bin option</a> in your package.json manifest.</p>
-
-<p>If the user installs the package locally like this</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install foo
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The program&#8217;s executable script would be found in 2 places:</p>
-
-<ol>
-<li>./node_modules/.bin</li>
-<li>./node_modules/foo/bin</li>
-</ol>
-
-
-<p>NPM adds a symbolic link from the <strong>.bin</strong> directory to your script.</p>
-
-<p>If the user chose to install your package globally like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install -g foo
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The package will install your executable script under the <a href="http://en.wikipedia.org/wiki/PATH_(variable">PATH</a> directories. More information can be found in the <a href="http://blog.nodejs.org/2011/03/23/npm-1-0-global-vs-local-installation/">global vs local</a> npm blog article.</p>
-
-<h2>Conclusion</h2>
-
-<p>Despite the relative youth of the <a href="http://nodejs.org">Node.js</a> eco-system, all the pieces required for building a command line application are already there. Feel free to give the <a href="https://github.com/liangzan/cli-app">example application</a> a run to see how easy it is to build one in <a href="http://nodejs.org">Node.js</a>.</p>
 ]]></content>
   </entry>
   
