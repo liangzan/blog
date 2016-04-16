@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-04-02T17:13:56+08:00</updated>
+  <updated>2016-04-16T11:42:06+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to set up a remote VPN using Sophos UTM]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm/"/>
+    <updated>2016-04-10T06:49:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm</id>
+    <content type="html"><![CDATA[<p>My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don&#8217;t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction.</p>
+
+<!-- more -->
+
+
+<h2>Setting up the Remote VPN</h2>
+
+<p>To set it up, I referred to the manual from Sophos. Their <a href="https://www.sophos.com/en-us/support/knowledgebase/119209.aspx">knowledge base</a> contains the administrative guide. Download the administrative guide for your version of UTM.</p>
+
+<p>The relevant chapter is <strong>Remote Access > SSL</strong>. There also plenty of articles and videos on the web on how to set that up. I won&#8217;t repeat them so as not to bore the reader.</p>
+
+<h2>Masquerading traffic from the office</h2>
+
+<p>My aim is when I log into the VPN from a remote location, my traffic should masquerade as coming from the office. To the outside world, my requests comes from the office network&#8217;s IP address. To do that, I need to add a Masquerade rule. Go to <strong>Network Protection > NAT</strong>, create a new Masquerading rule by clicking on the button <strong>Create Masquerading Rule</strong>.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-create-new-masquerading-rule.png" title="Sophos UTM Create New Masquerading Rule" ></p>
+
+<p>Select the network definition which represents the remote SSL users(you would have defined them when setting up the remove VPN). Select <strong>WAN</strong> as your interface, as you would like the traffic to go out. Click <strong>Save</strong>. Enable the rule by turning on the rule in the toggle button. Your rule should look like the screenshot below. You&#8217;re done. Hope this helps.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-masquerading-rule.png" title="Sophos UTM Masquerading Rule" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Lessons learned when working with a remote team]]></title>
@@ -1447,225 +1475,6 @@ Does it have many people reporting issues?</p>
 <p>I&#8217;m happy enough with standing desks that I&#8217;m going to continue using it. One suggestion. When you&#8217;re starting out, there is a temptation to sit down. Take the chair away. It does reduce the temptation. Hope your standing desk experiment works out!</p>
 
 <p><strong>Update:</strong> Follow the <a href="http://news.ycombinator.com/item?id=4591907">discussion</a> on Hacker News</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Uploading images via Etsy API with Ruby]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby/"/>
-    <updated>2012-08-27T07:51:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/08/27/uploading-images-via-etsy-api-with-ruby</id>
-    <content type="html"><![CDATA[<p>As I was building the <a href="http://photogenius.tailoredapps.co/">photo genius app</a> for <a href="http://tailoredapps.co/">Tailored</a>, I was tasked with uploading images to <a href="http://etsy.com">Etsy</a> via its <a href="http://www.etsy.com/developers">API</a>. There is little documentation on how to do this. So I&#8217;m going to show you how to do it.</p>
-
-<!-- more -->
-
-
-<p>Etsy has an <a href="http://www.etsy.com/developers/documentation/reference/listingimage#section_uploading_images">api for image uploading</a>. But it requires a multipart form post. What if you stored your images somewhere like <a href="http://aws.amazon.com/s3/">S3</a> where it is easier to access via a url? Can we upload an image via a url? The trick is to make use of Ruby&#8217;s <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/open-uri/rdoc/OpenURI.html">OpenURI library</a> to open the file via url on the fly. The instructions below assumes you&#8217;re on a Rails app.</p>
-
-<p>First create a new file with the code below.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/open_uri_fix.rb</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># Don&#39;t allow downloaded files to be created as StringIO. Force a tempfile to be created.</span>
-</span><span class='line'><span class="c1"># For the image publisher</span>
-</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This sets the constant of <strong>StringMax</strong> in <strong>OpenURI</strong> to be 0. The <strong>StringMax</strong> constant is used to determine when to open the url as a <strong>File</strong> or <strong>StringIO</strong> object. If the file size is smaller than <strong>StringMax</strong>, <strong>OpenURI</strong> will use <strong>StringIO</strong>. <strong>StringIO</strong> will cause problems in the app as it is not compatible with multipart form posts.</p>
-
-<p>Assuming you have the <a href="http://rubygems.org/gems/etsy">etsy ruby gem</a> installed, here is how you could write the upload method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># script/etsy_upload.rb</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">api_upload</span><span class="p">(</span><span class="n">listing_id</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">replacement_image_url</span><span class="o">=</span><span class="kp">nil</span><span class="p">,</span> <span class="n">listing_image_id</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/listings/</span><span class="si">#{</span><span class="n">listing_id</span><span class="si">}</span><span class="s2">/images&quot;</span>
-</span><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">listing_id</span><span class="p">:</span> <span class="n">listing_id</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">rank</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">multipart</span><span class="p">:</span> <span class="kp">true</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="n">replacement_image_url</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">image</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">replacement_image_url</span><span class="p">)})</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="n">listing_image_id</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">listing_image_id</span><span class="p">:</span> <span class="n">listing_image_id</span><span class="p">})</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">EtsyInterface</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">etsy_shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And here is how you could build a thin wrapper to make API calls. We&#8217;re assuming you have an etsy shop and etsy user object.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># lib/etsy_interface.rb</span>
-</span><span class='line'><span class="k">module</span> <span class="nn">EtsyInterface</span>
-</span><span class='line'>  <span class="k">module</span> <span class="nn">Client</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Public: Makes a request to Etsy API</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
-</span><span class='line'>    <span class="c1"># url    - The String which is the URL to query for</span>
-</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Examples</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.get(&#39;foo&#39;, shop, &#39;/foo&#39;, {bar: &#39;bar&#39;})</span>
-</span><span class='line'>    <span class="c1">#   # =&gt; {...}</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Returns the Hash</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Signature</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1">#   &lt;mtd&gt;(args)</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># mtd - Either of the get, post, put or delete HTTP methods</span>
-</span><span class='line'>    <span class="sx">%w(get put post delete)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">mtd</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">define_method</span> <span class="n">mtd</span> <span class="k">do</span> <span class="o">|</span><span class="n">shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">pre_setup</span>
-</span><span class='line'>        <span class="no">Etsy</span><span class="o">::</span><span class="no">Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kp">protected</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Public: Sets the constants of the Etsy class</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Examples</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.pre_setup</span>
-</span><span class='line'>    <span class="c1">#   # =&gt; nil</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Returns nothing</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">pre_setup</span>
-</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="ss">:production</span> <span class="k">unless</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span>
-</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_api_key</span> <span class="c1"># your etsy api key</span>
-</span><span class='line'>      <span class="no">Etsy</span><span class="o">.</span><span class="n">api_secret</span> <span class="o">=</span> <span class="no">Settings</span><span class="o">.</span><span class="n">etsy_secret</span> <span class="c1"># your etsy secret</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Public: Forms the query parameters for the request</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># shop   - The EtsyShop instance</span>
-</span><span class='line'>    <span class="c1"># params - The Hash of attributes to pass in to the query</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Examples</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1">#   EtsyInterface::Client.access_params(shop, {bar: &#39;bar&#39;})</span>
-</span><span class='line'>    <span class="c1">#   # =&gt; {access_token: &#39;d&#39;, access_secret: &#39;g&#39;, bar: &#39;bar&#39;}</span>
-</span><span class='line'>    <span class="c1">#</span>
-</span><span class='line'>    <span class="c1"># Returns the Hash</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="n">shop</span><span class="o">.</span><span class="n">etsy_user</span>
-</span><span class='line'>      <span class="n">access_params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">access_token</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_token_for</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
-</span><span class='line'>        <span class="n">access_secret</span><span class="p">:</span> <span class="no">EtsyBuilder</span><span class="o">.</span><span class="n">etsy_oauth_secret_for</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class='line'>      <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> Hope this helps!</p>
 ]]></content>
   </entry>
   
