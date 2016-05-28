@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-05-29T07:37:12+08:00</updated>
+  <updated>2016-05-29T07:38:22+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -19,6 +19,9 @@
     <updated>2016-05-29T05:54:00+08:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/05/29/how-does-freedomvpn-work</id>
     <content type="html"><![CDATA[<p>I just watched the Champion&#8217;s League Final streamed live on my laptop. I watched it on <a href="http://www.pptv.com/">PPTV</a> in Singapore. This is made possible by FreedomVPN(Which amazingly, does not have a landing page of its own where I can link to). Recently, I switched my ISP(Internet Service Provider) to <a href="http://www.viewqwest.com/">Viewqwest</a>. This far, so good. Their product FreedomVPN, has opened the door to enjoying Internet TV from most of the popular content sites of the world. To many, it is like voodoo. Let me try to explain in broad strokes how they did it. Disclaimed: these are my conjectures and has not been validated with Viewqwest.</p>
+
+<!-- more -->
+
 
 <h2>Just watch it</h2>
 
