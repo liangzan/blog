@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-04-16T11:42:06+08:00</updated>
+  <updated>2016-05-29T07:37:12+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,133 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How does FreedomVPN work]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/05/29/how-does-freedomvpn-work/"/>
+    <updated>2016-05-29T05:54:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/05/29/how-does-freedomvpn-work</id>
+    <content type="html"><![CDATA[<p>I just watched the Champion&#8217;s League Final streamed live on my laptop. I watched it on <a href="http://www.pptv.com/">PPTV</a> in Singapore. This is made possible by FreedomVPN(Which amazingly, does not have a landing page of its own where I can link to). Recently, I switched my ISP(Internet Service Provider) to <a href="http://www.viewqwest.com/">Viewqwest</a>. This far, so good. Their product FreedomVPN, has opened the door to enjoying Internet TV from most of the popular content sites of the world. To many, it is like voodoo. Let me try to explain in broad strokes how they did it. Disclaimed: these are my conjectures and has not been validated with Viewqwest.</p>
+
+<h2>Just watch it</h2>
+
+<p>We didn&#8217;t realise we had Freedom VPN at the start. How we discover it was amusing. I realised that we suddenly had more titles to choose from Netflix. We thought the Singapore catalogue has been beefed up. Only after discovering those new titles can only be seen when we are at home, we then realised it was Freedom VPN.</p>
+
+<p>There is no need to configure anything. Just watch it. It works across your smart phones, media players and the web browser. It is indeed convenient. It quickly won us over. We now access titles available from the US catalogue of Netflix. We can view BBC, the Chinese media sites and so many more.</p>
+
+<p>With the new content that is now available to my family, we ended our cable TV subscription. It is obvious that media content delivered over the Internet is going to be the norm. My children will never experience catering their own schedules around the TV&#8217;s programme schedule, or the frustration of being restricted to watching it on the TV.</p>
+
+<h2>When you press &#8220;Sherlock&#8221;</h2>
+
+<p>I had described what the user experience is like. Let me lay out the requirements.</p>
+
+<ul>
+<li>No configuration needed</li>
+<li>Connects to multiple content providers, each serving different countries</li>
+<li>Works on all devices</li>
+</ul>
+
+
+<p><a href="https://en.wikipedia.org/wiki/Sherlock_(TV_series">Sherlock</a>) is a brilliant TV show that is not available in the Singapore Netflix catalogue but is, on the US one. When I select <strong>Sherlock</strong>, what really happens?</p>
+
+<p>My web browser asks Netflix for <strong>Sherlock</strong>. The request has a problem. Where is Netflix? The expression <strong>www.netflix.com</strong> does not say where it is. It needs an address, an IP address. To translate <strong>www.netflix.com</strong> to an IP address, it asks a DNS server. When you&#8217;re on FreedomVPN, you are asking Viewqwest&#8217;s DNS server.</p>
+
+<p>On my laptop which is served by Viewqwest,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ nslookup www.netflix.com
+</span><span class='line'>
+</span><span class='line'>Non-authoritative answer:
+</span><span class='line'>Name:   www.netflix.com
+</span><span class='line'>Address: some.ip.address
+</span><span class='line'>Name:   www.netflix.com
+</span><span class='line'>Address: some.ip.address
+</span><span class='line'>Name:   www.netflix.com
+</span><span class='line'>Address: some.ip.address</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can&#8217;t divulge what the IP addresses are, but I can tell you where they point at. It is somewhere from Viewqwest&#8217;s office, in Singapore.</p>
+
+<p>https://s3.amazonaws.com/static.liangzan.net/blog/singapore_netflix_lookup.png</p>
+
+<p><img class="right" src="https://s3.amazonaws.com/static.liangzan.net/blog/singapore_netflix_lookup.png" title="Where Netflix is from FreedomVPN" ></p>
+
+<p>On a non-Viewqwest network,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Non-authoritative answer:
+</span><span class='line'>www.netflix.com canonical name = www.geo.netflix.com.
+</span><span class='line'>www.geo.netflix.com     canonical name = www.us-west-2.prodaa.netflix.com.
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.34.178
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.37.191
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.40.137
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.4.148
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.15.237
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.22.153
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.23.124
+</span><span class='line'>Name:   www.us-west-2.prodaa.netflix.com
+</span><span class='line'>Address: 54.214.28.210</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is pointing unmistakably to Netflix servers. What does this mean?</p>
+
+<blockquote><p>Masquerading: figurative sense of &#8220;false outward show&#8221; is from 1670s.</p></blockquote>
+
+
+<p>Requests are inherently gullible. They are led to believe that Netflix is really at Viewwqwest&#8217;s offices. Off they went. Does anyone really believe that the files of <strong>Sherlock</strong> are kept at Viewqwest&#8217;s office? It isn&#8217;t obviously. Now, our request needs to be satisfied with <strong>Sherlock</strong>. Where do we get <strong>Sherlock</strong>? From Netflix obviously.</p>
+
+<p>Why would Netflix give it to the request? Remember, the request came from Singapore. <strong>Sherlock</strong> is <em>not</em> available for Singapore viewers. We have to tell Netflix that the request did not come from Singapore, but from the US.</p>
+
+<p><img class="right" src="https://s3.amazonaws.com/static.liangzan.net/blog/netflix-access-activity.png" title="Netflix activity" ></p>
+
+<p>Look at my screenshot. This came from my activity logs in Netflix. I watched Netflix from US without me physically in the US. Where do the IP addresses point to?</p>
+
+<p><img class="right" src="https://s3.amazonaws.com/static.liangzan.net/blog/viewqwest-us-ip.png" title="Viewqwest US IPs" ></p>
+
+<p>Coming back to our request, what happens is our original request is being routed to Viewqwest offices in the US. It then <em>pretends</em> that the source is from the US, sends to Netflix, gets <strong>Sherlock</strong>, routes back to the Singapore office, and then finally back to the end user, me. I&#8217;m happily watching Sherlock duel with Moriarty. FreedomVPN listens actively for requests to their list of supported content websites. It then performs this form of masquerading to geo-unblock content for you. This is FreedomVPN.</p>
+
+<h2>Cat and Mouse</h2>
+
+<p>With Netflix clamping down on proxies, Viewqwest through Freedom VPN is the only vendor that I know of that is able to circumvent content geo-blocking. They are treading a thin line.</p>
+
+<p>Does it infringe terms of use? I don&#8217;t know. Content providers won&#8217;t be happy knowing that their content can be accessed in areas where it is not supposed to. Knowing is one thing, enforcing is another. Is it worth Netflix&#8217;s time to spend time and resources to go after FreedomVPN? Maybe not, since Viewqwest subscribers are not many enough to warrant spending the energy. I&#8217;m sure they have better things to do. As long as FreedomVPN continues to be a niche player, it should continue to stay under the radar. Perhaps that is why it never got its own landing page?</p>
+
+<p>I see some Viewqwest customers complain that FreedomVPN is not stable. It will never be. Accept that this is a cat and mouse game. This solution is a workaround, and will never work cleanly unless geoblocking is abolished. But for the convenience of watching <strong>Sherlock</strong> with one click, I&#8217;m wiling to accept that good enough is <em>good enough</em>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to set up a remote VPN using Sophos UTM]]></title>
@@ -1431,50 +1558,6 @@ Does it have many people reporting issues?</p>
 <h2>You&#8217;re supposed to fail sometimes</h2>
 
 <p>At least I tried. I picked up a host <a href="http://www.opscode.com/chef/">of</a> <a href="http://backbonejs.org/">technologies</a> along the way. I made mistakes, and I learned. The only thing which I thought I did right was not to seek funding. I&#8217;m not sure if I closed Notifymode too early. Could things have turned out better if I persisted? You never know.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My Standing Desk Experiment]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/09/29/my-standing-desk-experiment/"/>
-    <updated>2012-09-29T21:47:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/09/29/my-standing-desk-experiment</id>
-    <content type="html"><![CDATA[<p>I was intrigued about <a href="http://en.wikipedia.org/wiki/Standing_desk">standing desks</a> ever since I read about them. Will it make me more productive at work? Will it burn more calories(and help me lose weight)? One month ago, I decided to build myself a standing desk. <em>Build</em> is an overstatement. My total cost outlay is exactly <strong>zero</strong>.</p>
-
-<!-- more -->
-
-
-<h2>The set up</h2>
-
-<p>The standing desk height is the key factor in the construction. It has to be high enough that my elbow can rest comfortably on the desk. I found 4 bricks outside my house and used them as a stand. I wasn&#8217;t sure if the desk would be high enough. Luckily it was. Another slice of luck came my way. I found an unused bar chair in my house.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/standing-desk-bar-chair.jpg" title="Bar chair for standing desk" ></p>
-
-<p>Was it high enough? It was. So here is my improvised standing desk. Built in half an hour. Cost exactly nothing. I can stand or sit whenever I want to.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/improvised-standing-desk.jpg" title="Improvised standing desk" ></p>
-
-<h2>Observations on my body</h2>
-
-<p>I spend an average of 8-9 hours standing every day. That is interspersed with breaks. My overall fitness is good. I usually jog a few times every week. I&#8217;m not overweight. It took me a week for my body to grow used to standing for long periods. Does your whole body feel stiff after sitting down for the whole day? I do. The first thing I noticed is the stiffness is gone.</p>
-
-<p>My back never felt better. Standing allows the back to be in its natural position. There is no stiffness through the day. It just ceases to be noticed. Given I do not have a history of back problems. I&#8217;m sure standing would have prevented future back problems.</p>
-
-<p>My feet bore the brunt of my weight. Over long periods of standing, I find that the <a href="http://en.wikipedia.org/wiki/Foot">hindfoot</a> gets sore. The <a href="http://en.wikipedia.org/wiki/Triceps_surae_muscle">muscles on the calf</a> and those on the <a href="http://en.wikipedia.org/wiki/Thigh">back of the thigh</a> feels tight. The tense sensation extends from the back of the thigh all the way to the hind foot. It is not that bad. You will notice the tightness when you walk after standing for a while. Stretching might help. My feet do not remain in the same position. They vary between resting on 1 foot or both. I tend to walk around more, simply because there is less friction. When you are seated, it requires effort to get up. When you&#8217;re already standing, there is no effort overhead.</p>
-
-<p>Getting a floor mat helps to reduce fatigue. There are a plenty of <a href="http://www.matsmatsmats.com/commercial-industrial/ind-anti-fatigue.html">fatigue mats</a> for sale. I found an unused mat in my house. It helps to reduce the soreness of the hindfoot significantly. I believe any soft surface would suffice. Decide for yourself if you need to buy one. My suggestion is to try a cheap one first.</p>
-
-<p>I noticed I tend to edge closer to the desk when I stand. That is bad for the eyes as it is too close to the computer screen. When you&#8217;re sitting down, there is a gap between you and the desk. To prevent that, I try to place my floor mat further away from the desk.</p>
-
-<h2>Are the benefits worth it?</h2>
-
-<p>How does standing desks make you more productive? Mentally, I feel more alert and clear when I&#8217;m standing. Physically, I don&#8217;t have to adjust my sitting positions every now and then. Sitting tends to encourage bad postures. Slouching backwards. Hunching forwards. It is easier to get into a comfortable position while you&#8217;re standing. There are only 3 positions. On both feet, or on either foot. As a result I don&#8217;t find myself getting bothered by my body when I&#8217;m working.</p>
-
-<p>Another much touted benefit is weight loss. It didn&#8217;t happen to me. My weight remained the same after a month. I&#8217;m supposed to be burning more calories as I stand. Perhaps I ate more during this period. I suppose it differs from person to person.</p>
-
-<p>I&#8217;m happy enough with standing desks that I&#8217;m going to continue using it. One suggestion. When you&#8217;re starting out, there is a temptation to sit down. Take the chair away. It does reduce the temptation. Hope your standing desk experiment works out!</p>
-
-<p><strong>Update:</strong> Follow the <a href="http://news.ycombinator.com/item?id=4591907">discussion</a> on Hacker News</p>
 ]]></content>
   </entry>
   
