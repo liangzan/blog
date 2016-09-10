@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-11T06:04:42+08:00</updated>
+  <updated>2016-09-11T06:23:53+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,350 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Everday XPath - Node Test]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-node-test/"/>
+    <updated>2016-09-11T06:11:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-node-test</id>
+    <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we learn about the only mandatory part of the XPath expression: Node Test.</p>
+
+<!-- more -->
+
+
+<h2>Node Test</h2>
+
+<p>The node test is used as a filter to select the nodes we want. It is the only mandatory part in a XPath expression. We break a node test into 3 types.</p>
+
+<ul>
+<li><p><strong>Name test</strong>: It makes use of the inherent properties of a node to select it. Properties such as the type of the node.</p></li>
+<li><p><strong>Node type test</strong>: Nodes can be generalized as a comment node, a text node, a processing instruction node or a catchall node type. The node type tests helps to filter along these lines.</p></li>
+<li><p><strong>Targeted processing instruction test</strong>: This test selects processing instruction nodes with a defined type.</p></li>
+</ul>
+
+
+<p>For the following examples, we would use the below as the reference document.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;even&quot;</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;even&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Name Test</h2>
+
+<p>The name test filter makes use of properties of the nodes.</p>
+
+<h3>Asterisk <code>*</code></h3>
+
+<p>The asterisk or the glob, selects everything.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr/td/*
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all the nodes that come after the <code>td</code> nodes of the root level <code>table</code> node. It then selects the inner <code>table</code> as it came after the <code>td</code> nodes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>QName</h3>
+
+<p>When we want to select something more specific, we use the <em>QName</em>. QName stands for qualified name and can be either a prefixed name or an unprefixed name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>QName = PrefixedName | UnprefixedName
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A prefixed name is made up of 2 parts: a prefix and a localpart separated by a colon. The prefix is a name space prefix and is optional.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>PrefixedName = Prefix &#39;:&#39; LocalPart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The unprefixed name and local part resolves to become a <em>NCName</em> which stands for non-colonized name: name without colons.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>UnprefixedName = LocalPart
+</span><span class='line'>Prefix = NCName
+</span><span class='line'>LocalPart = NCName
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>td</code> in the following expression below is a <em>NCName</em>. It means to select elements of the <code>td</code> type.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//td
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The results returns a list of 7 <code>td</code> nodes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;3&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;4&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span> <span class="nt">&lt;5&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'><span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;6&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;7&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Node Type Test</h2>
+
+<p>There are times when you need a broader selection than a <em>NCName</em> and narrower than a <em>glob</em>. In such cases, there are 4 kinds of node types test which you can make use of.</p>
+
+<ul>
+<li><strong>comment()</strong>: Selects comment nodes.</li>
+<li><strong>node()</strong>: Selects all nodes irregardless of type.</li>
+<li><strong>text()</strong>: Selects the text from the current context.</li>
+<li><strong>processing-instruction()</strong>: Selects the processing instruction nodes.</li>
+</ul>
+
+
+<p>For the following examples, we would use the below as the reference document.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;foo.jpg&quot;</span><span class="nt">&gt;&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;even&quot;</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;even&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- &lt;td&gt;Delta&lt;/td&gt; --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr</span> <span class="na">class=</span><span class="s">&quot;odd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="c">&lt;!-- &lt;td&gt;Echo&lt;/td&gt; --&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>comment()</h3>
+
+<p>Selects comment nodes from the current context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//tr[@class=&quot;even&quot;]/comment()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the comment nodes from the context of the <code>tr</code> node with a class with value <em>even</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- &lt;td&gt;Delta&lt;/td&gt; --&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>node()</h3>
+
+<p>Selects all nodes irregardless of type, It even includes comment and processing instruction nodes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//tr[@class=&quot;even&quot;]/node()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all the nodes from the context of the <code>tr</code> node with a class with value <em>even</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="c">&lt;!-- &lt;td&gt;Delta&lt;/td&gt; --&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Compare this to the <em>glob</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//tr[@class=&quot;even&quot;]/*
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>node()</em> captures everything, even more than the <em>glob</em>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>=== text()</p>
+
+<p>Selects the text from the current context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//td/text()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the inner text from the nodes selected. Notice that it returns an empty string if the context does not contain any text.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>&#39;Alpha&#39; <span class="nt">&lt;1&gt;</span>
+</span><span class='line'>&#39;Bravo&#39; <span class="nt">&lt;2&gt;</span>
+</span><span class='line'>&#39;Charlie&#39; <span class="nt">&lt;3&gt;</span>
+</span><span class='line'>&#39;&#39; <span class="nt">&lt;4&gt;</span>
+</span><span class='line'>&#39;Foxtrot&#39; <span class="nt">&lt;5&gt;</span>
+</span><span class='line'>&#39;&#39; <span class="nt">&lt;7&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>processing-instruction()</h3>
+
+<p>Selects the processing instruction nodes. Processing instruction nodes are usually found in XML documents. It usually carries meta information for applications. An example of a processing instruction node is below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;style.xsl&quot;?&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It can be targeted. The example below selects only processing instructions with the target &#8220;xml-stylesheet&#8221;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>processing-instruction(&quot;xml-stylesheet&quot;)
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Everday XPath - The Expression]]></title>
@@ -1368,83 +1712,6 @@ Does it have many people reporting issues?</p>
 <h2>Update</h2>
 
 <p>Follow the discussion on <a href="http://news.ycombinator.com/item?id=5179335">Hacker News</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to learn enough web design to not look scammy]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy/"/>
-    <updated>2013-01-07T16:07:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/01/07/how-to-learn-enough-web-design-to-not-look-scammy</id>
-    <content type="html"><![CDATA[<p>I am a web developer by trade. I am not a designer. Like most backend engineers, I make things work. I don&#8217;t usually bother with making things pretty. Many people commented that I cannot design. I agree. I never had a penchant for design.</p>
-
-<!-- more -->
-
-
-<p>Today I have managed to learn enough design that my sites don&#8217;t look scammy. Some evidence at <a href="http://octopressthemes.com">Octopress Themes</a>. A year ago, I never entertained the thought that I can design a half decent looking site. I was always led to believe that I am not a creative. Therefore I should not do design at all. It is a good example of <a href="http://en.wikipedia.org/wiki/Learned_helplessness">learned helplessness</a>. Not being talented means you probably cannot become a top notch designer. It doesn&#8217;t mean you cannot design at all. If I can design half decent looking sites, so can you.</p>
-
-<h2>Plenty of resources</h2>
-
-<p>There are plenty of resources out there on how to learn design. Here are the ones which I find most relevant to engineers learning design.</p>
-
-<h3>Books</h3>
-
-<ul>
-<li><a href="http://www.amazon.com/Non-Designers-Design-Book-Robin-Williams/dp/0321193857/ref=sr_1_6?s=books&amp;ie=UTF8&amp;qid=1357551933&amp;sr=1-6">The Non-Designer&#8217;s Design book by Robin Williams</a></li>
-<li><a href="http://www.amazon.com/Design-Everyday-Things-Donald-Norman/dp/0465067107/">The Design of Everyday Things by Donald Norman</a></li>
-<li><a href="http://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1357552162&amp;sr=1-1&amp;keywords=dont+make+me+think">Don&#8217;t make me think by Steve Krug</a></li>
-</ul>
-
-
-<h3>Hacker news discussions</h3>
-
-<ul>
-<li><a href="http://news.ycombinator.com/item?id=1768358">Where to learn design</a></li>
-<li><a href="http://news.ycombinator.com/item?id=1839022">Visual design for hackers</a></li>
-<li><a href="http://news.ycombinator.com/item?id=66863">Best sources to learn design and usability</a></li>
-</ul>
-
-
-<h3>Newsletters</h3>
-
-<ul>
-<li><a href="http://seriffed.com/">Seriffed</a></li>
-<li><a href="http://sachagreif.com/">Sacha Grief</a></li>
-<li><a href="http://www.robertwilliamsdesign.com/newsletter/">Robert Williams</a></li>
-</ul>
-
-
-<h2>Learn by Copying</h2>
-
-<p>My next tip is: copy good designs. Choose a design which you like, and copy it. Copy does not mean cloning. Copying means stealing the ideas and incorporating in your design. Copying may sound dirty but designers in the fashion industry <a href="http://www.npr.org/2012/09/10/160746195/why-knockoffs-are-good-for-the-fashion-industry">does that</a> too. Take a few designs which you like, and improve them.</p>
-
-<h2>Copy from the best</h2>
-
-<p>Which brings me to the next tip. When you copy, copy from the best. If you copy homework from your friends, you copy from the top student correct? Similar logic applies. I often look(<em>steal</em>) for ideas from these sites. You could too.</p>
-
-<h3>Ideas</h3>
-
-<ul>
-<li><a href="http://dribbble.com">Dribbble</a></li>
-<li><a href="http://www.webcreme.com/">Web Creme</a></li>
-<li><a href="http://www.siteinspire.com/">Site Inspire</a></li>
-</ul>
-
-
-<h2>Be proficient in an image editor</h2>
-
-<p>An image editor to a designer is like the piano to a pianist. You cannot do without it. You often have to edit images to fit into the design. Being proficient won&#8217;t make you a good designer. It adds options to you. My suggestion is to pick up either one of these depending on your platform.</p>
-
-<ul>
-<li><a href="http://www.adobe.com/products/photoshop.html">Photoshop</a></li>
-<li><a href="http://www.pixelmator.com/">Pixelmator</a></li>
-<li><a href="http://www.gimp.org">Gimp</a></li>
-</ul>
-
-
-<h2>Do</h2>
-
-<p>My last tip is: do. There is no substitute for doing. The more you do the better you get. I hope my story can inspire you to believe that you can become half decent in design. I am still far from being decent in design though.</p>
 ]]></content>
   </entry>
   
