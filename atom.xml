@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-11T06:23:53+08:00</updated>
+  <updated>2016-09-11T06:26:38+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -313,7 +313,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>=== text()</p>
+<h3>text()</h3>
 
 <p>Selects the text from the current context.</p>
 
