@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-11T06:26:38+08:00</updated>
+  <updated>2016-09-11T06:47:12+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,505 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Everday XPath - Operators]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-operators/"/>
+    <updated>2016-09-11T06:28:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-operators</id>
+    <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
+
+<!-- more -->
+
+
+<p>Operators are special characters that has special meaning in a XPath expression.</p>
+
+<ul>
+<li><strong>Child</strong> <code>/</code>: Selects the children of the current context. When used at the beginning of the expression, it starts from the root node.</li>
+<li><strong>Recursive descent</strong> <code>//</code>: Searches the document, descending from the current context. When used at the beginning of the expression, it searches the entire document from the root node.</li>
+<li><strong>Dot</strong> <code>.</code>: Selects the current context. By default it takes the root node as the current context.</li>
+<li><strong>Double dot</strong> <code>..</code>: Selects the parent of the current context.</li>
+<li><strong>Wildcard</strong> <code>*</code>: Selecta all nodes from the current context.</li>
+<li><strong>Attribute</strong> <code>@</code>: Selects the node with the attribute and returns the attribute.</li>
+<li><strong>Attribute wildcard</strong> <code>@*</code>: Selects nodes with any attributes and returns the attributes.</li>
+<li><strong>Round brackets</strong> <code>()</code>: Expressions within round brackets takes precedence in the evaluation order.</li>
+<li><strong>Square brackets</strong> <code>[]</code>: Used both as a subscript operator and to encapsulate a filter expression.</li>
+<li><strong>Addition</strong> <code>+</code>: Performs addition.</li>
+<li><strong>Subtraction</strong> <code>-</code>: Performs subtraction.</li>
+<li><strong>Division</strong> <code>div</code>: Performs division.</li>
+<li><strong>Multiplication</strong> <code>*</code>: Performs multiplication.</li>
+<li><strong>Modulo</strong> <code>mod</code>: Performs modulo</li>
+</ul>
+
+
+<p>For the following examples, we would use the below as the reference document.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Child operator <code>/</code></h3>
+
+<p>The child operator selects the children of the current context. When used at the beginning of the expression, it starts from the root node.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the <code>table</code> node starting from the root.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr/td
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all the <code>td</code> nodes who are children of <code>tr</code> nodes who are children of the <code>table</code> node. Notice that it does not select the <code>td</code> nodes in the inner <code>table</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;3&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;4&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span> <span class="nt">&lt;5&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'><span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Recursive descent <code>//</code></h3>
+
+<p>The recursive descent operator searches the document, descending from the current context. When used at the beginning of the expression, it searches the entire document from the root node.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//td
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all the <code>td</code> nodes. Notice that it selects all the <code>td</code> nodes regardless of their parents.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;3&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;4&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span> <span class="nt">&lt;5&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'><span class="nt">&lt;/td&gt;</span>&#39;
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;6&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;7&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr/td//td
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all <code>td</code> nodes descending from the context of the <code>td</code> node of the root <code>table</code>. Notice that the first level <code>td</code> nodes are not selected.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Dot operator <code>.</code></h3>
+
+<p>The dot operator selects the current context. By default it takes the root node as the current context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//td[.=&quot;Bravo&quot;]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the <code>td</code> node whose value is <code>Bravo</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Double dot operator <code>..</code></h3>
+
+<p>The double dot operator selects the parent of the current context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr/td/..
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the parent node of the <code>td</code> nodes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;tr&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>Alpha<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;tr&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;tr&gt;</span> <span class="nt">&lt;3&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>Charlie<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;tr&gt;</span> <span class="nt">&lt;4&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>Delta<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;tr&gt;</span> <span class="nt">&lt;5&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Wildcard operator <code>*</code></h3>
+
+<p>The wildcard operator selects all nodes from the current context.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr/td/table/*/td
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all <code>td</code> nodes from the inner <code>table</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;1&gt;</span>
+</span><span class='line'><span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span> <span class="nt">&lt;2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Attribute operator <code>@</code></h3>
+
+<p>The attribute operator selects the node with the attribute and returns the attribute.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//table/@style
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the <code>table</code> with the <code>style</code> attribute and returns the <code>style</code> attribute.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>style=&quot;margin: 12px&quot;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Attribute wildcard operator <code>@*</code></h3>
+
+<p>The attribute wildcard operator selects nodes with any attributes and returns the attributes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//@*
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects all the attributes found in any of the nodes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>class=&quot;active&quot; <span class="nt">&lt;1&gt;</span>
+</span><span class='line'>style=&quot;margin: 12px&quot; <span class="nt">&lt;2&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Round brackets operator <code>()</code></h3>
+
+<p>Expressions within round brackets takes precedence in the evaluation order.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>(//@*)[1]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The expression within the round brackets is evaluated first, and the first result is returned by the subscript operator.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>class=&quot;active&quot;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Square brackets operator <code>[]</code></h3>
+
+<p>Square brackets are either used as a subscript operator or to encapsulate a filter expression.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>(//td)[2]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the second <code>td</code> node from the results of the expression encapsulated in the round brackets operator.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is another example as a subscript operator</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>/table/tr[2]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the second <code>tr</code> node which is a child of the <code>table</code> node.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;td&gt;</span>Bravo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'><span class="nt">&lt;/tr&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The following example shows the square brackets operator encapsulating a filter expression.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>(//td)[last()]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the last node from the results of the expression in the round brackets operator.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is another example of encapsulating a filter expression.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>//td[table]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This expression selects the <code>td</code> node which contains a <code>table</code> node.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;td&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;margin: 12px&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Echo<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;td&gt;</span>Foxtrot<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'><span class="nt">&lt;/td&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Arithmetic operators <code>+ - * div mod</code></h3>
+
+<p>The arithmetic operators evaluates expressions to return numerical results.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>count(//td) + count(//table)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>count</code> function returns the number of nodes returned from evaluating the expression. There are 7 <code>td</code> nodes and 2 <code>table</code> nodes which when added, returns 9.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>9.0
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Everday XPath - Node Test]]></title>
@@ -1658,60 +2157,6 @@ Does it have many people reporting issues?</p>
 <p><img src="http://farm1.staticflickr.com/142/388879822_f9bc08517a_o.jpg" title="Street with Neon lights. Photo by AndyCunningham." ></p>
 
 <p>The same goes for menu bar applets or shell status bars. Take control of them. Remove audio notifications. Prefer greyscale menu bar icons to colored ones so they fade to the background gracefully. Better still, remove them. Information for the sake of information is counter productive. To have a sense of how noisy your desktop really is, turn on your volume to the max, step away and observe from a distance. Note down which apps are trying to catch your attention by visual or audio cues. Then think, are those information important most of the time? If not, I can safely assure you your life would be more peaceful without them. Less is more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First impressions of Leap Motion]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion/"/>
-    <updated>2013-02-06T17:10:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/02/06/first-impressions-of-leap-motion</id>
-    <content type="html"><![CDATA[<p>For those who don&#8217;t know what <a href="http://www.leapmotion.com">Leap Motion</a> is, take a look at this youtube video.</p>
-
-<iframe width="560" height="315" src="http://www.youtube.com/embed/_d6KuiuteIA" frameborder="0" allowfullscreen></iframe>
-
-
-<p>I got the Leap Motion hardware and SDK by participating in their <a href="https://leapmotion.com/developers">developer program</a>. I was the lucky few that was selected. They informed me through email. A few weeks later, the Leap motion device is mailed to me, free of charge. It came in a dull black cardbox box. Within the box lies the device, a cable, and a card bearing a message from the founders.</p>
-
-<!-- more -->
-
-
-<h2>First impressions of Leap</h2>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-box.jpg" title="Leap Motion box" ></p>
-
-<p>It is very small and light. One side etched the Leap logo. The other lies the sensors. When you power the device, three red bulbs reveal themselves. That is where the magic happens. Powering the device will does nothing, you need to install the software. There is a SDK provided for Mac and Windows platforms. It comes with a set of examples and documentation to help you get started. Once you connect the device up, run the Leap app and you&#8217;ll be ready to go.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/leap-motion-unboxed.jpg" title="Leap Motion unboxed" ></p>
-
-<p>The Leap SDK gives you several debugging tools. There is a visualizer which displays a trace of your fingers as you move.</p>
-
-<iframe src="http://player.vimeo.com/video/57635349" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-
-
-<p> <p><a href="http://vimeo.com/57635349">Leap Motion Visualizer</a> from <a href="http://vimeo.com/user14137242">Graham Gaylor</a> on <a href="http://vimeo.com">Vimeo</a>.</p></p>
-
-<p>It is backed by a grid, so you can literally trace little grids with your finger. Accuracy is touted as Leap Motion&#8217;s strength. That is no lie. I can easily trace the small grid with my clumsy finger. It is nothing short of amazing. Besides your fingers, Leap traces anything that resembles a stick. I don&#8217;t sense a lag. Even if I move quickly, Leap is able to capture it. I could tell Leap is computationally intensive. My computer fans are always in ovedrive when I use Leap.</p>
-
-<p>You could play with the sample apps. They are mostly simple <em>hello world</em> style apps that shows you how to call the APIs. Sadly, there are no fruit ninja apps for you to play with. The Leap Motion team built an input emulator to interface with games like fruit ninja. They promised to open source it though. The Leap SDK provides bindings for Java, C++, C#, Obj-C, Python and Javascript. I believe more will come. The API itself is fairly primitive. It gives you access to the raw data. You will get data on the position of each pointer, the orientation and the movement. There are no gestures or other abstract APIs.</p>
-
-<h2>Development experience</h2>
-
-<p>Like a kid with a new toy, I was eager to build applications with it. I chose to try the Javascript API first. The Leap SDK runs a web socket server which allows the Javascript bindings to access the data. Usage of the API is boringly simple. It is an infinite loop which gives you a frame every iteration. The frame is a JSON object which contains the data on the pointers.</p>
-
-<p>The <a href="https://github.com/liangzan/leap-demo/tree/master/particles">first leap experiment</a> I did was to replicate Mike Bostock&#8217;s D3.js <a href="http://bl.ocks.org/1062544">particles</a>. I got a trail of particles to follow each pointer.</p>
-
-<p>Gestures naturally come to my mind. The SDK has no provision for gestues yet. I have to recognize it. And that is an <em>Articifial Intelligence</em> problem. I looked for gestures related libraries to build on. And I found the <a href="http://depts.washington.edu/aimgroup/proj/dollar/">$1 unistroke recognizer</a>. They had a Javascript implementation. I used it to recognize gestures in my <a href="https://github.com/liangzan/leap-demo/tree/master/gestures">next leap experiment</a>. It worked. But it has caveats.</p>
-
-<p>A gesture has a start and an end. Leap runs in an infinite loop. I had to define a start and end. In my gesture experiment, I defined 2 states: fist and point. The fist state literally means clenching into a fist. It acts as a blank state which I use to define the end points of the gesture movement. The point state means an extended finger. In that state, movement is captured. While my experiment is able to recognize gestures, it did not do so cleanly. When I change between a clenched fist to a pointing finger, there are some jitters unavoidably. That polluted my gesture shape. It is very hard to form a clean shape. There should be a better way to define the end point of a gesture.</p>
-
-<h2>Conclusion</h2>
-
-<p>As I presented my demo to the local javascript meetup group, everybody was visibly excited by Leap Motion. Leap Motion is an amazing product. Invariably, we wondered what potential applications could be built on Leap Motion. Games are an obvious application. Minority report styled navigation is another. For a long time we have been stuck with the keyboard and mouse. Then touch devices exploded onto the scene. After playing with Leap Motion, I firmly believe it is the dawn of another era of gestures styled devices. I&#8217;m living in exciting times.</p>
-
-<h2>Update</h2>
-
-<p>Follow the discussion on <a href="http://news.ycombinator.com/item?id=5179335">Hacker News</a></p>
 ]]></content>
   </entry>
   
