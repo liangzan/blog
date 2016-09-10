@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-11T06:47:12+08:00</updated>
+  <updated>2016-09-11T06:52:37+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -22,6 +22,8 @@
 
 <!-- more -->
 
+
+<h2>Operators</h2>
 
 <p>Operators are special characters that has special meaning in a XPath expression.</p>
 
