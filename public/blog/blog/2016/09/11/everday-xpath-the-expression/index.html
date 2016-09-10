@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Liang Zan - Blog</title>
+  <title>Everday XPath - The Expression - Liang Zan - Blog</title>
   <meta name="author" content="Wong Liang Zan">
 
   
-  <meta name="description" content="SmugFTP is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to &hellip;">
+  <meta name="description" content="This blog post is part of a series on XPath. The content comes from my ebook EverydayXPath. Part of the content from the book will be released to the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangzan.github.com/blog/blog/page/4/">
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,15 +78,12 @@
   <div id="body"   >
     <div id="main">
       <div id="content">
-	<div class="blog-index">
+	<div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP Came Into Being</a></h1>
+      <h1 class="entry-title">Everday XPath - the Expression</h1>
     
     
       <p class="meta">
@@ -102,36 +99,105 @@
   
 
 
-<time datetime="2011-07-23T16:35:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2011</time>
+<time datetime="2016-09-11T05:53:00+08:00" pubdate data-updated="true">Sep 11<span>th</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://smugftp.com">SmugFTP</a> is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.</p>
+<div class="entry-content"><p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
 
+<!-- more -->
+
+
+<h2>The Expression</h2>
+
+<p>When we travel to a foreign country, we rely on directions to get to the place that we want. Similarly, an XPath expression is like us giving the computer directions to find a particular node in the document.</p>
+
+<p>An XPath expression is made up of steps, evaluated from left to right. Each step moves closer to the target element. They are separated by the forward slash <code>/</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>step/step/step</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We define a step as a <em>location path</em>. A location path selects a set of nodes relative to the preceding step. When a location path starts with a forward slash, it starts from the root node.</p>
+
+<p>A location path can be broken up into 3 distinct parts. An axis, a node test and a predicate. It follows the format below. Only the node test is required in an expression. The rest are optional.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>axis::node-test[predicate]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <strong>axis</strong> makes use of the relationship between the nodes selected to the context node to act as a filter. For example, the ancestor axis selects the ancestors of the current context. While the descendant axis selects the descendants of the current context. The axis is optional.</p>
+
+<p>The <strong>node test</strong> can be thought of as a pattern used for matching the desired nodes. We make use of the properties of the node to form the pattern. For example, a valid node test would be <code>table</code> which means we want table nodes. The node test is required.</p>
+
+<p>The <strong>predicate</strong> is a filter expression. It filters against the nodes selected in the axis and node test. It evaluates to return either a number or a Boolean value. If it is a number, it selects the node in that position. If it is a Boolean, it selects nodes that satisfies the predicate. The predicate is optional.</p>
+
+<h2>Context</h2>
+
+<p>Writing an XPath expression starts with knowing the context. Assuming there is a robot whose job is to fetch you things in the house. The robot understands XPath. I&#8217;m in my living room, sitting on the couch.</p>
+
+<blockquote><p>From the living room, go to the second room, find the first shelve, bring me the first book.</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./room[2]/shelve[1]/book[1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The living room was the context from which the expression started.</p>
+
+<p>Assuming the root of the house starts from the door.</p>
+
+<blockquote><p>From the door, find the first room, find the first shelve, find the first book</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/door/room[1]/shelve/book[1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The context was from the root. That is like searching the document from the start.</p>
+
+<p>Since I want a book, if I know the title, I can do this</p>
+
+<blockquote><p>Find a book with the title &#8220;Infinite Jest&#8221;</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//books[title="Infinite Jest"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The expression changes according to the context. The context sets the basis for the XPath expression. Think of how to choose your context - the expression will turn out differently.</p>
+
+<p>Naturally, the next question is how should we choose the context? While they all work, there are differences in maintainability.</p>
+
+<p>Consider these two factors:</p>
+
+<ul>
+<li>Does the page change often? Will your expression break when there are changes?</li>
+<li>Do you understand what the expression means at first glance?</li>
+</ul>
+
+
+<p>Avoid using a context which has a high chance of changing. You don&#8217;t want your expression to break. When writing expressions, always prefer short to long, simple to complex, less syntax to more. Readability helps. Hopefully, these factors will clarify the approach you take when forming the XPath expression.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/23/how-smugftp-came-into-being/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
 
 
 
@@ -143,40 +209,43 @@
   
 
 
-<time datetime="2011-01-20T16:46:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2011</time>
-        
-      </p>
+<time datetime="2016-09-11T05:53:00+08:00" pubdate data-updated="true">Sep 11<span>th</span>, 2016</time>
+      
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/09/09/writing-an-ebook/" title="Previous Post: Writing an ebook">&laquo; Writing an ebook</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-  <div class="entry-content"><p>I&#8217;m one of those who have tried both Vim and Emacs. I&#8217;ve always wanted to write a post to share my experiences on these 2 venerable text editors. Right now, my primry editor is Emacs. Not to say Vim is not good, but for Emacs fits my setup better. I&#8217;m typing this article on Emacs if you&#8217;re curious.
-First a little history. I started with Vim first. Once I got through the steep learning curve, it felt fast. I was typing faster. Vim made me saw how inefficient I was earlier. From time to time, I will see articles or comments that mention Emacs. My curiosity grew. I started trying out Emacs. When I started learning it, I forced myself to use only emacs for a week. After that week, I was able to memorise most of the basic key strokes. So after about 2 years of using Emacs, I think its the right time to summarise my opinions.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/01/20/emacs-vs-vim/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
   <h1>About Me</h1>
-  <p>I&#8217;m a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
 </section>
 <section>
   <h1>Subscribe</h1>
@@ -230,7 +299,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/liangzan">@liangzan</a> on GitHub
@@ -260,7 +329,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -280,6 +349,7 @@ First a little history. I started with Vim first. Once I got through the steep l
   
 </aside>
 
+
       </div>
     </div>
     <footer role="contentinfo"><p>
@@ -294,7 +364,10 @@ First a little history. I started with Vim first. Once I got through the steep l
       var disqus_shortname = 'liangzanblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

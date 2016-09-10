@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-10T07:12:55+08:00</updated>
+  <updated>2016-09-11T06:04:42+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Everday XPath - The Expression]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/"/>
+    <updated>2016-09-11T05:53:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression</id>
+    <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
+
+<!-- more -->
+
+
+<h2>The Expression</h2>
+
+<p>When we travel to a foreign country, we rely on directions to get to the place that we want. Similarly, an XPath expression is like us giving the computer directions to find a particular node in the document.</p>
+
+<p>An XPath expression is made up of steps, evaluated from left to right. Each step moves closer to the target element. They are separated by the forward slash <code>/</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>step/step/step</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We define a step as a <em>location path</em>. A location path selects a set of nodes relative to the preceding step. When a location path starts with a forward slash, it starts from the root node.</p>
+
+<p>A location path can be broken up into 3 distinct parts. An axis, a node test and a predicate. It follows the format below. Only the node test is required in an expression. The rest are optional.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>axis::node-test[predicate]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <strong>axis</strong> makes use of the relationship between the nodes selected to the context node to act as a filter. For example, the ancestor axis selects the ancestors of the current context. While the descendant axis selects the descendants of the current context. The axis is optional.</p>
+
+<p>The <strong>node test</strong> can be thought of as a pattern used for matching the desired nodes. We make use of the properties of the node to form the pattern. For example, a valid node test would be <code>table</code> which means we want table nodes. The node test is required.</p>
+
+<p>The <strong>predicate</strong> is a filter expression. It filters against the nodes selected in the axis and node test. It evaluates to return either a number or a Boolean value. If it is a number, it selects the node in that position. If it is a Boolean, it selects nodes that satisfies the predicate. The predicate is optional.</p>
+
+<h2>Context</h2>
+
+<p>Writing an XPath expression starts with knowing the context. Assuming there is a robot whose job is to fetch you things in the house. The robot understands XPath. I&#8217;m in my living room, sitting on the couch.</p>
+
+<blockquote><p>From the living room, go to the second room, find the first shelve, bring me the first book.</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./room[2]/shelve[1]/book[1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The living room was the context from which the expression started.</p>
+
+<p>Assuming the root of the house starts from the door.</p>
+
+<blockquote><p>From the door, find the first room, find the first shelve, find the first book</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/door/room[1]/shelve/book[1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The context was from the root. That is like searching the document from the start.</p>
+
+<p>Since I want a book, if I know the title, I can do this</p>
+
+<blockquote><p>Find a book with the title &#8220;Infinite Jest&#8221;</p></blockquote>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//books[title="Infinite Jest"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The expression changes according to the context. The context sets the basis for the XPath expression. Think of how to choose your context - the expression will turn out differently.</p>
+
+<p>Naturally, the next question is how should we choose the context? While they all work, there are differences in maintainability.</p>
+
+<p>Consider these two factors:</p>
+
+<ul>
+<li>Does the page change often? Will your expression break when there are changes?</li>
+<li>Do you understand what the expression means at first glance?</li>
+</ul>
+
+
+<p>Avoid using a context which has a high chance of changing. You don&#8217;t want your expression to break. When writing expressions, always prefer short to long, simple to complex, less syntax to more. Readability helps. Hopefully, these factors will clarify the approach you take when forming the XPath expression.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Writing an ebook]]></title>
@@ -1356,204 +1445,6 @@ Does it have many people reporting issues?</p>
 <h2>Do</h2>
 
 <p>My last tip is: do. There is no substitute for doing. The more you do the better you get. I hope my story can inspire you to believe that you can become half decent in design. I am still far from being decent in design though.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Customizing your Emacs Eshell prompt]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt/"/>
-    <updated>2012-12-12T05:38:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2012/12/12/customizing-your-emacs-eshell-prompt</id>
-    <content type="html"><![CDATA[<p>If you use the shell in Emacs and you are not already using <a href="http://emacswiki.org/emacs/CategoryEshell">eshell</a>, convert to eshell now! Eshell is the best terminal emulator available in Emacs. If you need convincing, please read <a href="http://www.masteringemacs.org/articles/2010/12/13/complete-guide-mastering-eshell/">this article from Mastering Emacs</a>. Using <strong>grep</strong> in eshell is the killer feature for me. What the Master Emacs article didn&#8217;t elaborate is how to customize your eshell prompt. I&#8217;m going to share how to add colors and show the Git branch on your eshell prompt. This is how my prompt look like currently.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/eshell-prompt.png" title="Eshell prompt" ></p>
-
-<!-- more -->
-
-
-<h2>Adding colors</h2>
-
-<p>To add colors we need to change the property of the text. We make use of the <strong>propertize</strong> function. The snippet below changes the string to be green.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;some-string&quot;</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can take a look at the available styles you can apply to text by simply running <strong>M-x list-faces-display</strong>.</p>
-
-<h2>Showing the Git branch name</h2>
-
-<p>To get the current branch name from your Git repository, we make use of the function below. I copied this from <a href="http://www.jimmenard.com/">Jim Mernard&#8217;s</a> emacs <a href="https://github.com/jimm/elisp/blob/master/eshell-customize.el">configuration</a>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
-</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
-</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
-</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
-</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
-</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Installing</h2>
-
-<p>I customized Jim&#8217;s code to add colors. The end result look like this</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-history-size</span> <span class="mi">1024</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-regexp</span> <span class="s">&quot;^[^#$]*[#$] &quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;em-hist&quot;</span><span class="p">)</span>           <span class="c1">; So the history vars are defined</span>
-</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-save-history-on-exit</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-save-history-on-exit</span> <span class="nv">t</span><span class="p">))</span> <span class="c1">; Don&#39;t ask, just save</span>
-</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
-</span><span class='line'><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">boundp</span> <span class="ss">&#39;eshell-ask-to-save-history</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-ask-to-save-history</span> <span class="ss">&#39;always</span><span class="p">))</span> <span class="c1">; For older(?) version</span>
-</span><span class='line'><span class="c1">;(message &quot;eshell-ask-to-save-history is %s&quot; eshell-ask-to-save-history)</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">eshell/ef</span> <span class="p">(</span><span class="nf">fname-regexp</span> <span class="nv">&amp;rest</span> <span class="nv">dir</span><span class="p">)</span> <span class="p">(</span><span class="nf">ef</span> <span class="nv">fname-regexp</span> <span class="nv">default-directory</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">;;; ---- path manipulation</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">pwd-repl-home</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let* </span><span class="p">((</span><span class="nf">home</span> <span class="p">(</span><span class="nf">expand-file-name</span> <span class="p">(</span><span class="nf">getenv</span> <span class="s">&quot;HOME&quot;</span><span class="p">)))</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">home-len</span> <span class="p">(</span><span class="nb">length </span><span class="nv">home</span><span class="p">)))</span>
-</span><span class='line'>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">and</span>
-</span><span class='line'>   <span class="p">(</span><span class="nb">&gt;= </span><span class="p">(</span><span class="nb">length </span><span class="nv">pwd</span><span class="p">)</span> <span class="nv">home-len</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">(</span><span class="nf">equal</span> <span class="nv">home</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="mi">0</span> <span class="nv">home-len</span><span class="p">)))</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;~&quot;</span> <span class="p">(</span><span class="nb">substring </span><span class="nv">pwd</span> <span class="nv">home-len</span><span class="p">))</span>
-</span><span class='line'>      <span class="nv">pwd</span><span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">pwd</span><span class="p">)</span>
-</span><span class='line'>  <span class="s">&quot;Returns current git branch as a string, or the empty string if</span>
-</span><span class='line'><span class="s">PWD is not in a git repo (or the git command is not found).&quot;</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">when</span> <span class="p">(</span><span class="k">and </span><span class="p">(</span><span class="nf">eshell-search-path</span> <span class="s">&quot;git&quot;</span><span class="p">)</span>
-</span><span class='line'>             <span class="p">(</span><span class="nf">locate-dominating-file</span> <span class="nv">pwd</span> <span class="s">&quot;.git&quot;</span><span class="p">))</span>
-</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">((</span><span class="nf">git-output</span> <span class="p">(</span><span class="nf">shell-command-to-string</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;cd &quot;</span> <span class="nv">pwd</span> <span class="s">&quot; &amp;&amp; git branch | grep &#39;\\*&#39; | sed -e &#39;s/^\\* //&#39;&quot;</span><span class="p">))))</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">propertize</span> <span class="p">(</span><span class="nf">concat</span> <span class="s">&quot;[&quot;</span>
-</span><span class='line'>              <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">git-output</span><span class="p">)</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">(</span><span class="nb">substring </span><span class="nv">git-output</span> <span class="mi">0</span> <span class="mi">-1</span><span class="p">)</span>
-</span><span class='line'>                <span class="s">&quot;(no branch)&quot;</span><span class="p">)</span>
-</span><span class='line'>              <span class="s">&quot;]&quot;</span><span class="p">)</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;green&quot;</span><span class="p">))</span>
-</span><span class='line'>      <span class="p">)))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-prompt-function</span>
-</span><span class='line'>      <span class="p">(</span><span class="k">lambda </span><span class="p">()</span>
-</span><span class='line'>        <span class="p">(</span><span class="nf">concat</span>
-</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="p">((</span><span class="k">lambda </span><span class="p">(</span><span class="nf">p-lst</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">&gt; </span><span class="p">(</span><span class="nb">length </span><span class="nv">p-lst</span><span class="p">)</span> <span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">(</span><span class="nf">concat</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">zerop</span> <span class="p">(</span><span class="nb">length </span><span class="nv">elm</span><span class="p">))</span> <span class="s">&quot;&quot;</span>
-</span><span class='line'>                                            <span class="p">(</span><span class="nb">substring </span><span class="nv">elm</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">)))</span>
-</span><span class='line'>                            <span class="p">(</span><span class="nf">butlast</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">)</span>
-</span><span class='line'>                 <span class="s">&quot;/&quot;</span>
-</span><span class='line'>                 <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
-</span><span class='line'>                            <span class="p">(</span><span class="nf">last</span> <span class="nv">p-lst</span> <span class="mi">3</span><span class="p">)</span>
-</span><span class='line'>                            <span class="s">&quot;/&quot;</span><span class="p">))</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">mapconcat</span> <span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">elm</span><span class="p">)</span> <span class="nv">elm</span><span class="p">)</span>
-</span><span class='line'>                         <span class="nv">p-lst</span>
-</span><span class='line'>                         <span class="s">&quot;/&quot;</span><span class="p">)))</span>
-</span><span class='line'>          <span class="p">(</span><span class="nf">split-string</span> <span class="p">(</span><span class="nf">pwd-repl-home</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">))</span> <span class="s">&quot;/&quot;</span><span class="p">))</span> <span class="ss">&#39;face</span> <span class="o">`</span><span class="p">(</span><span class="nf">:foreground</span> <span class="s">&quot;yellow&quot;</span><span class="p">))</span>
-</span><span class='line'>         <span class="p">(</span><span class="k">or </span><span class="p">(</span><span class="nf">curr-dir-git-branch-string</span> <span class="p">(</span><span class="nf">eshell/pwd</span><span class="p">)))</span>
-</span><span class='line'>         <span class="p">(</span><span class="nf">propertize</span> <span class="s">&quot;# &quot;</span> <span class="ss">&#39;face</span> <span class="ss">&#39;default</span><span class="p">))))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">setq</span> <span class="nv">eshell-highlight-prompt</span> <span class="nv">nil</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To install, I put the code above in a new file called <strong>eshell_customizations.el</strong>. Then I loaded the script from my <strong>init.el</strong>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scheme'><span class='line'><span class="p">(</span><span class="nb">load </span><span class="s">&quot;~/.emacs.d/scripts/eshell-customizations.el&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Restart your emacs and your eshell should look better now.</p>
 ]]></content>
   </entry>
   
