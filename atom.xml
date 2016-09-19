@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-20T06:38:04+08:00</updated>
+  <updated>2016-09-20T06:40:56+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -29,7 +29,9 @@
 
 <p>I used an open source project, <a href="https://github.com/jlund/streisand">Streisand</a> to set it up. Streisand needs a server to set up from. Any of the major cloud providers or any webhost providing Ubuntu 16.04 server will do. I used <a href="https://www.vultr.com/">Vultr</a>.</p>
 
-<p>Streisand runs on <a href="https://www.ansible.com/">Ansible</a>, which I&#8217;m familiar with. First, you need to <code>git clone</code> the project to your local machine. I updated the IP address under the <strong>inentory</strong> file of the Streisand project to my Vultr server&#8217;s. Next, run the script. It took about 20 minutes for it to complete. Once completed, a folder of HTML documents is generated on the local machine. The documents outlines the steps to connect to the remote server using the various protocols. The instructions were clear, and even included links to the binaries. Most importantly, it worked. I was able to access Google, and the various blocked sites from China.</p>
+<p>Streisand runs on <a href="https://www.ansible.com/">Ansible</a>, which I&#8217;m familiar with. First, you need to <code>git clone</code> the project to your local machine. I updated the IP address under the <strong>inventory</strong> file of the Streisand project to my Vultr server. Next, run the script. It took about 20 minutes for it to complete.</p>
+
+<p>Once completed, a folder of HTML documents is generated on the local machine. The documents outlines the steps to connect to the remote server using the various protocols. The instructions were clear, and even included links to the binaries. Each document is unique to the server. The certs, passwords are all unique to the server. Most importantly, it worked. I was able to access Google, and the various blocked sites from China.</p>
 
 <p>I hope this helps. For the non-technically inclined, unfortunately I wasn&#8217;t able to find a company that provides OpenConnect commercially. Perhaps this would get better in future. I&#8217;m sure there is a market for such a service.</p>
 ]]></content>
