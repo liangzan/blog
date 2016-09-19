@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Liang Zan - Blog</title>
+  <title>Breaching the great firewall of china - Liang Zan - Blog</title>
   <meta name="author" content="Wong Liang Zan">
 
   
-  <meta name="description" content="In any substantial project, it is necessary to separate your code in different files. Node.js implements the CommonJS API standard to load modules &hellip;">
+  <meta name="description" content="It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the great firewall &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangzan.github.com/blog/blog/page/4/">
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,15 +78,12 @@
   <div id="body"   >
     <div id="main">
       <div id="content">
-	<div class="blog-index">
+	<div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to Use Exports in NodeJS</a></h1>
+      <h1 class="entry-title">Breaching the Great Firewall of China</h1>
     
     
       <p class="meta">
@@ -102,81 +99,38 @@
   
 
 
-<time datetime="2012-06-04T16:58:00+08:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
+<time datetime="2016-09-20T06:15:00+08:00" pubdate data-updated="true">Sep 20<span>th</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>In any substantial project, it is necessary to separate your code in different files. Node.js implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS API standard to load modules</a> from other files. Using <strong>exports</strong> can be a source of much confusion in Node.js. Let us explore how <strong>exports</strong> works.</p>
+<div class="entry-content"><p>It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the <a href="https://en.wikipedia.org/wiki/Great_Firewall">great firewall</a> meant for the technically inclined. This guide is accurate as of 2016.</p>
 
+<!-- more -->
+
+
+<h2>Use OpenConnect</h2>
+
+<p>In short, <a href="http://www.infradead.org/ocserv/index.html">OpenConnect</a> works. I&#8217;ve tried OpenVPN and ShadowSocks. Only OpenConnect works.</p>
+
+<p>I used an open source project, <a href="https://github.com/jlund/streisand">Streisand</a> to set it up. Streisand needs a server to set up from. Any of the major cloud providers or any webhost providing Ubuntu 16.04 server will do. I used <a href="https://www.vultr.com/">Vultr</a>.</p>
+
+<p>Streisand runs on <a href="https://www.ansible.com/">Ansible</a>, which I&#8217;m familiar with. First, you need to <code>git clone</code> the project to your local machine. I updated the IP address under the <strong>inentory</strong> file of the Streisand project to my Vultr server&#8217;s. Next, run the script. It took about 20 minutes for it to complete. Once completed, a folder of HTML documents is generated on the local machine. The documents outlines the steps to connect to the remote server using the various protocols. The instructions were clear, and even included links to the binaries. Most importantly, it worked. I was able to access Google, and the various blocked sites from China.</p>
+
+<p>I hope this helps. For the non-technically inclined, unfortunately I wasn&#8217;t able to find a company that provides OpenConnect commercially. Perhaps this would get better in future. I&#8217;m sure there is a market for such a service.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to Behave Like Xmonad</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
 
-<time datetime="2012-06-03T05:48:00+08:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working computer ready by the next day so that work does not get disrupted. Faced with less than a day of time, the logical choice is to get a new computer.</p>
-
-<p>For computers, I only have eyes for Thinkpads and Macs. I wanted a Thinkpad. But the <a href="http://www.seeseelooklook.com/index.php">prices of Thinkpads in Singapore</a> is ridiculously overpriced. It is about twice the <a href="http://www.lenovo.com/products/us/laptop/thinkpad/">price in the US</a>. As much as I wanted a Thinkpad, I decided on a Mac.</p>
-
-<p>No doubt the Mac desktop experience is good. But it can never compare to <a href="http://blog.liangzan.net/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">my Arch Linux setup</a> where <em>everything</em> is customized to <em>my liking</em>. I spent much effort getting my <a href="http://www.archlinux.org/">Arch Linux</a> to not only look good and to work effectively. Faced with the conclusion that the next few years of my computing life is going to be on a Mac, I decided to make life easier for myself.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized Themed Arch Linux Setup</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -188,124 +142,43 @@
   
 
 
-<time datetime="2012-01-19T15:36:00+08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs-urxvt-xmonad.png" title="Arch linux solarized screenshot with emacs urxvt tmux xmonad" ></p>
-
-<p>The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your applications.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2016-09-20T06:15:00+08:00" pubdate data-updated="true">Sep 20<span>th</span>, 2016</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP Came Into Being</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2011-07-23T16:35:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://smugftp.com">SmugFTP</a> is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.</p>
-
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/23/how-smugftp-came-into-being/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a></h1>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2016/09/11/everday-xpath-operators/" title="Previous Post: Everday XPath - Operators">&laquo; Everday XPath - Operators</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-20T16:46:00+08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m one of those who have tried both Vim and Emacs. I&#8217;ve always wanted to write a post to share my experiences on these 2 venerable text editors. Right now, my primry editor is Emacs. Not to say Vim is not good, but for Emacs fits my setup better. I&#8217;m typing this article on Emacs if you&#8217;re curious.
-First a little history. I started with Vim first. Once I got through the steep learning curve, it felt fast. I was typing faster. Vim made me saw how inefficient I was earlier. From time to time, I will see articles or comments that mention Emacs. My curiosity grew. I started trying out Emacs. When I started learning it, I forced myself to use only emacs for a week. After that week, I was able to memorise most of the basic key strokes. So after about 2 years of using Emacs, I think its the right time to summarise my opinions.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/01/20/emacs-vs-vim/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
   <h1>About Me</h1>
-  <p>I&#8217;m a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
 </section>
 <section>
   <h1>Subscribe</h1>
@@ -359,7 +232,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/liangzan">@liangzan</a> on GitHub
@@ -389,7 +262,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -409,6 +282,7 @@ First a little history. I started with Vim first. Once I got through the steep l
   
 </aside>
 
+
       </div>
     </div>
     <footer role="contentinfo"><p>
@@ -423,7 +297,10 @@ First a little history. I started with Vim first. Once I got through the steep l
       var disqus_shortname = 'liangzanblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
