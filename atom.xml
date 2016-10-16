@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-09-20T06:40:56+08:00</updated>
+  <updated>2016-10-16T17:00:04+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deliberate Constraints]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/10/16/deliberate-constraints/"/>
+    <updated>2016-10-16T15:36:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/10/16/deliberate-constraints</id>
+    <content type="html"><![CDATA[<p>Two weeks ago, we removed the television in the house. The television, one of the staple appliance in every family where planners assumed that it was present in every house. It was the center of the living room. My children was spending too much time on the television for their parent&#8217;s liking. It has been 2 weeks. In the past during meal times, I see two zombies with eyes transfixed on the television; now they play with each other. Does having more <em>things</em>, mean we lead a better quality of life?</p>
+
+<p>My current <a href="https://www.courex.com.sg/">employer</a> is a bootstrapped company. It has never seen copious amounts of money. Therefore every decision was made with sustainability in mind. Rule number 1: Don&#8217;t lose money. Without money, the company was forced to do things differently.</p>
+
+<p>To give the reader some context, one of the things we do is <a href="https://en.wikipedia.org/wiki/Last_mile_(transportation">last mile delivery</a>). We used to own a fleet of vehicles, and hired full time drivers. Surely that must work because that was what everyone did. It didn&#8217;t. Owning a vehicle and having full time drivers on payroll is expensive. We didn&#8217;t have the money. We never had enough capacity to cater for the high season, and had vehicles idling during low season. We were forced to switch to the crowd sourced model. If we had the money, we would have bought more vehicles. We often wonder, was having no money the thing that saved us?</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Brunei">Brunei</a>, a small country, but blessed with plentiful oil resources. There is no income tax, free education and cushy jobs awaiting in the government. Hard work is optional. When oil prices began to tumble, []Brunei&#8217;s GDP contracted](http://www.economist.com/news/asia/21661040-autocratic-sultanate-turns-more-devout-oil-money-declines-all-pray-and-no-work). Her oil resources are estimated to last for another 24 years. More than half of her economy is linked to oil. When the oil tap dries, I wonder what would happen. Not far away from Brunei, lies another small <a href="https://en.wikipedia.org/wiki/Singapore">country</a>, cursed with no natural resources. When they went independent, even they themselves thought they couldn&#8217;t make it. Having no resources made them do things differently. I&#8217;m sure Brunei must have thought: was the oil a blessing or a curse?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Breaching the great firewall of china]]></title>
@@ -2125,40 +2140,6 @@ Does it have many people reporting issues?</p>
 <p>If the functionality is simple enough, it might be a better choice to implement it yourself. Implementing yourself has the advantage that you understand how it works. And you&#8217;ll be free from hassle of keeping the library up to date.</p>
 
 <p>I hope this checklist helps to you to do your library shopping.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Thoughts on Kinesis Freestyle 2]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/05/21/thoughts-on-kinesis-freestyle-2/"/>
-    <updated>2013-05-21T05:53:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/05/21/thoughts-on-kinesis-freestyle-2</id>
-    <content type="html"><![CDATA[<p><img src="http://www.kinesis-ergo.com/images/kb820pb-648x204.jpg" title="Kinesis Freestyle 2 with VIP3" ></p>
-
-<p>I recently purchased a <a href="http://www.kinesis-ergo.com/freestyle2.htm">Kinesis Freestyle 2</a>. I usually type in a text editor. I bought it because it is <a href="https://en.wikipedia.org/wiki/Human_factors_and_ergonomics">ergonomic</a>. As my primary editor is the infamous <a href="http://www.gnu.org/s/emacs">Emacs</a>, I&#8217;m wary of contracting the dreaded <a href="http://en.wikipedia.org/wiki/repetitive_strain_injury">RSI</a>. Emacs users <a href="http://www.emacswiki.org/emacs/RepeatedStrainInjury">tend to be susceptible</a> to it. In the months before this, I was conscious of the strain in my fingers and wrist after a long typing session. Disclaimer: I am not a RSI sufferer though.</p>
-
-<!-- more -->
-
-
-<p>The Freestyle is not my first ergonomic keyboard. My first ergonomic keyboard is the <a href="http://www.microsoft.com/hardware/en-us/p/natural-ergonomic-keyboard-4000">Microsoft Natural 4000</a>. Unfortunately I find the keys are too stiff. My impression is that typing on the Natural keyboard feels like twice the force needed for a Macbook keyboard. Not only did it added more strain, it cuts my typing speed. No complaints with the key layout though. In the end I kept the Natural mouse but ditched the keyboard. I wouldn&#8217;t recommend buying the Microsoft Natural keyboard.</p>
-
-<h2>Getting used to it</h2>
-
-<p>After 2 weeks of using the Kinesis Freestyle, I realised that I don&#8217;t feel the strain in my fingers anymore. Not even in my left <a href="http://en.wikipedia.org/wiki/Little_finger">pinky</a>. That is remarkable. For this benefit alone, it is worth the purchase. I think there are a few factors that contribute to it.</p>
-
-<p>First the activation force is smaller. Compared to the Macbook, the Freestyle feels softer. My fingers don&#8217;t need to strain themselves as much. I won&#8217;t deny that the tactile feel of the keyboard feels better. Second, the split allowed my shoulders to be more relaxed. It made me notice that my shoulder muscles gets slightly tensed up when I&#8217;m using the conventional keyboards. Splitting it allows my hands to be wide apart, which in turn eases my shoulders. Third, the slope allowed me to type at a 15 degree angle. My arm feels relaxed in the angled position. The setup makes your arm and shoulders more relaxed, which released the strain in my fingers and wrists. On the typing noise, it is louder than the typical Macbook keyboard, but less noisy than a mechanical keyboard. It is not so loud that your co-workers will notice.</p>
-
-<h2>Gripes with the layout</h2>
-
-<p><img src="http://www.kinesis-ergo.com/images/freestyle2-mac-layout-800x307.jpg" title="Kinesis Freestyle Mac Layout" ></p>
-
-<p>I took about 2 weeks to get back to my former typing speed. At first I wasn&#8217;t used to the new layout. My biggest gripe is the <strong>B</strong> key. It was found on the left half of the Freestyle keyboard. I&#8217;m used to typing <strong>B</strong> with my right hand. I&#8217;d often try to type the phantom <strong>B</strong> with the right hand. It took some getting used to, but I&#8217;m now typing <strong>B</strong> with my left hand. The position of the <strong>Command</strong> and <strong>Option</strong> key is different too. The <strong>Command</strong> key was directly below <strong>X</strong> and the <strong>Option</strong> key is directly below <strong>Z</strong> on the Macbook. On the Freestyle, it is shifted a little to the left. I&#8217;m using the <strong>Option</strong> and <strong>Command</strong> key for many of my keyboard shortcuts. My hands had to stretch further to the left. The <strong>Escape</strong> key is rather unconventional too. I feel that it was placed too far to the top left. I guess all these can be overcame as I get used to the layout.</p>
-
-<p>There is a whole bunch of keys which I hardly use. The 2 rows of cut, copy, paste keys on the left. And the single row of page up/down. Unfortunately, I cannot attach custom macros to those keys.</p>
-
-<h2>Conclusion</h2>
-
-<p>I don&#8217;t think using the Freestyle significantly improved my typing speed. But my hands and shoulders did feel much better when typing on it. Given that I spend long hours typing almost everyday, it is a worthwhile purchase.</p>
 ]]></content>
   </entry>
   
