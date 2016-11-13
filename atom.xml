@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-10-16T17:09:16+08:00</updated>
+  <updated>2016-11-13T16:35:48+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Should you learn more programming languages?]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/11/13/should-you-learn-more-programming-languages/"/>
+    <updated>2016-11-13T15:49:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/11/13/should-you-learn-more-programming-languages</id>
+    <content type="html"><![CDATA[<p>In the book <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X/ref=sr_1_1?ie=UTF8&amp;qid=1479025939&amp;sr=8-1&amp;keywords=pragmatic+programmer">Pragmatic Programmers</a>, the authors made a sensible recommendation: learn a new programming language every year. Each new programming language is a new perspective of solving problems. Adding more under your toolbox helps you gain different perspectives. It sharpens your technical judgment. But is it the best use of your time?</p>
+
+<!-- more -->
+
+
+<p>Our time is limited. We can only learn a limited amount of things. I feel that we should not be learning any a new programming language every year. It is far better to learn a programming language from a different family every year. The more different they are, the better. One should aim to master an object-oriented language such as Java or C#, a dynamic scripting language such as Python, Javascript or Ruby, and a functional language, like Haskell, Scala or F#. You can&#8217;t go wrong with C or Golang either.</p>
+
+<p>Once you have mastered the few common families, adding more and more languages marginally adds to your technical capabilities. Knowing 1 more way of reading a CSV file does not add much value to you.  On the contrary, I feel that one should master other areas in computer science once you have those languages in your toolbox. Areas like machine learning, computer vision and security. These multiplies your capabilities. Machine learning allows you to solve non-linear problems. Security gives a mindset of how to break things; helping you to build your product correctly from the start.</p>
+
+<p>Definitely, learning is good. There are a lot of things I want to learn. Knowing that we only have limited time, means that we have to say no more often than not. My opinion is one should not invest time in learning more programming languages once you have mastered a few from different paradigm families. Instead, one should venture into other areas of computer science. Do share if you think otherwise.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Deliberate Constraints]]></title>
@@ -2016,133 +2034,6 @@
 
 
 <p>This way, your app file will be much cleaner. It is a useful technique for extracting out large code blocks. Hope these three tips helps!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The library shopping checklist]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/07/13/the-library-shopping-checklist/"/>
-    <updated>2013-07-13T05:59:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/07/13/the-library-shopping-checklist</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://farm6.staticflickr.com/5062/5652699228_68587eb26c.jpg" title="Shopping. By Epsos.de" ></p>
-
-<p>Library shopping is like second nature to developers. A library refers to packaged code like <a href="http://rubygems.org">Ruby gems</a>, <a href="http://npmjs.org">NPM packages</a> or <a href="https://pypi.python.org/pypi">Python packages</a>. Along the years, I do these evaluations unconsciously. I thought it&#8217;d be good to put this mental checklist down in writing.</p>
-
-<!-- more -->
-
-
-<h2>Does the library fulfil your requirements?</h2>
-
-<p>My first filter is to look for libraries that fulfil what I need to do. Different libraries have different features. The clearer you are on what you need to do, the easier it will be to filter which library is more suitable.</p>
-
-<h2>Is the library maintained?</h2>
-
-<p>Is the last commit recent? If the last commit is less than 6 months old, I would view it as recent.</p>
-
-<p>Does the documentation or website say that the library is not maintained anymore? Sometimes authors do put up notices that a project is abandoned. Sometimes if the official library is not maintained, there may be forks that may have patches. You could use those instead.</p>
-
-<p>Are the issues fixed promptly? Take a look at how fast issues gets fixed. It is an indicator of how well maintained the library is.</p>
-
-<h2>Will the library be maintained?</h2>
-
-<p>Are there more than one contributor? If there are more than one, it is a good sign. A solo contributor is less preferable, as no peer pressure makes it easy to abandon a project.</p>
-
-<h2>Is the library compatible with your platform?</h2>
-
-<p>Are you on the JVM, on Windows or on Ruby 1.8.7? The library may not support your platform, so you must check.</p>
-
-<h2>Is the library well documented?</h2>
-
-<p>The documentation has to address these concerns before I would see it as well documented</p>
-
-<ul>
-<li>Does it have an API reference?</li>
-<li>Does it address how to install?</li>
-<li>Does it address how to uninstall?</li>
-<li>Does it address how to use it?</li>
-<li>Does it address how to update older versions?</li>
-<li>Does it explain how it works?</li>
-<li>Does it explain all the features?</li>
-<li>Does it have examples?</li>
-<li>Does it have a change log?</li>
-</ul>
-
-
-<p>You have to take into account the quality of the writing. Clarity and succintness is what I look for.</p>
-
-<p>You also have to take note if the documentation is out of touch with the changes in the code. Check for the commit dates of the documentation.</p>
-
-<h2>Is the library well written?</h2>
-
-<p>Read the code. Is it clean? Is this the quality of code you would like to have in your project?</p>
-
-<h2>Is the library well versioned?</h2>
-
-<p>Check the history of versioning. Does the library adhere to <a href="http://semver.org">Semantic Versioning</a>?</p>
-
-<p>Some libraries don&#8217;t. If they don&#8217;t, it makes updates harder.</p>
-
-<h2>Does the API help more than hinder?</h2>
-
-<p>Take a closer look at the usage of the library.</p>
-
-<p>Do you need to do a lot of configuration work to get it working? Or does it work out of the box?</p>
-
-<p>Does the API force you to change your existing code? Or does it fits in beautifully?</p>
-
-<p>Is the API intuitive?</p>
-
-<p>And there is a matter of taste. Does the API feel enjoyable to write in?</p>
-
-<h2>Does the library have tests?</h2>
-
-<p>Never choose a library that have no tests. You will end up as a guinea pig.</p>
-
-<h2>Is the library&#8217;s license permissive enough?</h2>
-
-<p>There are a variety of <a href="http://en.wikipedia.org/wiki/Software_license">software licenses</a>. Note which license the library is using. Can your project use a library that uses that particular license?</p>
-
-<h2>Is the library mature?</h2>
-
-<p>How long has the library existed? Is it years, months or weeks? Prefer the long-lived ones to the young ones.</p>
-
-<p>How many users are using the library?
-How many downloads, watchers does the library have?
-Are there blog posts covering the library?
-Does it have many contributors?
-Does it have many people reporting issues?</p>
-
-<p>Of course, the more mature the library is, the better.</p>
-
-<h2>Does the library have dependencies?</h2>
-
-<p>Certain libraries have heavy dependencies. Take for example, <a href="http://docs.opscode.com/chef_overview_server.html">Chef server</a> has <a href="http://couchdb.apache.org">Couchdb</a>, <a href="http://www.rabbitmq.com">RabbitMQ</a> and <a href="http://www.merbivore.com">Merb</a> as its dependencies. Generally, prefer libraries who install minimal extra dependencies.</p>
-
-<h2>Does the library break existing code?</h2>
-
-<p>Take a close look at how the library works. In the case of Ruby, a library may monkey patch common classes. It may break your code. So do be careful. If you have a comprehensive test suite, it is time to put it in use.</p>
-
-<h2>Is the library stable?</h2>
-
-<p>If the library has reached stability, and the API don&#8217;t change much, that is good. It means you don&#8217;t have much of a maintenance cost. There is no need to keep updating your code to keep up with the library.</p>
-
-<h2>Does the library have alternatives?</h2>
-
-<p>This is the cost of switching. Over the long term, there is always a chance that a library may get abandoned. What are the other alternatives? It is always good to have <em>competition</em> serving the same function.</p>
-
-<h2>Do you understand how it works?</h2>
-
-<p>You should always strive to understand how it works below the hood. This will help immensely when problems occur, or when you need to further customize it. Prefer libraries that does one thing well, than those who do many things.</p>
-
-<h2>Is the performance good?</h2>
-
-<p>If the function that the library is serving may be intensive, it would be good to pay attention to its performance. Libraries such as <a href="https://github.com/resque/resque">Resque</a> and <a href="http://sidekiq.org/">Sidekiq</a> serves similar functions. The only perceptible difference is their performance.</p>
-
-<h2>Is it simpler to use it or write it yourself?</h2>
-
-<p>If the functionality is simple enough, it might be a better choice to implement it yourself. Implementing yourself has the advantage that you understand how it works. And you&#8217;ll be free from hassle of keeping the library up to date.</p>
-
-<p>I hope this checklist helps to you to do your library shopping.</p>
 ]]></content>
   </entry>
   
