@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-11-13T16:38:30+08:00</updated>
+  <updated>2016-12-28T06:56:59+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running an ecommerce logistics business is hard]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/12/24/running-an-ecommerce-logistics-business-is-hard/"/>
+    <updated>2016-12-24T06:05:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/12/24/running-an-ecommerce-logistics-business-is-hard</id>
+    <content type="html"><![CDATA[<p>I came into the logistics industry knowing nothing about it. Along the way I&#8217;ve witnessed competitors going bust(Zyllem), new entrants, competitors switching from logistics to technology(Anchanto), and more. It is a hyper competitive industry. I hope to offer an insider view of the industry, to show why it is so challenging, which hopefully will discourage new entrants, in turn making my job easier.</p>
+
+<!-- more -->
+
+
+<h2>Challenge 1: Consistency</h2>
+
+<p>It is not how well you do yesterday, but how well you do every day that matters. Consistency is what separates the wheat from the chaff. All logistics companies can perform one delivery successfully on a single day. But to do it at scale, to do it consistently everyday, over a sustained period of time, is very difficult. Customers are paying precisely for that - reliability.</p>
+
+<p>In technology, your product or service is delivered over a controlled environment. For machines, consistency is a natural state. You can change software at will, or expect results to always be the same, barring the same inputs. Not logistics. Where do you find a willing and able person to deliver a parcel? Finding one is trivial, how do you find people for one thousand, ten thousand, one hundred thousand parcels? How do you ensure that the person would deliver the parcel punctually? How do you know the person will perform the deliveries? What happens when the delivery person don&#8217;t turn up? Can you imagine your database server telling you one morning that he don&#8217;t feel like working that day? There are many human variables that can ruin a delivery. Many uncontrollable. As long as last mile deliveries are done by people, there will be that element of uncertainty.</p>
+
+<p>Logistics needs people to perform repetitive tasks consistently over a sustained period. People are not machines. It is a constant battle to make people perform like machines. Eventually it wears you out mentally. That is why companies give up, and transit from a logistics company to a technology company, providing software for other logistics companies.</p>
+
+<h2>Challenge 2: Coping with surges</h2>
+
+<p>Singles day on November 11 is a online shopping day created out of nothing by Alibaba. On that day, we saw sales double or triple. Then there is Black Friday, double twelve, etc. Such is the might of marketing, that they can conjure record breaking sales on any day they choose. Digitally there is no problem coping - just order more servers. Machines don&#8217;t sleep, don&#8217;t complain of overtime and they don&#8217;t quit.</p>
+
+<p>Assuming the sellers stocked up properly, how do you get the product into the hands of the buyer? How do you double your capacity just for that one day? Wait, this is a one day phenomenon and after that all the capacity we built up is going to be thrown away? Worse, do you believe sellers will pay more for delivery during surges? No. They will also insist that delivery standards remain as fast as usual. Because for consumers, it is common to cancel if they don&#8217;t receive their parcels within 2-3 days. When sales are lost due to cancellations, it is logical to shift the blame to the logistics company who cannot fulfill their orders in time. That is why Alibaba invested so heavily in logistics.</p>
+
+<p>Let&#8217;s simplify the problem. Delivering at its current state(before self-driving cars that is), depends on finding three things: a willing person, a transport, or better - a willing person with his own transport.</p>
+
+<h2>Challenge 3: Finance</h2>
+
+<p>Let&#8217;s look at the problem of transport. Scaling transportation assets is simple - buy more vehicles. You buy enough to cope during the high season. Don&#8217;t forget, those vehicle assets are going to be idling during the low season. Depreciation will be glaring at you on your balance sheet. Alright, since it is short term, let&#8217;s rent. Unfortunately, short term rental are more expensive. Costs associated with fixed fleets can spiral out of control very easily. Do you have the money to be in the game? Don&#8217;t forget the margin for logistics is razor thin. Do you even make money after all these investments?</p>
+
+<h2>Challenge 4: People</h2>
+
+<p>Next, the problem of people. Where do you find the people to drive those vehicles? Let&#8217;s put up job ads. To cope with surges, we have to ramp up way before it comes. In practice, you build up your pool of inactive drivers, and call them up during surges. People can be found. The problem with people is not in finding them, but managing them. There are numerous people problems. People not showing up, which creates urgent reschedules. People stealing money collected. People stealing parcels. People being lazy, and not finishing their load. Worse, if they are driving company vehicles, there are even more problems. You have to foot for their petrol when they use the vehicle for personal use(of course they won&#8217;t admit). When there are accidents, you have to pay for fixing the damage. When there are traffic violations, you pay the fines. They won&#8217;t go away. As long as people are part of the equation, you have to deal with such problems. Are you sure you want to deal with such problems every day?</p>
+
+<h2>Challenge 4: Competition</h2>
+
+<p>Last mile delivery is something that anybody can perform. It is a commodity with little differentiation. There are perfect substitutes everywhere. There will always be the price pressure downwards. Margins are razor thin. It is a hyper competitive industry. Are you sure you want to enter this market, given much better alternatives available?</p>
+
+<p>Of course I&#8217;m simplifying the picture. Even for a simple service like delivering, there are differentiators. Certain customers will want finer tracking as their parcels are high value items. If you have invested in technology, you win. Certain customers prefer API integration when creating orders and updating of tracking statuses. If you invested to build the technology, you win. Or if you can perform the delivery faster, at the same price, you win.</p>
+
+<p>It is not impossible to build a thriving ecommerce logistics business, but it is difficult. From the outside, it looks antiquated, inefficient, and ripe for a rethink of the current obsolete ways. That is true 2-3 years ago. Now the landscape is different. New entrants with technology focus came, and has brought the state of logistics to a different level. It has advanced. The market should be consolidating in the next couple of years. I hope I have done my part in dispelling any thought of entering the logistics industry. There are numerous ways to make money, please don&#8217;t choose logistics.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Should you learn more programming languages?]]></title>
@@ -1890,150 +1934,6 @@
 <p>The course can be hectic. Personally, I had to take one to two days off to catch up. Going through the coursework does not feel like work. It is fun! Every time I spot a vulnerability, I get a quick endorphin rush. The sense of satisfaction is similar to that of building. The coursework is not easy but not impossibly difficult. There is a light amount of outside reading that you have to do. I never knew about <a href="https://www.owasp.org">OWASP</a> before this. Now I regard OWASP as the wikipedia of security. The exams is similar to the practical. Except it is time limited. The most boring part of the course is the report writing.</p>
 
 <p>Security cannot be covered in a mere 12 weeks. Breaker 101 did show us the way forward. Like any skill it needs practice to hone it. Reading books alone is not effective. You got to go out there and break things(legally of course). There are plenty of security courses around. But I prefer to be taught by real hackers. If you want to get into security, take Breaker 101. You won&#8217;t regret it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Three tips for managing complexity in Node.js projects]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/08/12/three-tips-for-managing-complexity-in-node-dot-js-projects/"/>
-    <updated>2013-08-12T05:33:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/08/12/three-tips-for-managing-complexity-in-node-dot-js-projects</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://farm7.staticflickr.com/6045/6310508350_8deb30151d_n.jpg" title="Complexity. By DigitalMums" ></p>
-
-<p>After working on various Node.js projects, I want to share three simple tips which helps to reduce complexity. If you are building an <a href="http://expressjs.com">Express</a> or <a href="https://github.com/mcavage/node-restify">Restify</a> project, ususally the framework does not tell you how to structure your application. You can put everything in one mega file, or you can(and should) extract different functionalities out.</p>
-
-<!-- more -->
-
-
-<h2>Folder structure</h2>
-
-<p>A clear folder structure helps you to find code. It is a form of documentation. There is no right or wrong. Do what suits your project best. I find the suggestions from <a href="https://gist.github.com/viatropos/1398757">this discussion</a> worth applying. In general I like to separate the main parts of the app:</p>
-
-<ul>
-<li>application logic</li>
-<li>assets</li>
-<li>view templates</li>
-<li>configuration</li>
-<li>tests</li>
-<li>logging</li>
-<li>third party vendor code</li>
-</ul>
-
-
-<p>As long as your folder structure separates these functions, it is good enough.</p>
-
-<h2>Index method</h2>
-
-<p>For example, when you are writing an API application, your controllers will increase as you add more functionality. You can break the controllers into their own file and place them all in a folder.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>|-- controllers
-</span><span class='line'>|   |-- threads.js
-</span><span class='line'>|   |-- posts.coffee
-</span><span class='line'>|   |-- users.coffee
-</span><span class='line'>|   |-- polls.coffee</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you need to make them available to the server. You can make use of <strong>index.js</strong>. Place an <strong>index.js</strong> in your controller folder</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>|-- controllers
-</span><span class='line'>|   |-- index.js
-</span><span class='line'>|   |-- threads.js
-</span><span class='line'>|   |-- posts.coffee
-</span><span class='line'>|   |-- users.coffee
-</span><span class='line'>|   |-- polls.coffee</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Write something like this. It finds all the files in the folder and adds them to the exports namespace.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/*</span>
-</span><span class='line'><span class="cm"> * Modules are automatically loaded once they are declared</span>
-</span><span class='line'><span class="cm"> * in the controller directory.</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">file</span> <span class="o">!=</span> <span class="s1">&#39;index.js&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">moduleName</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">));</span>
-</span><span class='line'>    <span class="nx">exports</span><span class="p">[</span><span class="nx">moduleName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./&#39;</span> <span class="o">+</span> <span class="nx">moduleName</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can get all the controllers in one variable. Which allows you to hook it to the server.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">controllers</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./app/controllers&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">server</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/v1/accounts&#39;</span><span class="p">,</span> <span class="nx">controllers</span><span class="p">.</span><span class="nx">accounts</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique helps to reduce the number of requires you need to write. Plus, making use of <strong>index.js</strong> makes it look cleaner as you only need to write the folder name. In general, when you face a situation where you have many similar functions, extract them into separate files, and use an index file to bind them together.</p>
-
-<h2>Passing the reference to an external file</h2>
-
-<p>If you haven&#8217;t noticed in Express already, there are several <a href="http://expressjs.com/api.html#middleware">middleware</a> initialization function calls when you initialize an Express server.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
-</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">());</span>
-</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">multipart</span><span class="p">());</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It quickly gets unwieldy as your projects grow. My ideal case is to initialize all the middleware configurations in a separate file. To do that, I pass the server reference over.</p>
-
-<p>On your former app file, use a single require for the external file.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../config/middleware&#39;</span><span class="p">)(</span><span class="nx">app</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Export a single function which initializes all the middleware.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
-</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">());</span>
-</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">multipart</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This way, your app file will be much cleaner. It is a useful technique for extracting out large code blocks. Hope these three tips helps!</p>
 ]]></content>
   </entry>
   
