@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First impressions of the Ansible configuration management tool - Liang Zan - Blog</title>
+  <title>Being an early employee at startup that exited - Liang Zan - Blog</title>
   <meta name="author" content="Wong Liang Zan">
 
   
-  <meta name="description" content="While working at Action.io, we decided to use Ansible for managing our deployments. Previously we were using Opscode Chef. We felt that Ansible &hellip;">
+  <meta name="description" content="I am one of the early employees at Dropsuite, previously known as Dropmysite. Today, I was informed that Dropsuite has IPOed in the Australian Stock &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/">
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -83,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Impressions of the Ansible Configuration Management Tool</h1>
+      <h1 class="entry-title">Being an Early Employee at Startup That Exited</h1>
     
     
       <p class="meta">
@@ -99,45 +99,31 @@
   
 
 
-<time datetime="2012-11-05T06:56:00+08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+<time datetime="2016-12-30T20:22:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>While working at <a href="http://www.action.io">Action.io</a>, we decided to use <a href="http://ansible.cc">Ansible</a> for managing our deployments. Previously we were using <a href="http://www.opscode.com/chef/">Opscode Chef</a>. We felt that Ansible suited our needs better. Let me illustrate why.</p>
+<div class="entry-content"><p>I am one of the early employees at Dropsuite, previously known as Dropmysite. Today, I was informed that <a href="https://www.google.com/finance?q=ASX%3ADSE&amp;ei=YOl6WPjdJ8XEuATl-YHwCA">Dropsuite</a> has IPOed in the Australian Stock Exchange. Technically, it is a <a href="https://en.wikipedia.org/wiki/Reverse_takeover">reverse IPO</a>. The whole process took one year. The Australian Stock Exchange, or Australian investors, is known to welcome technology companies, which is why local technology companies choose to list there. Another local example is <a href="http://mig.me/home">mig.me</a>.</p>
+
+<p>It&#8217;s rare to have worked in a startup that exited. Rarer still, in Singapore. I&#8217;ve worked with 6 startups where only 2 of them exited. One(Dropsuite) IPOed, the other(Courex) got acquired. The rest closed down when the money ran out. If you are considering making a move to a startup, you can use my experience as a data point.</p>
 
 <!-- more -->
 
 
-<h2>What is Ansible?</h2>
+<h2>Financially, is it worth the move?</h2>
 
-<p>Ansible is a <a href="http://en.wikipedia.org/wiki/Configuration_management">configuration management</a> tool. Like Opscode Chef or <a href="http://puppetlabs.com">PuppetLabs Puppet</a>, Ansible helps you to manage the configuration on your servers. Without a configuration tool, system administrators would install, configure and update server software by hand. Configuration management tools help to automate that.</p>
+<p>Most startups will offer below market salary and make it up using stock options. Stock options gives you the right to buy X number of stock of the company at X price at X time. Usually you only receive stock options after you&#8217;ve worked after a year or more. Every month, you continue to receive options, until the your allotment runs out. As an early employee, you share in the ownership of the company via owning the options. You partake in shaping the future of the company.</p>
 
-<p>At the start, since all of us at Action.io were fluent in <a href="http://www.ruby-lang.org/">Ruby</a> and Chef, our natural choice was Chef. We written <a href="http://wiki.opscode.com/display/chef/Cookbooks">cookbooks</a> and <a href="http://wiki.opscode.com/display/chef/Recipes">recipes</a>, got hosted Chef running and were deploying with <a href="http://wiki.opscode.com/display/chef/Knife">Knife</a>. Happy days! But something didn&#8217;t feel right.</p>
+<p>I was one of the early employees. I wasn&#8217;t senior management, but I was in Engineering as one of the lead engineers, leading one of the key products: Dropmyemail. There were about 10 people when I joined. At that time, we were still using a shared office, and the CEO was one table across me.</p>
 
-<h2>Chef did not suit us</h2>
+<p>My options are only a few month&#8217;s worth of salary at the current price. Considering I earned a good chunk of the option pool, this shows that unless you are one of the founders or the investors, you won&#8217;t get rich through stock options.</p>
 
-<p>Perhaps I am a Chef noob. I was never convinced on the pull workflow. After an update to the cookbooks on the Chef server, we had to wait for the Chef clients to poll for updates, to <em>pull</em> changes from the Chef server and update itself. It is The Wait that feels wrong. Why do I have to wait? I want my servers to get updated <em>now</em>. Not 5 minutes later. What I did everytime is to ssh in to the servers and run <code>sudo chef-client</code> to make the server pull changes immediately. I asked some of my peers who also use Chef. Remarkably, they did the same too.</p>
+<h2>Is it worth it at all?</h2>
 
-<p>If me and my friends did that, it does not mean everyone does that. My point is the pull workflow does not feel intuitive. I&#8217;m not a veteran with 10 years of experience running hundreds of servers. Maybe there is a good reason to adopt a pull workflow. But for a small setup with less than 20 servers, it felt out of place.</p>
-
-<p>Our next pain point is: Chef is resource hungry. Running a chef client process takes up precious memory and CPU cycles. For Action.io&#8217;s case, those memory and CPU cycles could be better utilized for the users. Not waiting for an update that arrives Once In A While.</p>
-
-<h2>Arrives Ansible</h2>
-
-<p>Here is my sales pitch for Ansible. Ansible pushes updates(like <a href="https://github.com/capistrano/capistrano">Capistrano</a>). You need not wait for updates to happen. It cuts total deployment time. Especially in misson critical situations like An Outage. You&#8217;d prefer to be up in 5 minutes rather than 50 where 45 is spent waiting for the Chef client to poll(exaggeration of course). Sold?</p>
-
-<p>Ansible installs <em>nothing</em> on your servers. No idle client that does nothing but sit there and polls every hour. Think of the memory that Nginx could have used for serving requests. How about those CPU cycles that could be available for Postgresql to do indexing? Why keep that lazy bum around? Nginx and Postgresql will harbour resentment over time. Keep your star workers happy. Ansible keeps no such lazy bums. Sold?</p>
-
-<p>Ansible is easy to grasp. Reading an Ansible playbook is like reading your Bash history. Your playbooks are completely written in <a href="www.yaml.org">YAML</a>. YAML comes with less markup noise. It is a wise choice. The choice of using YAML allows Ansible to be language agnostic. Ansible does not need fluency in a particular programming language. Which means the learning curve is low and it is easy to get proficient quickly. Furthermore, the Ansible paradigm is &#8220;I ssh in and run command Foo&#8221;. That is exactly the same as hand building a server. Which means it should be dead easy to grasp. Another Big Plus is you know exactly what is going on. Ansible is running shell commands over ssh. The commands are not hidden under some abstract concept of knifes and puppets and flying saucers. Error messages will be clearer(hint: easy to debug -> less downtime -> more money). Being easy to learn means anybody could learn to deploy(hint: no need to hire a dedicated sys admin -> make your existing engineers work harder -> more money). Sold?</p>
-
-<h2>Being young is not always good</h2>
-
-<p>A sales pitch had to make you believe elephants could fly, wash your laundry and perhaps deploy your server as well. Being that I am not actually doing Sales, I can be honest with Ansible&#8217;s warts. And so the anti-sales pitch. Being a young project Ansible suffers from the common ailments of Poor Documentation and Non Existent Eco System. If I were using Chef, there are usually cookbooks available for common software. Not for Ansible. At Action.io, we hand wrote all of them. The mailing list is still the best chance where you can get your questions answered. Let&#8217;s be fair, it&#8217;s all part of growing pain. The Ansible eco system is not mature yet.</p>
-
-<p>So what do you think of Ansible? Would you use it? Ansible as a tool is mature, but the eco system is not. It wasn&#8217;t hard to hand write our playbooks. Nor did it take much time. A better eco system may bring ready made playbooks. We still have to customise it. To us, it is the other advantages that Ansible brought that made us decide to use it. I hope you are sold.</p>
+<p>It depends on which stage you are at your career. If you are young, and weighing between a startup or a corporation, go with the startup. You will learn how to make do with less resources, learn how other functions of the business worked, more importantly learn how to get things done. That experience is priceless and will prove an asset in your later years. If you are not young anymore, either start a company as a founder, or join as the senior management. Otherwise the opportunity cost does not justify the move.</p>
 </div>
 
 
@@ -160,7 +146,7 @@
   
 
 
-<time datetime="2012-11-05T06:56:00+08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+<time datetime="2016-12-30T20:22:00+08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2016</time>
       
 
 
@@ -168,7 +154,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/" >Tweet</a>
   
   
   
@@ -177,10 +163,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/10/15/post-mortem-of-notifymode/" title="Previous Post: Post mortem of Notifymode">&laquo; Post mortem of Notifymode</a>
+        <a class="basic-alignment left" href="/blog/2016/12/24/running-an-ecommerce-logistics-business-is-hard/" title="Previous Post: Running an ecommerce logistics business is hard">&laquo; Running an ecommerce logistics business is hard</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/12/12/customizing-your-emacs-eshell-prompt/" title="Next Post: Customizing your Emacs Eshell prompt">Customizing your Emacs Eshell prompt &raquo;</a>
       
     </p>
   </footer>
@@ -318,8 +302,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/';
-        var disqus_url = 'http://liangzan.github.com/blog/blog/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool/';
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/';
         var disqus_script = 'embed.js';
       
     (function () {

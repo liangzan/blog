@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2016-12-28T06:56:59+08:00</updated>
+  <updated>2017-01-15T11:50:15+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Being an early employee at startup that exited]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/"/>
+    <updated>2016-12-30T20:22:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited</id>
+    <content type="html"><![CDATA[<p>I am one of the early employees at Dropsuite, previously known as Dropmysite. Today, I was informed that <a href="https://www.google.com/finance?q=ASX%3ADSE&amp;ei=YOl6WPjdJ8XEuATl-YHwCA">Dropsuite</a> has IPOed in the Australian Stock Exchange. Technically, it is a <a href="https://en.wikipedia.org/wiki/Reverse_takeover">reverse IPO</a>. The whole process took one year. The Australian Stock Exchange, or Australian investors, is known to welcome technology companies, which is why local technology companies choose to list there. Another local example is <a href="http://mig.me/home">mig.me</a>.</p>
+
+<p>It&#8217;s rare to have worked in a startup that exited. Rarer still, in Singapore. I&#8217;ve worked with 6 startups where only 2 of them exited. One(Dropsuite) IPOed, the other(Courex) got acquired. The rest closed down when the money ran out. If you are considering making a move to a startup, you can use my experience as a data point.</p>
+
+<!-- more -->
+
+
+<h2>Financially, is it worth the move?</h2>
+
+<p>Most startups will offer below market salary and make it up using stock options. Stock options gives you the right to buy X number of stock of the company at X price at X time. Usually you only receive stock options after you&#8217;ve worked after a year or more. Every month, you continue to receive options, until the your allotment runs out. As an early employee, you share in the ownership of the company via owning the options. You partake in shaping the future of the company.</p>
+
+<p>I was one of the early employees. I wasn&#8217;t senior management, but I was in Engineering as one of the lead engineers, leading one of the key products: Dropmyemail. There were about 10 people when I joined. At that time, we were still using a shared office, and the CEO was one table across me.</p>
+
+<p>My options are only a few month&#8217;s worth of salary at the current price. Considering I earned a good chunk of the option pool, this shows that unless you are one of the founders or the investors, you won&#8217;t get rich through stock options.</p>
+
+<h2>Is it worth it at all?</h2>
+
+<p>It depends on which stage you are at your career. If you are young, and weighing between a startup or a corporation, go with the startup. You will learn how to make do with less resources, learn how other functions of the business worked, more importantly learn how to get things done. That experience is priceless and will prove an asset in your later years. If you are not young anymore, either start a company as a founder, or join as the senior management. Otherwise the opportunity cost does not justify the move.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running an ecommerce logistics business is hard]]></title>
@@ -1908,32 +1934,6 @@
 <h2>In retrospect</h2>
 
 <p>Security disclosure programs are definitely worth the cost of running it. But don&#8217;t take for granted that having such a program in place means your app is secure. Most of the security researchers only do a shallow dive. They don&#8217;t spend too much time since the payoff is not there. You should still get a professional security consultant to perform an audit.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Breaker 101: the experience so far]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2013/10/23/breaker-101-the-experience-so-far/"/>
-    <updated>2013-10-23T05:39:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2013/10/23/breaker-101-the-experience-so-far</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://farm8.staticflickr.com/7129/7712545428_8615dcb6d8_m.jpg" title="Lock. By Alexandre Dulaunoy" ></p>
-
-<p><a href="http://daeken.com/2013-06-11.1_Breaker_101__An_intensive_online_web_security_course.html">Breaker 101</a> is a course conducted by <a href="http://en.wikipedia.org/wiki/Cody_Brocious">Cody Brocious</a>. It aims to teach you the basics to <a href="http://en.wikipedia.org/wiki/Internet_security">web security</a>. I&#8217;ve always been curious about security. When the opportunity arose, I signed up without hesitation. It is not cheap though. But I thought the course would benefit me. It already did.</p>
-
-<!-- more -->
-
-
-<p>It has fundamentally transformed the way I code. I view things differently. When I code, I am security conscious. I&#8217;m spotting security vulnerabilities in my old code after taking the course. That alone is worth the price of the course. I&#8217;m now confident my apps aren&#8217;t easy to break.</p>
-
-<h2>The course</h2>
-
-<p>The course is conducted via a live video stream each week. Cody would go through the material. We ask questions after the class. We have an IRC channel and a forum. Those serve as additional aveneues to ask questions. We also have study groups that are formed organically. I have a small group for those located in Asia. We would discuss coursework.</p>
-
-<p>The bulk of the learning is done through the practicals. These are &#8216;capture the flag&#8217; style practicals. Each practical would focus on a class of vulnerabilities. There are about 5 vulerabilities in each practical. The practicals are web apps with vulnerabilities hidden in them. Our job is to find them, break them and write them in a report to be submitted. Most of the time, we can find most of the vulerabilities. There is a myth that good builders cannot be good breakers. I don&#8217;t think that is true. Most of the class are coders in their day jobs. And we were all able to find the vulnerabilities. The key approach is to understand how an app works. Then make use of hidden assumptions to break the app. Being coders give us an advantage. We can easily guess how it works.</p>
-
-<p>The course can be hectic. Personally, I had to take one to two days off to catch up. Going through the coursework does not feel like work. It is fun! Every time I spot a vulnerability, I get a quick endorphin rush. The sense of satisfaction is similar to that of building. The coursework is not easy but not impossibly difficult. There is a light amount of outside reading that you have to do. I never knew about <a href="https://www.owasp.org">OWASP</a> before this. Now I regard OWASP as the wikipedia of security. The exams is similar to the practical. Except it is time limited. The most boring part of the course is the report writing.</p>
-
-<p>Security cannot be covered in a mere 12 weeks. Breaker 101 did show us the way forward. Like any skill it needs practice to hone it. Reading books alone is not effective. You got to go out there and break things(legally of course). There are plenty of security courses around. But I prefer to be taught by real hackers. If you want to get into security, take Breaker 101. You won&#8217;t regret it.</p>
 ]]></content>
   </entry>
   
