@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-01-15T11:50:15+08:00</updated>
+  <updated>2017-03-02T07:03:45+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Communication skills > Technical skills]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2017/02/19/communication-skills-%3E-technical-skills/"/>
+    <updated>2017-02-19T11:38:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2017/02/19/communication-skills->-technical-skills</id>
+    <content type="html"><![CDATA[<p>Speaking or writing, is something I thought was basic, something anyone with a basic education can do. I felt that I was done with honing my language skills after I&#8217;ve left school. If the school thinks it was good enough to graduate, it was good enough.</p>
+
+<!-- more -->
+
+
+<p>Early in my career, I was more interested in building my technical skills. Companies would ask if you knew X language, mastered the Y framework or wrote apps that did Z. Those skills were measurable. Either you wrote something with it or you didn&#8217;t. It is much harder to measure communication skills.</p>
+
+<p>Communication is the act of transferring information to another person. There are large variance in effectiveness. Imagine you have this fantastic idea of Uber for Sailing boats in absolute clarity in your head. You want to pitch this idea to a group of tourists, hoping they would try sailing. Communication is like drawing a mental picture of what you see in another person&#8217;s head. A skillful communicator would paint something like <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg/482px-Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg">this</a> in anothers mind; while an average one may only let the tourists think of <a href="https://s3.amazonaws.com/static.liangzan.net/blog/6407942619_fe539a1580_m.jpg">this</a>. Your writing bridges the gap to your thoughts. The better you are, the more details they see, the easier they understand you.</p>
+
+<p>The technical world is awash with difficult concepts that needs better explanations. Take for example the RAM, how do you explain that to a five year old? I had difficult understanding it when I was in my teens. My teachers calls it the <code>memory</code>. The word <code>memory</code> had connotations with storing information, which I naturally associated with our own memory. So what was the difference between the hard disks and the memory? Both store information correct? Why have two in a computer? This lingering question was never cleared up until after I wrote my first programs years later. The ability to pare down a foreign concept to something digestible is invaluable.</p>
+
+<h2>Brevity in code and in documentation</h2>
+
+<p>There are bad technical writing everywhere. The biggest problem is they are often too brief. Preference for brevity in code has diffused to documentation. Let&#8217;s take a look at how the official Scala docs attempts to explain <a href="http://docs.scala-lang.org/tutorials/tour/currying.html">currying</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Methods may define multiple parameter lists. When a method is called with a fewer number of parameter lists, then this will yield a function taking the missing parameter lists as its arguments.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The definition is correct. The example demonstrates its usage. But do you <em>understand</em> when to use currying? Code should be brief as you are writing for the computer. But documentation are written for humans. Authors should strive to explain not only the how, but also why and when to use it. More horrors to come.</p>
+
+<h2>Jargon-filled wishy washy</h2>
+
+<p>From <a href="https://www.thoughtworks.com/radar">thoughtworks radar</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>The microservices style of architecture highlights rising abstractions in the developer world because of containerization and the emphasis on low coupling, offering a high level of operational isolation. Developers can think of a container as a self-contained process and the PaaS as the common deployment target, using the microservices architecture as the common style. Decoupling the architecture allows the same for teams, cutting down on coordination cost among silos. Its attractiveness to both developers and DevOps has made this the de facto standard for new development in organizations.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Do you know what the author is trying to say? Let me attempt to simplify it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Containers and Microservice complements each other naturally, yielding advantages. Low-coupling helps your infrastructure become more resilient. In the event of failure, the failure is isolated and does not bring down the entire infratructure. Being isolated allows teams to work independently, cutting down wasted time coordinating deployments. Its advantages has made it the standard for new projects in companies.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Start with the topic sentence and cut down on the jargon. Your readers will thank you for it. I learned that from <em>Style</em>. Similar to <a href="https://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758">good user interfaces</a>, clear writing don&#8217;t make the user think.</p>
+
+<h2>The mythical self-documenting code</h2>
+
+<p>Every developer I met likes to write APIs but hates to write documentation. They will spend herculean effort, meticulously designing an intuitive RESTFUL API that scales, but they will put in the least amount of effort necessary to write documentation for it. Even resorting to <a href="http://swagger.io/">auto-generating documentation</a>. They would claim their API is so well designed, the endpoints and parameters so well named, that it is self-documented.</p>
+
+<p>Have you heard of Haskell?</p>
+
+<p>I was looking for a XML library. I found one and wanted to learn how to use it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fromContent :: Content -&gt; Cursor Source
+</span><span class='line'>
+</span><span class='line'>A cursor for the given content.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sometimes I&#8217;m lucky - there is one sentence.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fromTag :: Tag -&gt; [Content] -&gt; Element Source</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Most times I get a type signature.</p>
+
+<p>Haskellers would often argue that the signature is good enough. Do you believe that, or do you think it is just excuses made to hide their disdain for writing documentation? Granted, this malady is widespread across all communities, but Haskell is in a plague that is.</p>
+
+<p>Inevitably when emails start appearing asking what does that endpoint do, what does that parameter mean, you will realise that the time spent answering those emails could be better spent writing documentation in the first place. Perhaps it is because that employers look first for technical skills, and second on how well you communicate, that communication became a second citizen.</p>
+
+<h2>Becoming the 10x multiplier</h2>
+
+<p>If you are good at communication, you naturally become a 10x multiplier of others. It is more valuable than being <a href="http://antirez.com/news/112">the mythical 10x engineer</a>. It is a skill that should be valued, which sadly I don&#8217;t see. Things like onboarding new engineers to a new codebase, technical support overheads, all these go away with someone in your team who is a good teacher and patient enough to write. It is not hard to understand why as communication skill is impossible to quantify. Engineers when given a choice to work on their side projects or writing, would gravitate towards coding. It is what brings them to this profession. That is why we must insist that good engineers must not only build well, they must also communicate well.</p>
+
+<p>How do you be better? Like every skill, you practice. Writing and speaking are but conduits to your thoughts. <a href="https://www.goodreads.com/">Read</a> voraciously, read widely, and think for yourself if what they say is correct. For writing, I recommend <a href="https://www.amazon.com/Style-Basics-Clarity-Grace-5th/dp/0321953304">Style: The Basics of Clarity and Grace </a> by Joseph Williams. This book distils the process of writing well into easy to understand steps. Compared to <a href="https://www.amazon.com/Writing-Well-Classic-Guide-Nonfiction/dp/0060891548">On Writing Well</a>, <em>Style</em> is better. The easy way is to dish out rule-of-thumbs, but he did not. There is a widely held misconception that passive voice is bad. In the right context, the sentence flows better with the passive voice. <em>Style</em> shows you that. You should read both books nonetheless.</p>
+
+<p>I usually write on Emacs, and there are tools which I use and would recommend. I use <a href="https://www.gnu.org/software/ispell/ispell.html">ispell</a> to check my spelling. I use the <a href="https://github.com/bnbeckwith/writegood-mode">writegood mode</a> to catch passive voices and weasel words. There are readability tests like <a href="https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests">Flesch-Kincaid</a> included in writegood mode which scores your writing. I also use <a href="http://www.thesaurus.com/">thesaurus.com</a> to find the exact words for conveying my thoughts.</p>
+
+<p>To hone your speaking skills, practice. Find a <a href="https://www.toastmasters.org/">Toastmasters</a> chapter nearby, attend it and seek chances to speak. Toastmasters have impromptu sessions where you are given a topic to speak on the spot. Those are great exercises for thinking on your feet. In less than 10 sessions, you will lose the fear of public speaking. What is most valuable is you get feedback from others after every session.</p>
+
+<p>There is this verse from <a href="https://en.wikipedia.org/wiki/Tao_Te_Ching">Tao Te Ching</a>:</p>
+
+<blockquote><p>知不知，尚矣；不知知，病也</p></blockquote>
+
+
+<p>Which means there are knowledge you know you don&#8217;t know(like I know I don&#8217;t know nuclear physics), and knowledge you don&#8217;t know you don&#8217;t know(like that missing breakthrough for robotics, if it exists). We should strive to know what we don&#8217;t know, because it makes you aware of how little you know, and so you will find the reason to keep learning. I certainly hope I have planted enough seeds of doubt in your mind, enough to question if your communication skills is <em>good enough</em>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Being an early employee at startup that exited]]></title>
@@ -1896,44 +1985,6 @@
 <h2>Conclusion</h2>
 
 <p>In this article, we have gone through how to set up a WebDAV server using Apache on Ubuntu 14.04. We have also discussed how to configure Digest authentication to secure the server. Lastly, we have shown you how to connect to the WebDAV server from all 3 major operating systems using their native file browsers.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Running a security disclosure program]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2014/03/25/running-a-security-disclosure-program/"/>
-    <updated>2014-03-25T05:59:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2014/03/25/running-a-security-disclosure-program</id>
-    <content type="html"><![CDATA[<p><img class="right" src="http://farm8.staticflickr.com/7308/11406985424_457c44045f_m.jpg" title="Security. By perspec_photo88" ></p>
-
-<p>A few months ago, I started a security disclosure program for my <a href="https://www.dropmyemail.com">employer</a>. It is definitely beneficial for us. I&#8217;d like to share some of our experiences running a security disclosure program.</p>
-
-<!-- more -->
-
-
-<h2>What is a security disclosure program</h2>
-
-<p>A security disclosure program is a program is an open invitation for security researchers to find vulnerabilities in your application. If they find something, they are encouraged to disclose to us and allow us time to fix it before going public. Your company may choose to offer a reward. It could be monetary or an acknowledgment on the Hall of Fame. Many companies run such programs. Good examples include Google, Facebook and Github.</p>
-
-<p>To the companies running such a program, it gains a group of enthusiastic volunteers who will scrutinize their apps for vulnerabilities. It is far more cost effective than having in-house employees do the same. For the security researchers, it is a form of marketing or income for them. It is a win-win scenario for both parties.</p>
-
-<h2>The influx</h2>
-
-<p>We first posted the security page detailing our disclosure program. Within days, security researchers found our program without us telling anybody about it. That is our first surprise. Very quickly, more and more security researchers came without prompting. There was a visible spike in our traffic. <a href="https://bugcrowd.com">BugCrowd</a> knew about our program and added us to their <a href="https://bugcrowd.com/list-of-bug-bounty-programs">list</a> of bounty programs. The security researchers come from all over the world. The quality of the reports varies widely. Through their reports we managed to uncover no less than 5-6 serious vulnerabilities. That alone was worth it.</p>
-
-<p>After the initial rush, things will begin to quiet down. You will feel more confident about the security of your app.</p>
-
-<h2>The cons</h2>
-
-<p>There are <em>a lot</em> of reports to respond to. It is very similar to handling support. It creates an additional load on the team. Every report has to be investigated and judged if it is a real vulnerability or not. Most of the time the reports cover fairly trivial vulnerabilities. Some may not agree with you on whether it is a real vulnerability or not. You definitely need someone in your team to be able to judge the vulnerabilities.</p>
-
-<p>During this period expect various parts of the app to break. We have researchers running automated tools against our apps. There was a huge spike in errors. No doubt it caused some inconveniences.</p>
-
-<p>I think rewards are a good motivator. Think carefully what reward you want to give. Not all rewards are the same. A Hall of Fame only requires a page update. Whereas a T-shirt costs you money to print, time to package and money for postage. Does your team have the time to send out dozens of shirts every week? Do you have enough shirts to give out? If it is a monetary reward, expect arguments with you on your judgment.</p>
-
-<h2>In retrospect</h2>
-
-<p>Security disclosure programs are definitely worth the cost of running it. But don&#8217;t take for granted that having such a program in place means your app is secure. Most of the security researchers only do a shallow dive. They don&#8217;t spend too much time since the payoff is not there. You should still get a professional security consultant to perform an audit.</p>
 ]]></content>
   </entry>
   
