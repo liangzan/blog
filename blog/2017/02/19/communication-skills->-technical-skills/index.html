@@ -129,8 +129,7 @@
 
 <p>There are bad technical writing everywhere. The biggest problem is they are often too brief. Preference for brevity in code has diffused to documentation. Let&#8217;s take a look at how the official Scala docs attempts to explain <a href="http://docs.scala-lang.org/tutorials/tour/currying.html">currying</a>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Methods may define multiple parameter lists. When a method is called with a fewer number of parameter lists, then this will yield a function taking the missing parameter lists as its arguments.</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>Methods may define multiple parameter lists. When a method is called with a fewer number of parameter lists, then this will yield a function taking the missing parameter lists as its arguments.</p></blockquote>
 
 
 <p>The definition is correct. The example demonstrates its usage. But do you <em>understand</em> when to use currying? Code should be brief as you are writing for the computer. But documentation are written for humans. Authors should strive to explain not only the how, but also why and when to use it. More horrors to come.</p>
@@ -139,14 +138,12 @@
 
 <p>From <a href="https://www.thoughtworks.com/radar">thoughtworks radar</a>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>The microservices style of architecture highlights rising abstractions in the developer world because of containerization and the emphasis on low coupling, offering a high level of operational isolation. Developers can think of a container as a self-contained process and the PaaS as the common deployment target, using the microservices architecture as the common style. Decoupling the architecture allows the same for teams, cutting down on coordination cost among silos. Its attractiveness to both developers and DevOps has made this the de facto standard for new development in organizations.</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>The microservices style of architecture highlights rising abstractions in the developer world because of containerization and the emphasis on low coupling, offering a high level of operational isolation. Developers can think of a container as a self-contained process and the PaaS as the common deployment target, using the microservices architecture as the common style. Decoupling the architecture allows the same for teams, cutting down on coordination cost among silos. Its attractiveness to both developers and DevOps has made this the de facto standard for new development in organizations.</p></blockquote>
 
 
 <p>Do you know what the author is trying to say? Let me attempt to simplify it.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Containers and Microservice complements each other naturally, yielding advantages. Low-coupling helps your infrastructure become more resilient. In the event of failure, the failure is isolated and does not bring down the entire infratructure. Being isolated allows teams to work independently, cutting down wasted time coordinating deployments. Its advantages has made it the standard for new projects in companies.</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>Containers and Microservice complements each other naturally, yielding advantages. Low-coupling helps your infrastructure become more resilient. In the event of failure, the failure is isolated and does not bring down the entire infratructure. Being isolated allows teams to work independently, cutting down wasted time coordinating deployments. Its advantages has made it the standard for new projects in companies.</p></blockquote>
 
 
 <p>Start with the topic sentence and cut down on the jargon. Your readers will thank you for it. I learned that from <em>Style</em>. Similar to <a href="https://www.amazon.com/Dont-Make-Me-Think-Usability/dp/0321344758">good user interfaces</a>, clear writing don&#8217;t make the user think.</p>
