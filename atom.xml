@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-03-02T07:03:45+08:00</updated>
+  <updated>2017-03-02T07:07:46+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -25,7 +25,15 @@
 
 <p>Early in my career, I was more interested in building my technical skills. Companies would ask if you knew X language, mastered the Y framework or wrote apps that did Z. Those skills were measurable. Either you wrote something with it or you didn&#8217;t. It is much harder to measure communication skills.</p>
 
-<p>Communication is the act of transferring information to another person. There are large variance in effectiveness. Imagine you have this fantastic idea of Uber for Sailing boats in absolute clarity in your head. You want to pitch this idea to a group of tourists, hoping they would try sailing. Communication is like drawing a mental picture of what you see in another person&#8217;s head. A skillful communicator would paint something like <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg/482px-Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg">this</a> in anothers mind; while an average one may only let the tourists think of <a href="https://s3.amazonaws.com/static.liangzan.net/blog/6407942619_fe539a1580_m.jpg">this</a>. Your writing bridges the gap to your thoughts. The better you are, the more details they see, the easier they understand you.</p>
+<p>Communication is the act of transferring information to another person. There are large variance in effectiveness. Imagine you have this fantastic idea of Uber for Sailing boats in absolute clarity in your head. You want to pitch this idea to a group of tourists, hoping they would try sailing. Communication is like drawing a mental picture of what you see in another person&#8217;s head. A skillful communicator would paint something like this in anothers mind:</p>
+
+<p><img class="right" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg/482px-Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg" title="Rembrandt's Church in the store on the lake of Galilee" ></p>
+
+<p>While an average one may only let the tourists think of this:</p>
+
+<p><img class="left" src="https://s3.amazonaws.com/static.liangzan.net/blog/6407942619_fe539a1580_m.jp"></p>
+
+<p>Your writing bridges the gap to your thoughts. The better you are, the more details they see, the easier they understand you.</p>
 
 <p>The technical world is awash with difficult concepts that needs better explanations. Take for example the RAM, how do you explain that to a five year old? I had difficult understanding it when I was in my teens. My teachers calls it the <code>memory</code>. The word <code>memory</code> had connotations with storing information, which I naturally associated with our own memory. So what was the difference between the hard disks and the memory? Both store information correct? Why have two in a computer? This lingering question was never cleared up until after I wrote my first programs years later. The ability to pare down a foreign concept to something digestible is invaluable.</p>
 
