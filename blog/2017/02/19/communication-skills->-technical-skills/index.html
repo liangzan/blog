@@ -113,7 +113,7 @@
 
 <p>Early in my career, I was more interested in building my technical skills. Companies would ask if you knew X language, mastered the Y framework or wrote apps that did Z. Those skills were measurable. Either you wrote something with it or you didn&#8217;t. It is much harder to measure communication skills.</p>
 
-<p>Communication is the act of transferring information to another person. There are large variance in effectiveness. Imagine you have this fantastic idea of Uber for Sailing boats in absolute clarity in your head. You want to pitch this idea to a group of tourists, hoping they would try sailing. Communication is like drawing a mental picture of what you see in another person&#8217;s head. A skillful communicator would paint something like this in anothers mind:</p>
+<p>Communication is the act of transferring information to another person. There are large variance in effectiveness. Imagine you have this fantastic idea of <strong>Uber for Sailing boats</strong> in absolute clarity in your head. You want to pitch this idea to a group of tourists, hoping they would try sailing. Communication is like drawing a mental picture of what you see in another person&#8217;s head. A skillful communicator would paint something like this in anothers mind:</p>
 
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg/482px-Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg" title="Rembrandt's Church in the store on the lake of Galilee" ></p>
 
@@ -121,13 +121,13 @@
 
 <p><img class="right" src="https://s3.amazonaws.com/static.liangzan.net/blog/6407942619_fe539a1580_m.jpg"></p>
 
-<p>Your writing bridges the gap to your thoughts. The better you are, the more details they see, the easier they understand you.</p>
+<p>Your writing bridges the gap to your thoughts. The better you are, the more details they see, the easier they can understand you.</p>
 
-<p>The technical world is awash with difficult concepts that needs better explanations. Take for example the RAM, how do you explain that to a five year old? I had difficult understanding it when I was in my teens. My teachers calls it the <code>memory</code>. The word <code>memory</code> had connotations with storing information, which I naturally associated with our own memory. So what was the difference between the hard disks and the memory? Both store information correct? Why have two in a computer? This lingering question was never cleared up until after I wrote my first programs years later. The ability to pare down a foreign concept to something digestible is invaluable.</p>
+<p>The technical world is awash with difficult concepts that needs better explanations. Take for example the <code>RAM</code>, how do you explain that to a five year old? I had difficulty understanding it when I was in my teens. My teachers calls it the <code>memory</code>. The word <code>memory</code> had connotations with storing information, which I naturally associated with our own memory. So what was the difference between the hard disks and the memory? Both store information correct? Why have two in a computer? This lingering question was never cleared up until after I wrote my first programs years later. The ability to pare down a foreign concept to something digestible is invaluable.</p>
 
 <h2>Brevity in code and in documentation</h2>
 
-<p>There are bad technical writing everywhere. The biggest problem is they are often too brief. Preference for brevity in code has diffused to documentation. Let&#8217;s take a look at how the official Scala docs attempts to explain <a href="http://docs.scala-lang.org/tutorials/tour/currying.html">currying</a>:</p>
+<p>There are bad technical writing everywhere. The biggest problem is they are often too brief. Preference for brevity in code has diffused into documentation. Let&#8217;s take a look at how the official Scala docs attempts to explain <a href="http://docs.scala-lang.org/tutorials/tour/currying.html">currying</a>:</p>
 
 <blockquote><p>Methods may define multiple parameter lists. When a method is called with a fewer number of parameter lists, then this will yield a function taking the missing parameter lists as its arguments.</p></blockquote>
 
@@ -156,18 +156,20 @@
 
 <p>I was looking for a XML library. I found one and wanted to learn how to use it.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>fromContent :: Content -&gt; Cursor Source
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fromContent</span> <span class="ow">::</span> <span class="kt">Content</span> <span class="ow">-&gt;</span> <span class="kt">Cursor</span> <span class="kt">Source</span>
 </span><span class='line'>
-</span><span class='line'>A cursor for the given content.</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="kt">A</span> <span class="n">cursor</span> <span class="n">for</span> <span class="n">the</span> <span class="n">given</span> <span class="n">content</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Sometimes I&#8217;m lucky - there is one sentence.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>fromTag :: Tag -&gt; [Content] -&gt; Element Source</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">fromTag</span> <span class="ow">::</span> <span class="kt">Tag</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="kt">Content</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="kt">Element</span> <span class="kt">Source</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Most times I get a type signature.</p>
