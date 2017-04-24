@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-03-02T07:26:40+08:00</updated>
+  <updated>2017-04-25T06:22:15+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using more than a hundred stored procedures in production]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production/"/>
+    <updated>2017-04-23T06:50:00+08:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production</id>
+    <content type="html"><![CDATA[<p>At my present company <a href="https://www.storeviva.com/">Courex</a>, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.</p>
+
+<p>Life started as a conventional PHP-MySQL web application built by an outsourced team. Obviously with outsourced teams hired on a shoestring budget, it was plagued with performance issues and bugs.</p>
+
+<h2>Pro: Abstraction</h2>
+
+<p>The PHP code was taking input from a form, constructing SQL queries, running them, finally rendering the results. There were a series of different queries to run. This pattern repeated in most parts of the application. Thus the idea of using stored procedures was mooted. What stored procedures did was it abstracted over the series of queries as one procedure call, simplifying the code.</p>
+
+<p>In the past the code did this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="k">FROM</span> <span class="n">foo</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="k">c</span> <span class="k">FROM</span> <span class="n">bar</span><span class="p">;</span>
+</span><span class='line'><span class="k">UPDATE</span> <span class="n">foo</span> <span class="k">SET</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="k">WHERE</span> <span class="n">baz</span> <span class="o">=</span> <span class="n">boo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we do this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CALL</span> <span class="n">update_foo</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>They are no different from functions. All the usual engineering best practices apply. For example, we are able to name the stored procedure. Now we can use a meaningful name called <code>create_delivery</code> and it does what we expect - insert a delivery row. Instead of updating the same query repeated across 10 files, we update the one stored procedure. That&#8217;s a maintenance win.</p>
+
+<h2>Pro: Code reuse</h2>
+
+<p>We have code bases in different programming languages, but 1 database. All code bases have access to those same functions and procedures on the database. We have procedures that converts types, procedures that does validations, triggers that updates time stamps. All that comes free as long as you can make a MySQL query.</p>
+
+<p>In fact, we implemented our message queue purely in stored procedures. All our applications were able to <em>just</em> use it without much fanfare since it is just a sql query.</p>
+
+<h2>Pro: Well understood</h2>
+
+<p>SQL along with Javascript are basic skills that we came to expect from every developer. From our experience, introducing them to our team and learning to use them is a non-issue. Jumping in to maintain them is also trivial. That&#8217;s a win.</p>
+
+<h2>Pro: No extra dependencies, stability and performance</h2>
+
+<p>The best thing is there are no extra dependencies. I&#8217;ve came to appreciate projects with less moving parts. The less dependencies there are, the easier it is to setup and maintain.</p>
+
+<p>MySQL also does not introduce major versions with breaking changes every few years. Using a mature relational database, we enjoy a level of stability and performance we don&#8217;t usually experience from other software. We enjoy the peace of mind it brings.</p>
+
+<p>Of course there is a flip side.</p>
+
+<h2>Bad: SQL has its warts</h2>
+
+<p>SQL is not a good language for writing complex logic. Its warts slows down development time. Take error messages for example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SQL</span> <span class="n">Error</span> <span class="p">(</span><span class="mi">1064</span><span class="p">):</span> <span class="n">You</span> <span class="n">have</span> <span class="n">an</span> <span class="n">error</span> <span class="k">in</span> <span class="n">your</span> <span class="k">SQL</span> <span class="n">syntax</span><span class="p">;</span> <span class="k">check</span> <span class="n">the</span> <span class="n">manual</span> <span class="n">that</span> <span class="n">corresponds</span> <span class="k">to</span> <span class="n">your</span> <span class="n">MySQL</span> <span class="n">server</span> <span class="k">version</span> <span class="k">for</span> <span class="n">the</span> <span class="k">right</span> <span class="n">syntax</span> <span class="k">to</span> <span class="n">use</span> <span class="n">near</span> <span class="s1">&#39;foo&#39;</span> <span class="k">at</span> <span class="n">line</span> <span class="mi">1</span> <span class="o">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We frequently encounter error messages that does not help. Non-helpful error messages slow down development.</p>
+
+<p>Which brings me to our next point - readability. SQL is hardly readable when queries gets long. Being free-format led to a Cambrian explosion of indentation styles in the wild. I do not relish debugging a three hundred line query with non-helpful error messages.</p>
+
+<p>I firmly belong to the camp where the more restrictive the language is, the easier it is to write correct code. SQL, without the strict mode, is too forgiving.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;1&quot;</span> <span class="o">+</span> <span class="ss">&quot;1&quot;</span> <span class="o">//</span> <span class="k">returns</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="mi">1</span> <span class="o">+</span> <span class="ss">&quot;1&quot;</span>   <span class="o">//</span> <span class="k">returns</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;a&quot;</span> <span class="o">+</span> <span class="ss">&quot;a&quot;</span> <span class="o">//</span> <span class="k">returns</span> <span class="mi">0</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="mi">1</span> <span class="o">+</span> <span class="k">NULL</span>  <span class="o">//</span> <span class="k">returns</span> <span class="n">NUL</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even when expressions does not make sense, it returns something. It should not be type casting automatically, worse, not even showing a warning, giving a false sense of security. This can lead to dangerous bugs. Imagine the query is trying to add a sum of money to a bank account, and somehow one of the parameter is <code>NULL</code> or an alphabet, nothing will get added. As SQL deals directly with data, the impact of mistakes gets magnified.</p>
+
+<h2>Bad: It needs powerful hardware</h2>
+
+<p>As we use hundreds of stored procedures and functions, it is highly demanding on resources. Our database server has to be powerful. We&#8217;re forced to use dedicated hardware. In fact we tried using AWS&#8217;s RDS&#8217;s <code>db.m4.4xlarge</code> which is a 16 core, 64GB RAM virtual machine with the max IOPS allocated. It didn&#8217;t work. We encountered table locks every few hours. We&#8217;ve tried various ways to tune it, but the locks did not go away. Mysteriously, once we were on dedicated hardware, it went away. Granted there could be ways to solve it on RDS(we aren&#8217;t professional DBAs), but it showed us that we need to invest on powerful servers for this approach to work.</p>
+
+<p>There is obviously the problem of vendor lock in. SQL is not portable between the different databases. But isn&#8217;t that the same for your <insert your language> code base? To me this is a non-issue. I&#8217;ve also heard cases against stored procedures because of deployment or versioning. I&#8217;m not even sure they are problems to begin with. Treat stored procedures like normal code. Use a version control system. There is a tool: <a href="https://flywaydb.org/">Flyway</a> which helps a lot. Things you expect in modern day deployment such as versioning, rolling back are all taken care of by Flyway.</p>
+
+<p>Why wasn&#8217;t stored procedures more popular? I suspect it is because it is not <em>new</em> and not <em>marketed</em> much if at all. Most times, it is a short chapter on a SQL book. There are always shiny new things to adopt. Stored procedures, I must admit does not have the <em>cool</em> factor. But it is <a href="http://mcfunley.com/choose-boring-technology">stable, boring and it works</a>. I got to thank my colleague, <a href="https://github.com/prenaux">Pierre</a> who instigated this move. Hopefully more people would come to appreciate this feature of relational databases that almost no one talks about.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Communication skills > Technical skills]]></title>
@@ -1735,263 +1824,6 @@
 <p>Strictly speaking, you do not need technology to fulfil a logistics service. It can be done on pen and paper. Technology&#8217;s role in logistics is to help maintain consistency and improve efficiency. It helps to enforce people follow processes. Every step in the process is recorded. If a step is not followed, the system sounds out. That is how consistency is maintained. A lot of work in logistics is repetitive and boring. Humans are not good at performing repetitive tasks. Machines are.</p>
 
 <p>It is a breath of fresh air to get out of the echo chamber of technology. We&#8217;re often building technology solutions for technology problems. I got to see how technology can amplify what a worker can do. It make a worker more productive. So why isn&#8217;t technology more widely adopted in the industry? It is a human problem. There is a learning curve for people. I&#8217;ve witnessed one company who refuse to use a modern inventory management system. They opted to use plain spreadsheets. Why? Because they don&#8217;t want to learn to use the product, despite the advantages it brings. People in the conventional industries are definitely not the early adopters when it comes to technology. Human problems are much harder to solve than technical problems.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to configure WebDAV using Apache on Ubuntu]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2014/09/04/how-to-configure-webdav-using-apache-on-ubuntu/"/>
-    <updated>2014-09-04T23:18:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2014/09/04/how-to-configure-webdav-using-apache-on-ubuntu</id>
-    <content type="html"><![CDATA[<p><a href="https://en.wikipedia.org/wiki/WebDAV">WebDAV</a> is an extension of the HTTP protocol that allows users to manage files on servers. There are many ways to manage files on a remote server. WebDAV has several benefits over other solutions such as <a href="https://en.wikipedia.org/wiki/File_Transfer_Protocol">FTP</a> or <a href="https://en.wikipedia.org/wiki/Samba_(software">Samba</a>). In this article, we will go through how to configure your Apache server on Ubuntu 14.04 to allow native WebDAV access from Windows, Mac and Linux with authentication.</p>
-
-<!-- more -->
-
-
-<h2>Why WebDAV?</h2>
-
-<p>WebDAV offers several advantages.</p>
-
-<ul>
-<li><p>Native integration on all major OSes(Windows, Mac, Linux). There is no need to install third party software to use WebDAV.</p></li>
-<li><p>Supports partial transfers.</p></li>
-<li><p>More choices for authentication. Being on HTTP means <a href="https://en.wikipedia.org/wiki/NT_LAN_Manager">NTLM</a>, <a href="https://en.wikipedia.org/wiki/Kerberos_(protocol">Kerberos</a>), <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a>, etc are possible.</p></li>
-</ul>
-
-
-<p>Depending on your situation, WebDAV may be the best solution for your needs.</p>
-
-<h2>Why Apache?</h2>
-
-<p>There are many web servers around that supports WebDAV on Linux. However, Apache has the most compliant implementation of the WebDAV protocol out there. At the time in writing, WebDAV on <a href="http://nginx.org/">Nginx</a> and <a href="http://www.lighttpd.net/">Lighttpd</a> work but only partially.</p>
-
-<h2>Install Apache</h2>
-
-<p>Let us get <a href="https://httpd.apache.org/">Apache</a> installed.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update
-</span><span class='line'>sudo apt-get install apache2</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The Apache web server should be installed and running.</p>
-
-<h2>Setting up WebDAV</h2>
-
-<p>There are 3 steps to set up WebDAV. We designate a location, enable the necessary modules and configure it.</p>
-
-<h3>Step 1: Preparing the directories</h3>
-
-<p>We need to designate a folder for serving WebDAV. We are creating a new directory in <code>/var/www</code> for that. You will also need to change the owner to <code>www-data</code>(or whichever your Apache user is) in order to allow Apache to write to it.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mkdir /var/www/webdav
-</span><span class='line'>sudo chown www-data:www-data /var/www/</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Step 2: Enabling modules</h3>
-
-<p>Next we enable the modules using <a href="http://man.he.net/man8/a2enmod">a2enmod</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo a2enmod dav
-</span><span class='line'>sudo a2enmod dav_fs</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The Apache modules are found under <code>/etc/apache2/modules-available</code>. This creates a symbolic link from <code>/etc/apache2/modules-available</code> to <code>/etc/apache2/modules-enabled</code>.</p>
-
-<h3>Configuration</h3>
-
-<p>We open the configuration file at <code>/etc/apache2/sites-available/000-default.conf</code> using your favorite text editor. Add the following configuration.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>DavLockDB /var/www/DavLock
-</span><span class='line'>
-</span><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>    Alias /webdav /var/www/webdav
-</span><span class='line'>
-</span><span class='line'>    &lt;Directory /var/www/webdav&gt;
-</span><span class='line'>        DAV On
-</span><span class='line'>    &lt;/Directory&gt;
-</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <a href="https://httpd.apache.org/docs/2.4/mod/mod_dav_fs.html">DavLockDB</a> directive designates the name of the DAV Lock database. It should be a path to a file. The file does not need to be created. The directory should be writeable by the Apache server.</p>
-
-<p>The <a href="https://httpd.apache.org/docs/2.4/mod/mod_alias.html">Alias</a> directive maps requests to <code>http://your.server/webdav</code> to the <code>/var/www/webdav</code> folder.</p>
-
-<p>The <a href="https://httpd.apache.org/docs/current/mod/core.html#directory">Directory</a> directive tells Apache to enable WebDAV for the <code>/var/www/webdav</code> folder. You can find out more about <a href="https://httpd.apache.org/docs/2.4/mod/mod_dav.html">mod_dav</a> from the Apache docs.</p>
-
-<p>If you restart the Apache server, you will have a working WebDAV server without authentication.</p>
-
-<p>Restart the Apache server like this</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo service apache2 restart</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The WebDAV server should be found at <strong>http://&lt;your.server.com>/webdav</strong>. Try logging in without any credentials.</p>
-
-<h2>Adding authentication</h2>
-
-<p>A WebDAV server without authentication is not secure. In this section we&#8217;ll add authentication to your WebDAV server. There are many authentication schemes available. We are only going to touch on the 2 simplest schemes: Basic and Digest authentication.</p>
-
-<h3>Which to use? Basic or Digest authentication?</h3>
-
-<p>Take a look at this table which illustrates the compatibility of the various authentication schemes on different operating systems. Note that if you are serving HTTPS, we are assuming your ssl cert is valid(not self-signed).</p>
-
-<p><img src="http://i.imgur.com/Q01EN3F.png" alt="WebDAV compatibility" /></p>
-
-<p>If you are using <strong>HTTP</strong>, use <a href="https://en.wikipedia.org/wiki/Digest_access_authentication">Digest authentication</a> as it will work on all operating systems. If you are using <strong>HTTPS</strong>, you have the option of using <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic authentication</a>.</p>
-
-<p>We&#8217;re going to cover the <strong>Digest</strong> authentication version since it works on all the operating systems without the need for a SSL cert.</p>
-
-<h3>Digest authentication</h3>
-
-<p>Let us generate the file(called <strong>users.password</strong>) that stores the password for the users. In Digest authentication, there is the <strong>realm</strong> field which acts as a namespace for the users. We will use <strong>webdav</strong> as our <strong>realm</strong>. Our first user will be called <strong>alex</strong>.</p>
-
-<p>To generate the digest file, we have to install the dependencies.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install apache2-utils</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After that, we generate the file.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo htdigest -c /etc/apache2/users.password webdav alex</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There should be a password prompt for the password of <strong>alex</strong>.</p>
-
-<p>For subsequent addition of users, you should remove the <strong>c</strong> flag. Another example adding a user called <strong>bob</strong>.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo htdigest /etc/apache2/users.password webdav bob</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We also need to allow Apache to read it. So we change the owner of the file.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo chown www-data:www-data /etc/apache2/users.password</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After the password file is created, we should make changes to the configuration at <code>/etc/apache2/sites-available/000-default.conf</code>.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>DavLockDB /var/www/DavLock
-</span><span class='line'>
-</span><span class='line'>&lt;VirtualHost *:80&gt;
-</span><span class='line'>    Alias /webdav /var/www/webdav
-</span><span class='line'>
-</span><span class='line'>    &lt;Directory /var/www/webdav&gt;
-</span><span class='line'>        DAV On
-</span><span class='line'>        AuthType Digest
-</span><span class='line'>        AuthName "webdav"
-</span><span class='line'>        AuthUserFile /etc/apache2/users.password
-</span><span class='line'>  Require valid-user
-</span><span class='line'>    &lt;/Directory&gt;
-</span><span class='line'>&lt;/VirtualHost&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <a href="https://httpd.apache.org/docs/current/mod/mod_authn_core.html">mod_authn</a> module contains the definitions for the authentication directives. In essence, we instruct Apache that for the <code>/var/www/webdav</code> directory, there should be authentication using the <strong>Digest</strong> scheme. The realm should be called <strong>webdav</strong>. Find the password from the file at <strong>/etc/apache2/users.password</strong>. Only valid users who authenticate themselves is able to acess that directory.</p>
-
-<p>Finally, enable the digest module and restart the server for the settings to take effect.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo a2enmod auth_digest
-</span><span class='line'>sudo service apache2 restart</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Testing it</h2>
-
-<p>We&#8217;ll demonstrate how to access your WebDAV server from the native file browsers of Mac, Windows and Linux(Ubuntu).</p>
-
-<h3>Mac</h3>
-
-<p>On Mac, open <strong>Finder</strong>. On the menu bar, find <strong>Go</strong> and select the option <strong>Connect to Server</strong>.</p>
-
-<p><img src="http://i.imgur.com/q6rsU9q.png" alt="WebDAV Mac Step 1" /></p>
-
-<p>Enter the server address. It should be <strong>http://&lt;your.server>/webdav</strong>. Press <strong>Connect</strong>.</p>
-
-<p><img src="http://i.imgur.com/h4mFZoK.png" alt="WebDAV Mac Step 2" /></p>
-
-<p>You will be prompted for a username and pssword. Enter them and press <strong>Connect</strong>.</p>
-
-<p><img src="http://i.imgur.com/BkhcR7I.png" alt="WebDAV Mac Step 3" /></p>
-
-<p>Once you have connected, the directory should appear in <strong>Finder</strong>.</p>
-
-<p><img src="http://i.imgur.com/HcuBGmq.png" alt="WebDAV Mac Step 4" /></p>
-
-<h3>Windows</h3>
-
-<p>On Windows, open <strong>File Explorer</strong>. On the left sidebar, you should find the <strong>Network</strong> icon.</p>
-
-<p><img src="http://i.imgur.com/KhKCetD.png" alt="WebDAV Windows Step 1" /></p>
-
-<p>Right click on the <strong>Network</strong> icon. It should show the context menu with the option <strong>Map network drive</strong>. Click on that.</p>
-
-<p><img src="http://i.imgur.com/KYLEwSv.png" alt="WebDAV Windows Step 2" /></p>
-
-<p>Enter the server address in the folder field. It should be <strong>http://&lt;your.server>/webdav</strong>. Select the <strong>Connect using different credentials</strong> if your login is different. Press <strong>Finish</strong>.</p>
-
-<p><img src="http://i.imgur.com/PbYhFXr.png" alt="WebDAV Windows Step 3" /></p>
-
-<p>You will be prompted for a username and password. Enter them and press <strong>OK</strong>.</p>
-
-<p><img src="http://i.imgur.com/d57Cul7.png" alt="WebDAV Windows Step 4" /></p>
-
-<p>Once you have connected, it should appear as a network drive on the left sidebar of your <strong>File Explorer</strong>.</p>
-
-<p><img src="http://i.imgur.com/CTPOwvI.png" alt="WebDAV Windows Step 5" /></p>
-
-<h3>Linux(Ubuntu)</h3>
-
-<p>We are using Ubuntu 14.04 as our Linux desktop operating system. On Ubuntu, open <strong>Files</strong>. THere is a <strong>Connect to Server</strong> option on the left sidebar. Click on that.</p>
-
-<p><img src="http://i.imgur.com/XqbJm4t.png" alt="WebDAV Linux Step 1" /></p>
-
-<p>Enter the server address. It should be <strong>dav://&lt;your.server>/webdav</strong>. Press <strong>Connect</strong>.</p>
-
-<p><img src="http://i.imgur.com/M3VuEE5.png" alt="WebDAV Linux Step 2" /></p>
-
-<p>You will be prompted for a username and password. Enter them and press <strong>Connect</strong>.</p>
-
-<p><img src="http://i.imgur.com/Sa5037A.png" alt="WebDAV Linux Step 3" /></p>
-
-<p>Once you have connected, the directory should appear under the <strong>Network</strong> listing.</p>
-
-<p><img src="http://i.imgur.com/FQtteVI.png" alt="WebDAV Linux Step 4" /></p>
-
-<h2>Conclusion</h2>
-
-<p>In this article, we have gone through how to set up a WebDAV server using Apache on Ubuntu 14.04. We have also discussed how to configure Digest authentication to secure the server. Lastly, we have shown you how to connect to the WebDAV server from all 3 major operating systems using their native file browsers.</p>
 ]]></content>
   </entry>
   
