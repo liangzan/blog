@@ -113,7 +113,7 @@
 
 <p>Life started as a conventional PHP-MySQL web application built by an outsourced team. Obviously with outsourced teams hired on a shoestring budget, it was plagued with performance issues and bugs.</p>
 
-<h2>Pro: Abstraction</h2>
+<h2>Good: Abstraction</h2>
 
 <p>The PHP code was taking input from a form, constructing SQL queries, running them, finally rendering the results. There were a series of different queries to run. This pattern repeated in most parts of the application. Thus the idea of using stored procedures was mooted. What stored procedures did was it abstracted over the series of queries as one procedure call, simplifying the code.</p>
 
@@ -137,17 +137,17 @@
 
 <p>They are no different from functions. All the usual engineering best practices apply. For example, we are able to name the stored procedure. Now we can use a meaningful name called <code>create_delivery</code> and it does what we expect - insert a delivery row. Instead of updating the same query repeated across 10 files, we update the one stored procedure. That&#8217;s a maintenance win.</p>
 
-<h2>Pro: Code reuse</h2>
+<h2>Good: Code reuse</h2>
 
 <p>We have code bases in different programming languages, but 1 database. All code bases have access to those same functions and procedures on the database. We have procedures that converts types, procedures that does validations, triggers that updates time stamps. All that comes free as long as you can make a MySQL query.</p>
 
 <p>In fact, we implemented our message queue purely in stored procedures. All our applications were able to <em>just</em> use it without much fanfare since it is just a sql query.</p>
 
-<h2>Pro: Well understood</h2>
+<h2>Good: Well understood</h2>
 
 <p>SQL along with Javascript are basic skills that we came to expect from every developer. From our experience, introducing them to our team and learning to use them is a non-issue. Jumping in to maintain them is also trivial. That&#8217;s a win.</p>
 
-<h2>Pro: No extra dependencies, stability and performance</h2>
+<h2>Good: No extra dependencies, stability and performance</h2>
 
 <p>The best thing is there are no extra dependencies. I&#8217;ve came to appreciate projects with less moving parts. The less dependencies there are, the easier it is to setup and maintain.</p>
 
@@ -185,11 +185,11 @@
 
 <h2>Bad: It needs powerful hardware</h2>
 
-<p>As we use hundreds of stored procedures and functions, it is highly demanding on resources. Our database server has to be powerful. We&#8217;re forced to use dedicated hardware. In fact we tried using AWS&#8217;s RDS&#8217;s <code>db.m4.4xlarge</code> which is a 16 core, 64GB RAM virtual machine with the max IOPS allocated. It didn&#8217;t work. We encountered table locks every few hours. We&#8217;ve tried various ways to tune it, but the locks did not go away. Mysteriously, once we were on dedicated hardware, it went away. Granted there could be ways to solve it on RDS(we aren&#8217;t professional DBAs), but it showed us that we need to invest on powerful servers for this approach to work.</p>
+<p>As we use hundreds of stored procedures and functions, it is highly demanding on resources. Our database server has to be powerful. We&#8217;re forced to use dedicated hardware. In fact we tried using AWS RDS&#8217;s <code>db.m4.4xlarge</code> which is a 16-core 64GB RAM virtual machine with the max IOPS allocated. It didn&#8217;t work. We encountered table locks every few hours. We&#8217;ve tried various ways to tune it, but the locks did not go away. Mysteriously, once we were on dedicated hardware, it went away. Granted there could be ways to solve it on RDS(we aren&#8217;t professional DBAs), but it showed us that we need to invest on powerful servers for this approach to work.</p>
 
-<p>There is obviously the problem of vendor lock in. SQL is not portable between the different databases. But isn&#8217;t that the same for your <insert your language> code base? To me this is a non-issue. I&#8217;ve also heard cases against stored procedures because of deployment or versioning. I&#8217;m not even sure they are problems to begin with. Treat stored procedures like normal code. Use a version control system. There is a tool: <a href="https://flywaydb.org/">Flyway</a> which helps a lot. Things you expect in modern day deployment such as versioning, rolling back are all taken care of by Flyway.</p>
+<p>There is obviously the problem of vendor lock in. SQL is not portable between the different databases. But isn&#8217;t that the same for your <code>&lt;insert your language&gt;</code> code base? To me this is a non-issue. I&#8217;ve also heard cases against stored procedures because of deployment or versioning. I&#8217;m not even sure they are problems to begin with. Treat stored procedures like normal code. Use a version control system. There is a tool <a href="https://flywaydb.org/">Flyway</a> which helps. Things you expect in modern deployment such as versioning, rolling back are all taken care of by Flyway.</p>
 
-<p>Why wasn&#8217;t stored procedures more popular? I suspect it is because it is not <em>new</em> and not <em>marketed</em> much if at all. Most times, it is a short chapter on a SQL book. There are always shiny new things to adopt. Stored procedures, I must admit does not have the <em>cool</em> factor. But it is <a href="http://mcfunley.com/choose-boring-technology">stable, boring and it works</a>. I got to thank my colleague, <a href="https://github.com/prenaux">Pierre</a> who instigated this move. Hopefully more people would come to appreciate this feature of relational databases that almost no one talks about.</p>
+<p>Why wasn&#8217;t stored procedures more popular? I suspect it is because it is not <em>new</em> and not <em>marketed</em> much if at all. Most times, it is a short chapter on a SQL book. There are always shiny new things to adopt. Stored procedures does not have the <em>cool</em> factor. But it is <a href="http://mcfunley.com/choose-boring-technology">stable, boring and it works</a>. I got to thank my colleague <a href="https://github.com/prenaux">Pierre</a> who instigated this move. Hopefully more people would come to appreciate this feature of relational databases that almost no one talks about.</p>
 </div>
 
 
