@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-04-25T06:22:15+08:00</updated>
+  <updated>2017-04-25T06:23:36+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -19,6 +19,9 @@
     <updated>2017-04-23T06:50:00+08:00</updated>
     <id>http://liangzan.github.com/blog/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production</id>
     <content type="html"><![CDATA[<p>At my present company <a href="https://www.storeviva.com/">Courex</a>, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.</p>
+
+<!-- more -->
+
 
 <p>Life started as a conventional PHP-MySQL web application built by an outsourced team. Obviously with outsourced teams hired on a shoestring budget, it was plagued with performance issues and bugs.</p>
 
