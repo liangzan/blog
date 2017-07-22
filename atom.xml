@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-07-22T17:14:09+08:00</updated>
+  <updated>2017-07-22T17:17:38+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -103,11 +103,11 @@
 <table class="table-values">
   <thead>
     <tr>
-      <td>Year</td>
-      <td>Residents Births</td>
-      <td>Phase 2A1 applicants</td>
-      <td>Phase 2A2 applicants</td>
-      <td>Aggregated Phase 2A applicants</td>
+      <th>Year</th>
+      <th>Residents Births</th>
+      <th>Phase 2A1 applicants</th>
+      <th>Phase 2A2 applicants</th>
+      <th>Aggregated Phase 2A applicants</th>
     </tr>
   </thead>
   <tbody>
@@ -129,7 +129,10 @@
 
 <table class="table-values">
   <thead>
-    <tr><td>Correlation Coefficient</td><td>Value</td></tr>
+    <tr>
+      <th>Correlation Coefficient</th>
+      <th>Value</th>
+    </tr>
   </thead>
   <tbody>
 <tr><td>Phase 2A1 vs Births</td><td>-0.405010861</td></tr>
@@ -167,7 +170,15 @@
 
 <table class="table-values">
   <thead>
-    <tr><td>Year</td><td>Resident Births</td><td>Phase 2C applicants</td><td>Places</td><td>TUR</td><td>APP</td><td>Probability</td></tr>
+    <tr>
+      <th>Year</th>
+      <th>Resident Births</th>
+      <th>Phase 2C applicants</th>
+      <th>Places</th>
+      <th>TUR</th>
+      <th>APP</th>
+      <th>Probability</th>
+    </tr>
   </thead>
   <tbody>
     <tr><td>2016</td><td>35,129</td><td>49.83</td><td>33</td><td>0.9</td><td>1.51</td><td>0.662251656</td></tr>
@@ -189,7 +200,7 @@
 
 <table class="table-values">
   <thead
-    <tr><td>Correlation coefficient</td><td>Value</td></tr>
+    <tr><th>Correlation coefficient</th><th>Value</th></tr>
   </thead>
   <tbody>
     <tr><td>Phase 2C vs Births</td><td>-0.090778097</td></tr>
