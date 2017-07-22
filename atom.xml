@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2017-07-22T07:42:32+08:00</updated>
+  <updated>2017-07-22T08:04:53+08:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -31,7 +31,7 @@
 
 <h2>Probability of getting into Nanyang Primary</h2>
 
-<p>The probability is dependent on 2 things: number of applicants and the number of places. The number of places depends on the number of applicants from Phase 1. How do we know how many will apply for Phase 1 in 2018?</p>
+<p>The probability is dependent on 2 things: number of applicants and the number of places. The number of places depends on the number of applicants from Phase 1. How many will apply for Phase 1 in 2018?</p>
 
 <h3>Finding the number of places for Phase 2A</h3>
 
@@ -62,60 +62,85 @@
 
 <p>The above is a table of data tabulating the number of resident births and Phase 1 applicants to Nanyang Primary. The <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">correlation coefficient</a> between the applicants and births is below.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>| Correlation Coefficient |  Value        |
-</span><span class='line'>| Phase 1 vs Births       | -0.053323383 |</span></code></pre></td></tr></table></div></figure>
+<table>
+  <thead>
+    <tr>
+      <th>Correlation Coefficient</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+     <td>Phase 1 vs Births</td>
+     <td>-0.053323383</td>
+   </tr>
+  </tbody>
+</table
 
+The number of applicants is negatively correlated to the birth rate. Which means when there are more births, there are less applicants. It doesn't make sense. Let's look at the scatter plot.
 
-<p>The number of applicants is negatively correlated to the birth rate. Which means when there are more births, there are less applicants. It doesn&#8217;t make sense. Let&#8217;s look at the scatter plot.</p>
+<img src="https://s3.amazonaws.com/static.liangzan.net/blog/nyps_phase1_vs_births.png" title="Nanyang Primary Phase 1 applicants vs Births" >
 
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/nyps_phase1_vs_births.png" title="Nanyang Primary Phase 1 applicants vs Births" ></p>
-
-<p>Applicants in 2018 will come from births in 2012 which is <strong>38,641</strong>. To be conservative, I selected the three points on the top left, drew a line through them to interpolate the number of applicants for 2018. It is <strong>215</strong>. Since the number of places at Nanyang is <strong>390</strong>, that leaves</p>
+Applicants in 2018 will come from births in 2012 which is **38,641**. To be conservative, I selected the three points on the top left, drew a line through them to interpolate the number of applicants for 2018. It is **215**. Since the number of places at Nanyang is **390**, that leaves
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>390 - 215 = 175</span></code></pre></td></tr></table></div></figure>
 
-
-<p><strong>175</strong> places. There is a <a href="http://www.todayonline.com/singapore/moe-40-spaces-reserved-every-primary-school-phase-2b-2c-applicants">law introduced in 2014</a> that there must be at least 40 places kept for Phase 2B and 2C. In the worst case scenario, that leaves</p>
+**175** places. There is a [law introduced in 2014](http://www.todayonline.com/singapore/moe-40-spaces-reserved-every-primary-school-phase-2b-2c-applicants) that there must be at least 40 places kept for Phase 2B and 2C. In the worst case scenario, that leaves
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>175 - 40 = 135</span></code></pre></td></tr></table></div></figure>
 
+**135** places for Phase 2A. We now know the number of places on offer. Let us find the number of applicants next.
 
-<p><strong>135</strong> places for Phase 2A. We now know the number of places on offer. Let us find the number of applicants next.</p>
+## Finding the number of applicants for Phase 2A
 
-<h2>Finding the number of applicants for Phase 2A</h2>
+Likewise, I believe that the number of applicants for Phase 2A _should_ correlate to the number of births.
 
-<p>Likewise, I believe that the number of applicants for Phase 2A <em>should</em> correlate to the number of births.</p>
+<table>
+  <thead>
+    <tr>
+      <td>Year</td>
+      <td>Residents Births</td>
+      <td>Phase 2A1 applicants</td>
+      <td>Phase 2A2 applicants</td>
+      <td>Aggregated Phase 2A applicants</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>2016</td><td>35,129</td><td>105</td><td>19</td><td>124</td></tr>
+    <tr><td>2015</td><td>36,925</td><td>70</td><td>42</td><td>112</td></tr>
+    <tr><td>2014</td><td>37,277</td><td>67</td><td>61</td><td>128</td></tr>
+    <tr><td>2013</td><td>37,074</td><td>67</td><td>63</td><td>130</td></tr>
+    <tr><td>2012</td><td>36,272</td><td>54</td><td>75</td><td>129</td></tr>
+    <tr><td>2011</td><td>35,528</td><td>43</td><td>75</td><td>118</td></tr>
+    <tr><td>2010</td><td>35,135</td><td>41</td><td>84</td><td>125</td></tr>
+    <tr><td>2009</td><td>35,474</td><td>38</td><td>67</td><td>105</td></tr>
+    <tr><td>2008</td><td>38,555</td><td>39</td><td>57</td><td>96</td></tr>
+    <tr><td>2007</td><td>39,281</td><td>21</td><td>60</td><td>81</td></tr>
+  </tbody>
+</table>
 
-<p>| Year | Residents Births | Phase 2A1 applicants |  Phase 2A2 applicants | Aggregated Phase 2A applicants |
-| 2016 | 35,129           | 105                  | 19                    | 124                            |
-| 2015 | 36,925           | 70                   | 42                    | 112                            |
-| 2014 | 37,277           | 67                   | 61                    | 128                            |
-| 2013 | 37,074           | 67                   | 63                    | 130                            |
-| 2012 | 36,272           | 54                   | 75                    | 129                            |
-| 2011 | 35,528           | 43                   | 75                    | 118                            |
-| 2010 | 35,135           | 41                   | 84                    | 125                            |
-| 2009 | 35,474           | 38                   | 67                    | 105                            |
-| 2008 | 38,555           | 39                   | 57                    | 96                             |
-| 2007 | 39,281           | 21                   | 60                    | 81                             |</p>
+Likewise, we tabulate the number of resident to Phase 2A applicants. The correlation coefficient between the applicants and births is below.
 
-<p>Likewise, we tabulate the number of resident to Phase 2A applicants. The correlation coefficient between the applicants and births is below.</p>
+<table>
+  <thead>
+    <tr><td>Correlation Coefficient</td><td>Value</td></tr>
+  </thead>
+  <tbody>
+<tr><td>Phase 2A1 vs Births</td><td>-0.405010861</td></tr>
+<tr><td>Phase 2A2 vs Births</td><td>-0.056426767</td></tr>
+<tr><td>Aggregated Phase 2A vs Births</td><td>-0.650995037</td></tr>
+  </tbody>
+</table>
 
-<p>| Correlation Coefficient       | Value        |
-| Phase 2A1 vs Births           | -0.405010861 |
-| Phase 2A2 vs Births           | -0.056426767 |
-| Aggregated Phase 2A vs Births | -0.650995037 |</p>
+Again we see negative correlation, which does not make sense. It is likely to be skewed by the data from 2007-2008. Let&#8217;s use the scatter plot instead.
 
-<p>Again we see negative correlation, which does not make sense. It is likely to be skewed by the data from 2007-2008. Let&#8217;s use the scatter plot instead.</p>
+<img src="https://s3.amazonaws.com/static.liangzan.net/blog/nyps_phase2a_vs_births.png" title="Nanyang Primary Phase 2A applicants vs Births" >
 
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/nyps_phase2a_vs_births.png" title="Nanyang Primary Phase 2A applicants vs Births" ></p>
+Ignoring the 2 data points from 2007-2008(at bottom right), I draw a line through to interpolate the number of applicants for Phase 2A. I arrived at **145** applicants.
 
-<p>Ignoring the 2 data points from 2007-2008(at bottom right), I draw a line through to interpolate the number of applicants for Phase 2A. I arrived at <strong>145</strong> applicants.</p>
-
-<p>With this figure, we can calculate the probability of my child getting a place in Nanyang Primary in Phase 2A.</p>
+With this figure, we can calculate the probability of my child getting a place in Nanyang Primary in Phase 2A.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -124,41 +149,52 @@
 </span><span class='line'> = 135 / 145
 </span><span class='line'> = 0.931034483</span></code></pre></td></tr></table></div></figure>
 
+My daughter has a **93.1%** chance of getting into Nanyang Primary. That&#8217;s reassuring.
 
-<p>My daughter has a <strong>93.1%</strong> chance of getting into Nanyang Primary. That&#8217;s reassuring.</p>
+## Backup plan: Ai Tong
 
-<h2>Backup plan: Ai Tong</h2>
+In the **6.9%** chance that my daughter won&#8217;t get into Nanyang Primary, what is the probability of her entering Ai Tong? That is dependent on the number of applicants to the number of places. Since the ruling in 2014 ensures that there are at least 20 places for Phase 2C, let us assume the worst and use **20** for the number of places available.
 
-<p>In the <strong>6.9%</strong> chance that my daughter won&#8217;t get into Nanyang Primary, what is the probability of her entering Ai Tong? That is dependent on the number of applicants to the number of places. Since the ruling in 2014 ensures that there are at least 20 places for Phase 2C, let us assume the worst and use <strong>20</strong> for the number of places available.</p>
+## Finding the number of applicants for Phase 2C
 
-<h2>Finding the number of applicants for Phase 2C</h2>
+Consistent with what we did previously, the number of Phase 2C applicants _should_ correlate to the number of births.
 
-<p>Consistent with what we did previously, the number of Phase 2C applicants <em>should</em> correlate to the number of births.</p>
+<table>
+  <thead>
+    <tr><td>Year</td><td>Resident Births</td><td>Phase 2C applicants</td><td>Places</td><td>TUR</td><td>APP</td><td>Probability</td></tr>
+  </thead>
+  <tbody>
+    <tr><td>2016</td><td>35,129</td><td>49.83</td><td>33</td><td>0.9</td><td>1.51</td><td>0.662251656</td></tr>
+    <tr><td>2015</td><td>36,925</td><td>46.2</td><td>23.1</td><td>0.93</td><td>2</td><td>0.5</td></tr>
+    <tr><td>2014</td><td>37,277</td><td>44.55</td><td>29.7</td><td>0.91</td><td>1.5</td><td>0.666666667</td></tr>
+    <tr><td>2013</td><td>37,074</td><td>35.838</td><td>6.6</td><td>0.98</td><td>5.43</td><td>0.184162063</td></tr>
+    <tr><td>2012</td><td>36,272</td><td>58.212</td><td>23.1</td><td>0.93</td><td>2.52</td><td>0.396825397</td></tr>
+    <tr><td>2011</td><td>35,528</td><td>67.32</td><td>19.8</td><td>0.94</td><td>3.4</td><td>0.294117647</td></tr>
+    <tr><td>2010</td><td>35,135</td><td>67.32</td><td>39.6</td><td>0.88</td><td>1.7</td><td>0.588235294</td></tr>
+    <tr><td>2009</td><td>35,474</td><td>65.835</td><td>49.5</td><td>0.85</td><td>1.33</td><td>0.751879699</td></tr>
+    <tr><td>2008</td><td>38,555</td><td>64.548</td><td>39.6</td><td>0.88</td><td>1.63</td><td>0.613496933</td></tr>
+    <tr><td>2007</td><td>39,281</td><td>66.33</td><td>49.5</td><td>0.85</td><td>1.34</td><td>0.746268657</td></tr>
+    <tr><td>2006</td><td>36,272</td><td>79.596</td><td>29.7</td><td>0.91</td><td>2.68</td><td>0.373134328</td></tr>
+  </tbody>
+</table>
 
-<p>| Year  | Resident Births | Phase 2C applicants | Places | TUR  | APP  | Probability |
-| 2016  | 35,129          | 49.83               | 33     | 0.9  | 1.51 | 0.662251656 |
-| 2015  | 36,925          | 46.2                | 23.1   | 0.93 | 2    | 0.5         |
-| 2014  | 37,277          | 44.55               | 29.7   | 0.91 | 1.5  | 0.666666667 |
-| 2013  | 37,074          | 35.838              | 6.6    | 0.98 | 5.43 | 0.184162063 |
-| 2012  | 36,272          | 58.212              | 23.1   | 0.93 | 2.52 | 0.396825397 |
-| 2011  | 35,528          | 67.32               | 19.8   | 0.94 | 3.4  | 0.294117647 |
-| 2010  | 35,135          | 67.32               | 39.6   | 0.88 | 1.7  | 0.588235294 |
-| 2009  | 35,474          | 65.835              | 49.5   | 0.85 | 1.33 | 0.751879699 |
-| 2008  | 38,555          | 64.548              | 39.6   | 0.88 | 1.63 | 0.613496933 |
-| 2007  | 39,281          | 66.33               | 49.5   | 0.85 | 1.34 | 0.746268657 |
-| 2006  | 36,272          | 79.596              | 29.7   | 0.91 | 2.68 | 0.373134328 |</p>
+There is data published on [Kiasu Parents](https://www.kiasuparents.com/kiasu/article/bishan/). The figures are in percentages. I had to infer the places from the percentages. **TUR** stands for cumulative take up rate, which is the percentage of the places that were taken by Phase 2C. **APP** is the ratio of applicants to the places available. As we are assuming the worst, we are not using that to estimate the number of places.
 
-<p>There is data published on <a href="https://www.kiasuparents.com/kiasu/article/bishan/">Kiasu Parents</a>. The figures are in percentages. I had to infer the places from the percentages. <strong>TUR</strong> stands for cumulative take up rate, which is the percentage of the places that were taken by Phase 2C. <strong>APP</strong> is the ratio of applicants to the places available. As we are assuming the worst, we are not using that to estimate the number of places.</p>
+<table>
+  <thead
+    <tr><td>Correlation coefficient</td><td>Value</td></tr>
+  </thead>
+  <tbody>
+    <tr><td>Phase 2C vs Births</td><td>-0.090778097</td></tr>
+    <tr><td>Phase 2C vs Places</td><td>0.554622244</td></tr>
+  </tbody>
+</table>
 
-<p>| Correlation coefficient | Value        |
-| Phase 2C vs Births      | -0.090778097 |
-| Phase 2C vs Places      | 0.554622244  |</p>
+If we correlate births to the number of applicants, it returns a negative value which does not make sense. If we correlate number of applicants to the places available, it returns a positive correlation of around **0.55**. Parents could be making their decision to apply based on the number of places available.
 
-<p>If we correlate births to the number of applicants, it returns a negative value which does not make sense. If we correlate number of applicants to the places available, it returns a positive correlation of around <strong>0.55</strong>. Parents could be making their decision to apply based on the number of places available.</p>
+<img src="https://s3.amazonaws.com/static.liangzan.net/blog/aitong_places_vs_phas2c.png" title="Ai Tong Phase 2C applicants vs Places" >
 
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/aitong_places_vs_phas2c.png" title="Ai Tong Phase 2C applicants vs Places" ></p>
-
-<p>Using the scatter plot, I drew a line to interpolate the number of applicants given <strong>20</strong> places. It is <strong>42</strong>.</p>
+Using the scatter plot, I drew a line to interpolate the number of applicants given **20** places. It is **42**.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -167,14 +203,13 @@
 </span><span class='line'> = 20 / 42
 </span><span class='line'> = 0.476190476</span></code></pre></td></tr></table></div></figure>
 
+We conclude that my daughter has a **47.6%** chance of getting into Ai Tong at Phase 2C.
 
-<p>We conclude that my daughter has a <strong>47.6%</strong> chance of getting into Ai Tong at Phase 2C.</p>
+## Bringing everything together
 
-<h2>Bringing everything together</h2>
+I have both the probabilities for getting a place in Nanyang Primary and Ai Tong. What I want to know is the probability of getting into either.
 
-<p>I have both the probabilities for getting a place in Nanyang Primary and Ai Tong. What I want to know is the probability of getting into either.</p>
-
-<p>Let us first define our terms.</p>
+Let us first define our terms.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -185,8 +220,7 @@
 </span><span class='line'>C is the probability that we get a place in Ai Tong, given we failed to get a place in Nanyang
 </span><span class='line'>D is the probability that we failed to get a place in Nanyang</span></code></pre></td></tr></table></div></figure>
 
-
-<p>To help the reader, I&#8217;ve copied out some probability equations.</p>
+To help the reader, I&#8217;ve copied out some probability equations.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -199,8 +233,7 @@
 </span><span class='line'>P(A n B) = 0             # for mutually exclusive events
 </span><span class='line'>P(A u B) = P(A) + P(B) - P(A n B)</span></code></pre></td></tr></table></div></figure>
 
-
-<p>We want the result of the probabilities of A and C together. Since A anc C are mutually exclusive, <code>P(A n C)</code> is 0. The final result would be the addition of both probabilities.</p>
+We want the result of the probabilities of A and C together. Since A anc C are mutually exclusive, `P(A n C)` is 0. The final result would be the addition of both probabilities.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -209,22 +242,19 @@
 </span><span class='line'>         = P(A) + P(C) - 0
 </span><span class='line'>         = P(A) + P(C)</span></code></pre></td></tr></table></div></figure>
 
-
-<p>We already know <code>P(A) = 0.931</code>. So we need to find <code>P(C)</code>. Let us define <code>P(C)</code> as a conditional probability, since we want the probability of getting into Ai Tong, given that we failed to get a place in Nanyang.</p>
+We already know `P(A) = 0.931`. So we need to find `P(C)`. Let us define `P(C)` as a conditional probability, since we want the probability of getting into Ai Tong, given that we failed to get a place in Nanyang.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>P(C) = P(B|D)
 </span><span class='line'>     = P(B n D) / P(D)</span></code></pre></td></tr></table></div></figure>
 
-
-<p>Does getting a place in Nanyang affect the probability of getting a place in Ai Tong? The number of places don&#8217;t change as it is set by law. The number of applicants will still be the same as people applying do not care about my result. They are mutually exclusive. Therefore,</p>
+Does getting a place in Nanyang affect the probability of getting a place in Ai Tong? The number of places don&#8217;t change as it is set by law. The number of applicants will still be the same as people applying do not care about my result. They are mutually exclusive. Therefore,
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>P(B n D) = 0</span></code></pre></td></tr></table></div></figure>
 
-
-<p>Which means</p>
+Which means
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -233,16 +263,14 @@
 </span><span class='line'>     = P(B n D) / P(D)
 </span><span class='line'>     = 0</span></code></pre></td></tr></table></div></figure>
 
-
-<p>That is obviously wrong. Did we do something wrong? Let&#8217;s redefine C as the probability that we get a place in Ai Tong, and we failed to get a place in Nanyang.</p>
+That is obviously wrong. Did we do something wrong? Let&#8217;s redefine C as the probability that we get a place in Ai Tong, and we failed to get a place in Nanyang.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>P(C) = P(B n D)
 </span><span class='line'>     = P(B) * P(D)</span></code></pre></td></tr></table></div></figure>
 
-
-<p>We plug the result back to our first equation.</p>
+We plug the result back to our first equation.
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -253,10 +281,10 @@
 </span><span class='line'>         = 0.931 + (0.476 * 0.069)
 </span><span class='line'>         = 0.963844</span></code></pre></td></tr></table></div></figure>
 
+It means that my daughter has an increased chance of **96.3%** of getting into Nanyang or Ai Tong. That&#8217;s reassuring.
 
-<p>It means that my daughter has an increased chance of <strong>96.3%</strong> of getting into Nanyang or Ai Tong. That&#8217;s reassuring.</p>
+With that figure, I can tell my wife not to worry. With this simple episode, you can see the usefulness of Math in helping to make decisions. Intuition can be [misleading](https://en.wikipedia.org/wiki/Birthday_problem). We must demand rigour in thinking when making decisions that has big impact.
 
-<p>With that figure, I can tell my wife not to worry. With this simple episode, you can see the usefulness of Math in helping to make decisions. Intuition can be <a href="https://en.wikipedia.org/wiki/Birthday_problem">misleading</a>. We must demand rigour in thinking when making decisions that has big impact.</p>
 ]]></content>
   </entry>
   
