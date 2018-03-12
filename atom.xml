@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2018-01-25T04:42:09+08:00</updated>
+  <updated>2018-03-12T09:16:04+00:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -14,9 +14,39 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Business books on selling which I recommend]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2018/03/09/business-books-on-selling-which-i-recommend/"/>
+    <updated>2018-03-09T17:10:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2018/03/09/business-books-on-selling-which-i-recommend</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve always been curious about selling, the complex kind, the kind with long sales cycle, <em>very</em> expensive(typically $100,000 or more) contracts, those needing multiple signatures. I&#8217;ve read a number of business books on the topic and these are the three that stand out.</p>
+
+<!-- more -->
+
+
+<h2>Strategic Selling</h2>
+
+<p>What I like about <a href="https://www.amazon.com/New-Strategic-Selling-Successful-Companies-ebook/dp/B00HG5UPUM/ref=sr_1_1?ie=UTF8&amp;qid=1520587124&amp;sr=8-1&amp;keywords=strategic+selling">Strategic Selling</a> by Robert Miller, is he breaks down the complex sales process systematically, which appeals to me. He gives us a framework for thinking where the product&#8217;s positioning in the market. The different influencers within a customer&#8217;s company, and how to approach them. Now the sales process is broken into distinct steps where progress can be quantifiable. Though the quantifying step is still a judgement call. After reading the book, I realised that sales is a process that is repeatable.</p>
+
+<h2>SPIN selling</h2>
+
+<p><a href="https://www.amazon.com/SPIN-Selling-Neil-Rackham/dp/0070511136/ref=sr_1_1?ie=UTF8&amp;qid=1520587202&amp;sr=8-1&amp;keywords=spin+selling">SPIN selling</a> by Neil Rackham is published in the 1980s. Though that is a long time ago, I find that its wisdom is relevant today. After all, companies still sell to people today. Sales in the early days, thought that to sell more, sales people needs to be good at closing. Neil Rackham rejected that perception by collecting real world data and coming to the conclusion that the conventional closing methods don&#8217;t work. SPIN selling is a methodology of framing the questions to ask your customers such that the customer reveals important information and indirectly be convinced of the need to buy. Fantastic book, with a lot of rigour in its methods. Sadly I find such rigour sorely missing in business books.</p>
+
+<h2>Challenger</h2>
+
+<p><a href="https://www.amazon.com/Challenger-Sale-Control-Customer-Conversation-ebook/dp/B0052REP7K/ref=sr_1_2?ie=UTF8&amp;qid=1520587225&amp;sr=8-2&amp;keywords=challenger+sale">Challenger Sales Model</a> by Matthew Dixon and Brent Adamson is the predecessor of SPIN selling. It is heavily influenced by SPIN. It is not a replacement, depending on the sitation, you can use either SPIN or Challenger. Challenger Sales Model is great for businesses stuck in a commodity business, business selling products or services with little differentiation. It prompts you to think more strategically, becoming a partner of your customer and not only doing transactional sales where you are just a price number to them.</p>
+
+<h2>Are they effective?</h2>
+
+<p>Disclaimer, I&#8217;m not a veteran salesperson. However I&#8217;ve asked my friends who have been selling for 10-20 years. There is the viewpoint that Sales is a skill learned by doing, true in all careers. My friend don&#8217;t follow any framework strictly, but acts from experience. To him, there is no need to learn these frameworks. Another friend though, feels that they are useful. He introduced these frameworks into his sales team. But again, every situation is different and this is where experience comes in play.</p>
+
+<p>These books cover different aspects of selling. Strategic Selling covers the selling process from a bird&#8217;s eye view. SPIN selling helps when you don&#8217;t know your customer. Challenger works for those who knows their customers well. Rather than pick one, my suggestion is you read all of them. It never hurts to learn more.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Things I would do at a new startup]]></title>
     <link href="http://liangzan.github.com/blog/blog/2018/01/12/things-i-would-do-at-a-new-startup/"/>
-    <updated>2018-01-12T16:08:00+08:00</updated>
+    <updated>2018-01-12T16:08:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2018/01/12/things-i-would-do-at-a-new-startup</id>
     <content type="html"><![CDATA[<p>With the benefit of spending years at the trenches, watching decisions and their eventual impact, subconsciously I&#8217;ve formed my opinion on what I would do if I were to start building a new product.</p>
 
@@ -60,7 +90,7 @@
   <entry>
     <title type="html"><![CDATA[What is the probability of my child entering Nanyang Primary or Ai Tong]]></title>
     <link href="http://liangzan.github.com/blog/blog/2017/07/19/what-is-the-probability-of-my-child-entering-nanyang-primary-or-ai-tong/"/>
-    <updated>2017-07-19T12:30:00+08:00</updated>
+    <updated>2017-07-19T12:30:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2017/07/19/what-is-the-probability-of-my-child-entering-nanyang-primary-or-ai-tong</id>
     <content type="html"><![CDATA[<p>Like most parents in Singapore, we leave no chance to getting to the best schools for our children. My wife wants to move closer to Nanyang Primary to increase our chance of getting a place. I did not want to do that. Our chances are high enough that it doesn&#8217;t warrant such extremes. I realised I needed to prove my point.</p>
 
@@ -362,7 +392,7 @@
   <entry>
     <title type="html"><![CDATA[Why am I doing a Math degree]]></title>
     <link href="http://liangzan.github.com/blog/blog/2017/07/03/why-am-i-doing-a-math-degree/"/>
-    <updated>2017-07-03T05:48:00+08:00</updated>
+    <updated>2017-07-03T05:48:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2017/07/03/why-am-i-doing-a-math-degree</id>
     <content type="html"><![CDATA[<p>I am applying to do a Math degree in my mid-thirties, knowing how much work that is, mindful of my work and family commitments, and not forgetting the cost. I&#8217;ve got an <a href="https://www.ece.nus.edu.sg/home/education/ee.html">Electrical Engineering</a> degree. It&#8217;s common to do a graduate degree, though a more conventional route would be to do a MBA or a Masters in Computer Science/Data science. Yet I chosen a Bachelor&#8217;s in Math.</p>
 
@@ -401,7 +431,7 @@
   <entry>
     <title type="html"><![CDATA[Using more than a hundred stored procedures in production]]></title>
     <link href="http://liangzan.github.com/blog/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production/"/>
-    <updated>2017-04-23T06:50:00+08:00</updated>
+    <updated>2017-04-23T06:50:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production</id>
     <content type="html"><![CDATA[<p>At my present company <a href="https://www.storeviva.com/">Courex</a>, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.</p>
 
@@ -493,7 +523,7 @@
   <entry>
     <title type="html"><![CDATA[Communication skills > Technical skills]]></title>
     <link href="http://liangzan.github.com/blog/blog/2017/02/19/communication-skills-%3E-technical-skills/"/>
-    <updated>2017-02-19T11:38:00+08:00</updated>
+    <updated>2017-02-19T11:38:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2017/02/19/communication-skills->-technical-skills</id>
     <content type="html"><![CDATA[<p>Speaking or writing, is something I thought was basic, something anyone with a basic education can do. I felt that I was done with honing my language skills after I&#8217;ve left school. If the school thinks it was good enough to graduate, it was good enough.</p>
 
@@ -589,7 +619,7 @@
   <entry>
     <title type="html"><![CDATA[Being an early employee at startup that exited]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited/"/>
-    <updated>2016-12-30T20:22:00+08:00</updated>
+    <updated>2016-12-30T20:22:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/12/30/being-an-early-employee-at-startup-that-exited</id>
     <content type="html"><![CDATA[<p>I am one of the early employees at Dropsuite, previously known as Dropmysite. Today, I was informed that <a href="https://www.google.com/finance?q=ASX%3ADSE&amp;ei=YOl6WPjdJ8XEuATl-YHwCA">Dropsuite</a> has IPOed in the Australian Stock Exchange. Technically, it is a <a href="https://en.wikipedia.org/wiki/Reverse_takeover">reverse IPO</a>. The whole process took one year. The Australian Stock Exchange, or Australian investors, is known to welcome technology companies, which is why local technology companies choose to list there. Another local example is <a href="http://mig.me/home">mig.me</a>.</p>
 
@@ -615,7 +645,7 @@
   <entry>
     <title type="html"><![CDATA[Running an ecommerce logistics business is hard]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/12/24/running-an-ecommerce-logistics-business-is-hard/"/>
-    <updated>2016-12-24T06:05:00+08:00</updated>
+    <updated>2016-12-24T06:05:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/12/24/running-an-ecommerce-logistics-business-is-hard</id>
     <content type="html"><![CDATA[<p>I came into the logistics industry knowing nothing about it. Along the way I&#8217;ve witnessed competitors going bust(Zyllem), new entrants, competitors switching from logistics to technology(Anchanto), and more. It is a hyper competitive industry. I hope to offer an insider view of the industry, to show why it is so challenging, which hopefully will discourage new entrants, in turn making my job easier.</p>
 
@@ -659,7 +689,7 @@
   <entry>
     <title type="html"><![CDATA[Should you learn more programming languages?]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/11/13/should-you-learn-more-programming-languages/"/>
-    <updated>2016-11-13T15:49:00+08:00</updated>
+    <updated>2016-11-13T15:49:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/11/13/should-you-learn-more-programming-languages</id>
     <content type="html"><![CDATA[<p>In the book <a href="https://www.amazon.com/Pragmatic-Programmer-Journeyman-Master/dp/020161622X/ref=sr_1_1?ie=UTF8&amp;qid=1479025939&amp;sr=8-1&amp;keywords=pragmatic+programmer">Pragmatic Programmers</a>, the authors made a sensible recommendation: learn a new programming language every year. Each new programming language is a new perspective of solving problems. Adding more under your toolbox helps you gain different perspectives. It sharpens your technical judgment. But is it the best use of your time?</p>
 
@@ -677,7 +707,7 @@
   <entry>
     <title type="html"><![CDATA[Deliberate Constraints]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/10/16/deliberate-constraints/"/>
-    <updated>2016-10-16T15:36:00+08:00</updated>
+    <updated>2016-10-16T15:36:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/10/16/deliberate-constraints</id>
     <content type="html"><![CDATA[<p>Two weeks ago, we removed the television in the house. The television, one of the staple appliance in every family where planners assumed that it was present in every house. It was the center of the living room. My children was spending too much time on the television for their parent&#8217;s liking. It has been 2 weeks. In the past during meal times, I see two zombies with eyes transfixed on the television; now they play with each other. Does having more <em>things</em>, means we lead a better quality of life?</p>
 
@@ -695,7 +725,7 @@
   <entry>
     <title type="html"><![CDATA[Breaching the great firewall of china]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china/"/>
-    <updated>2016-09-20T06:15:00+08:00</updated>
+    <updated>2016-09-20T06:15:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/09/20/breaching-the-great-firewall-of-china</id>
     <content type="html"><![CDATA[<p>It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the <a href="https://en.wikipedia.org/wiki/Great_Firewall">great firewall</a> meant for the technically inclined. This guide is accurate as of 2016.</p>
 
@@ -719,7 +749,7 @@
   <entry>
     <title type="html"><![CDATA[Everday XPath - Operators]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-operators/"/>
-    <updated>2016-09-11T06:28:00+08:00</updated>
+    <updated>2016-09-11T06:28:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-operators</id>
     <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
 
@@ -1220,7 +1250,7 @@
   <entry>
     <title type="html"><![CDATA[Everday XPath - Node Test]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-node-test/"/>
-    <updated>2016-09-11T06:11:00+08:00</updated>
+    <updated>2016-09-11T06:11:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-node-test</id>
     <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we learn about the only mandatory part of the XPath expression: Node Test.</p>
 
@@ -1564,7 +1594,7 @@
   <entry>
     <title type="html"><![CDATA[Everday XPath - The Expression]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression/"/>
-    <updated>2016-09-11T05:53:00+08:00</updated>
+    <updated>2016-09-11T05:53:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/09/11/everday-xpath-the-expression</id>
     <content type="html"><![CDATA[<p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
 
@@ -1653,7 +1683,7 @@
   <entry>
     <title type="html"><![CDATA[Writing an ebook]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/09/09/writing-an-ebook/"/>
-    <updated>2016-09-09T06:13:00+08:00</updated>
+    <updated>2016-09-09T06:13:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/09/09/writing-an-ebook</id>
     <content type="html"><![CDATA[<p>I spent the past 3 months writing an ebook: <a href="http://www.everydayxpath.com">EverydayXPath</a>. The idea came as I needed to write a <a href="http://www.seleniumhq.org/">Selenium</a> script. Naturally I needed to use <a href="https://en.wikipedia.org/wiki/XPath">XPath</a> for selecting nodes on the web page. As I was googling for solutions, documentation on XPath felt inadequate. I needed good examples and coherent explanations for the various operators. XPath and CSS are the two common query languages for querying XML/HTML documents. I felt there is a opportunity for a niche product. Let me share the setup I used for writing the ebook.</p>
 
@@ -1731,7 +1761,7 @@
   <entry>
     <title type="html"><![CDATA[A firing]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/06/05/a-firing/"/>
-    <updated>2016-06-05T16:37:00+08:00</updated>
+    <updated>2016-06-05T16:37:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/06/05/a-firing</id>
     <content type="html"><![CDATA[<p>I was hooked by the documentary series: <a href="https://en.wikipedia.org/wiki/Chef%27s_Table">Chef&#8217;s table</a>. Each episode is about a famous chef. What hooked me was how human each of them was. They are not famous by default. Everyone of them had their struggles. Each of their journey to the zenith was hard. Perhaps it is cultural. We are taught to portray ourselves as successful, taught to hide our own imperfections. If <strong>Chef&#8217;s table</strong> is angled to show how good the chef was, how talented they are, I wonder, would the viewer relate personally to the chef? It is because they are imperfect and everyone is, that they connect.</p>
 
@@ -1761,7 +1791,7 @@
   <entry>
     <title type="html"><![CDATA[How does FreedomVPN work]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/05/29/how-does-freedomvpn-work/"/>
-    <updated>2016-05-29T05:54:00+08:00</updated>
+    <updated>2016-05-29T05:54:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/05/29/how-does-freedomvpn-work</id>
     <content type="html"><![CDATA[<p>I just watched the Champion&#8217;s League Final streamed live on my laptop. I watched it on <a href="http://www.pptv.com/">PPTV</a> in Singapore. This is made possible by FreedomVPN(Which amazingly, does not have a landing page of its own where I can link to). Recently, I switched my ISP(Internet Service Provider) to <a href="http://www.viewqwest.com/">Viewqwest</a>. This far, so good. Their product FreedomVPN, has opened the door to enjoying Internet TV from most of the popular content sites of the world. To many, it is like voodoo. Let me try to explain in broad strokes how they did it. Disclaimer: these are my conjectures and has not been validated with Viewqwest.</p>
 
@@ -1889,7 +1919,7 @@
   <entry>
     <title type="html"><![CDATA[How to set up a remote VPN using Sophos UTM]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm/"/>
-    <updated>2016-04-10T06:49:00+08:00</updated>
+    <updated>2016-04-10T06:49:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm</id>
     <content type="html"><![CDATA[<p>My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don&#8217;t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction.</p>
 
@@ -1917,7 +1947,7 @@
   <entry>
     <title type="html"><![CDATA[Lessons learned when working with a remote team]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/"/>
-    <updated>2016-04-01T06:42:00+08:00</updated>
+    <updated>2016-04-01T06:42:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team</id>
     <content type="html"><![CDATA[<p>I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from outsourcing. I would consider a remote team part of the company.</p>
 
@@ -1949,7 +1979,7 @@
   <entry>
     <title type="html"><![CDATA[Prefer lifting to destructuring in Scala]]></title>
     <link href="http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/"/>
-    <updated>2016-03-13T15:56:00+08:00</updated>
+    <updated>2016-03-13T15:56:00+00:00</updated>
     <id>http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala</id>
     <content type="html"><![CDATA[<p>This is one of the few things which I discovered along the way as I was learning Scala. Always prefer lifting a function than destructuring.</p>
 
@@ -1992,34 +2022,6 @@
 <p>It is not necessary to destructure the type only to put it back again. Look how short it is, and clear its intention is. It did exactly the same things the earlier code snippet did.</p>
 
 <p>When you see a lot of destructuring using pattern matching in a Scala code, it is almost always a code smell. Always prefer lifting over destructuring.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[the tyranny of billing]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2016/01/12/the-tyranny-of-billing/"/>
-    <updated>2016-01-12T03:45:00+08:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2016/01/12/the-tyranny-of-billing</id>
-    <content type="html"><![CDATA[<p>Billing is a critical function of any business. It is more than just collection of money. What better way than to tell a story.</p>
-
-<!-- more -->
-
-
-<p>We use the product of a fictitious company, ABC Widgets. The product is critical to our business. If the product fails to run properly, it causes a cascading effect to the company. We are happy with the product. It solves our problems. The price is reasonable. ABC Widgets bills us using the pre-paid model. In short, pay before you use. No payment, the service is cut. That is fair. We did not disagree.</p>
-
-<p>Things were fine for months. One day, we received complaints from our customers that something was wrong. We investigated. It turned out that ABC Widget&#8217;s service stopped running. We reached their support. Our pre-paid account ran out of money. And our business critical service was cut. Our account was usually charged automatically when credits run low. This time it failed to charge.</p>
-
-<p>We topped up our accounts manually. It did charge. Why wasn&#8217;t we notified? ABC Widgets replied they did email us. Twice. Sent automatically to our placeholder email: admin@so-and-so.com. They even pasted the email contents. It is our fault. We did not pay. They warned us. Not once, but twice. So, they were morally right to cut off our business critical service.</p>
-
-<p>We were unhappy. But things has been going well this far. Besides, it did look like our fault. We let things past. A few months later, we received complaints from our customers. The account ran out of credits again. Our service was terminated. We are very unhappy. How can our accounts fail to top up again? We demand to know why. They replied it happens from time to time. And they apologized. We changed our notification email to point to a real person this time. We need to be actively monitoring our emails in case it happened again.</p>
-
-<p>A sharp reader will see that the point of failure was the auto-charging of the accounts. It failed which led to the series of unfortunate events. Correct. So, it is a technical problem. Wrong. It is not simply a technical problem. It is a failure to understand the needs of the customer. This is how customers are lost.</p>
-
-<p>The same incident happened for the third time. This time, we did not even receive the notification email. We decided to switch vendors. Our trust in them was lost. ABC Widgets lost a customer not because the product was no good, but because of they failed to understand their needs.</p>
-
-<p>When you sell a business critical service, it has to run. In the case of ABC Widgets, the product is running fine. However their billing did not cater to the needs of their customers. You should never lightly cut the service of a customer especially when it is business critical. Repeat that. You should never <strong>lightly</strong> cut the service when it is business critical. How much effort did ABC Widget take to build a stellar product? A lot. How much effort did ABC Widgets take to reach their customers when there are problems in billing? 2 automated emails. Is that the best they can do? They don&#8217;t understand that it is critical, and it cannot be cut off like that.</p>
-
-<p>If I were them, I would have customer service call the customer asking in person if they would like to cut the service. One phone call is enough. Is that a lot of effort? A switch to post-paid model would solve it as well. We would have continued with ABC Widgets. Please don&#8217;t subject your customers to the tyranny of your billing system. They would be grateful.</p>
 ]]></content>
   </entry>
   

@@ -99,7 +99,7 @@
   
 
 
-<time datetime="2012-08-27T07:51:00+08:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
+<time datetime="2012-08-27T07:51:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
         
       </p>
     
@@ -125,8 +125,8 @@
 </span><span class='line'><span class="c1">#</span>
 </span><span class='line'><span class="c1"># Don&#39;t allow downloaded files to be created as StringIO. Force a tempfile to be created.</span>
 </span><span class='line'><span class="c1"># For the image publisher</span>
-</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="no">OpenURI</span><span class="o">::</span><span class="no">Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
+</span><span class='line'><span class="ss">OpenURI</span><span class="p">:</span><span class="ss">:Buffer</span><span class="o">.</span><span class="n">send</span> <span class="ss">:remove_const</span><span class="p">,</span> <span class="s1">&#39;StringMax&#39;</span> <span class="k">if</span> <span class="ss">OpenURI</span><span class="p">:</span><span class="ss">:Buffer</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="s1">&#39;StringMax&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="ss">OpenURI</span><span class="p">:</span><span class="ss">:Buffer</span><span class="o">.</span><span class="n">const_set</span> <span class="s1">&#39;StringMax&#39;</span><span class="p">,</span> <span class="mi">0</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -162,19 +162,19 @@
 </span><span class='line'>  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/listings/</span><span class="si">#{</span><span class="n">listing_id</span><span class="si">}</span><span class="s2">/images&quot;</span>
 </span><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">listing_id</span><span class="p">:</span> <span class="n">listing_id</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">rank</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">multipart</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="ss">rank</span><span class="p">:</span> <span class="n">rank</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">multipart</span><span class="p">:</span> <span class="kp">true</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">if</span> <span class="n">replacement_image_url</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">image</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">replacement_image_url</span><span class="p">)})</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="ss">image</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">replacement_image_url</span><span class="p">)})</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">if</span> <span class="n">listing_image_id</span><span class="o">.</span><span class="n">present?</span>
 </span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">merge</span><span class="p">({</span><span class="n">listing_image_id</span><span class="p">:</span> <span class="n">listing_image_id</span><span class="p">})</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="no">EtsyInterface</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">etsy_shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'>  <span class="ss">EtsyInterface</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">etsy_shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -272,7 +272,7 @@
 </span><span class='line'>    <span class="sx">%w(get put post delete)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">mtd</span><span class="o">|</span>
 </span><span class='line'>      <span class="n">define_method</span> <span class="n">mtd</span> <span class="k">do</span> <span class="o">|</span><span class="n">shop</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span><span class="o">|</span>
 </span><span class='line'>        <span class="n">pre_setup</span>
-</span><span class='line'>        <span class="no">Etsy</span><span class="o">::</span><span class="no">Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
+</span><span class='line'>        <span class="ss">Etsy</span><span class="p">:</span><span class="ss">:Request</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">mtd</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">access_params</span><span class="p">(</span><span class="n">shop</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span><span class="o">.</span><span class="n">to_hash</span>
 </span><span class='line'>      <span class="k">end</span>
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>
@@ -339,7 +339,7 @@
   
 
 
-<time datetime="2012-08-27T07:51:00+08:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
+<time datetime="2012-08-27T07:51:00+00:00" pubdate data-updated="true">Aug 27<span>th</span>, 2012</time>
       
 
 
