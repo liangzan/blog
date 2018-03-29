@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2018-03-19T09:49:25+00:00</updated>
+  <updated>2018-03-29T09:29:57+00:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughts on dApp development]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/"/>
+    <updated>2018-03-22T17:07:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve recently got into <a href="https://blockgeeks.com/guides/dapps/">dApp</a> development. Having programmed for a while, here&#8217;re some thoughts on building dApps on <a href="https://www.ethereum.org/">Ethereum</a>.</p>
+
+<!-- more -->
+
+
+<h2>Smart contracts are powerful</h2>
+
+<p>Interacting with <a href="https://blockgeeks.com/guides/smart-contracts/">Smart Contracts</a> feels like interacting with an instance of an object. It feels familiar yet odd at the same time. The familiar bit comes from the interaction. You can call functions on it, you can store value on it, it is like regular programming. The weird bit is this is happening in <strong>public</strong>. Every transaction can be held to scrutiny and there is no argument whether something happened or not. That is powerful.</p>
+
+<p>Smart contracts is a novel angle of encapsulating logic and data. Immediately I can see that it solves the payment problem for the couriers. The customer can put out a smart contract, put ether in it and wait for couriers to participate. Delivery jobs can be put into a variable. Couriers can bid publicly via transactions, and get paid by the contract when the delivery is performed successfully. There would be no basis for disputes. Today, such logic is contained in monolithic applications controlled by different logistics companies, and they don&#8217;t interoperate well. I can imagine a future where developers will primarily write smart contracts, and leave the rest to the blockchain infrastructure.</p>
+
+<h2>dApps development is not hard</h2>
+
+<p>I&#8217;ve read about the shortage of blockchain developers. This led me to assume that dApp development is hard. Frankly, I don&#8217;t find its learning curve steeper than a new programming language or a new Javascript framework. In fact I find learning <a href="https://www.scala-lang.org/">Scala</a> or <a href="https://reactjs.org/">React</a>/<a href="https://redux.js.org">Redux</a> harder. It&#8217;s suffering from growing pains where documentation and tooling support are lagging behind. I also find that you need a basic understanding of how blockchains work. Otherwise many of the borrowed metaphors such as wallets, addresses, transactions would be confusing. On the whole, things do work, albeit with some rough edges.</p>
+
+<p>For example, <a href="http://truffleframework.com/ganache/">Ganache</a> would crash sometimes. For me, that happens once every other day; annoying but liveable. I was old enough to have used <a href="https://en.wikipedia.org/wiki/Windows_98">Windows 98</a>; that crashed every 2-3 hours. No doubt in 2018 we should demand higher standards. Another example - <a href="http://truffleframework.com/">Truffle</a>. Again documentation cannot catch up. I wanted to deploy contracts using Truffle and I found no documentation. In the end, I had to dig through the tests of <a href="https://github.com/trufflesuite/truffle-deployer">truffle-deployer</a> to learn how to apply it.</p>
+
+<p>Don&#8217;t get me started on <a href="https://solidity.readthedocs.io/en/v0.4.21/">Solidity</a>. I was trying to do something basic - transferring funds to an address. I thought this <em>ought</em> to be a solved problem since transactions are what Ethereum is meant for. Instead I found an intuitively named function called <code>call</code> used for that purpose. Flabbergasted, I checked the documentation, where I found two functions named <code>transfer</code> and <code>send</code> written for that purpose. Why isn&#8217;t people using that? Could programmers are trying to be clever? When the source code is often the only source of documentation, this leaves me feeling apprehensive. Luckily after digging deeper, I realised that <code>send</code> fails <em>silently</em> when the recipient runs out of gas, hardly something uncommon. If I&#8217;d like to interact with a contract, how do I know what functions are there? Sadly there is often no documentation; there is <em>only</em> Solidity code. The onus is on the developer to understand what the contract does by reading the code. Sounds like Haskell. Another annoyance is Solidity errors are often not meaningful. I was left in the dark as to what happened when the contract crashed. After much searching, I realised I have to use the <a href="http://truffleframework.com/docs/getting_started/debugging">debugger</a>. The debugger worked, thankfully. The worst bit is the bug was resulted from calling a non-existent constructor. How did a wrongly named constructor pass the compiler? One last thing - Solidity doesn&#8217;t have syntax highlighting on <em>Github</em>. Programming with the blockchain is like programming in the 80s - not for the faint of heart.</p>
+
+<p>Blockchain is like the Internet in the 90s. I do see its potential. Its effect would be similar to what containers did for shipping. This time the effect would be felt everywhere. Contrary to the norm, I don&#8217;t find the learning curve for Blockchain development steep. It reminds me of the time when mobile app development was expensive as developers were scarce. Prices came down when more developers learns the craft and enter the pool. It&#8217;s exactly the same now for blockchain development. Given time, things will improve. If you&#8217;re still on the fence, don&#8217;t hesitate anymore, it is time to get started.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Joining EF in their third batch]]></title>
@@ -1973,55 +2001,6 @@
 <p>Communication should happen regularly at defined times. It is up to the team&#8217;s preference. I feel that there should happen at least once every 2 days or so. I find that most developers I know, don&#8217;t have the inclination to update their progress regularly without prompting. It should be the manager&#8217;s responsibility to ask for it.</p>
 
 <p>Remote working goes against many culture norms especially in Asia. If the management is not open to new ideas, it may be an uphill cause. Company culture matters when deciding if you want to do it. In conclusion, if the work is well defined and the worker have experience doing it, no harm going remote. If not, better not.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Prefer lifting to destructuring in Scala]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala/"/>
-    <updated>2016-03-13T15:56:00+00:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2016/03/13/prefer-lifting-to-destructuring-in-scala</id>
-    <content type="html"><![CDATA[<p>This is one of the few things which I discovered along the way as I was learning Scala. Always prefer lifting a function than destructuring.</p>
-
-<!-- more -->
-
-
-<p>For example, I have a function which returns the capital given the two letter country code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">???</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This function returns an <code>Option[String]</code> type. If the capital exists, it returns the capital as a <code>String</code> contained in the <code>Option</code> monad. If not, it returns a <code>None</code>.</p>
-
-<p>I want to upper case the results returned. This was what I was doing in my early days.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">capital</span> <span class="k">=</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="o">)</span>
-</span><span class='line'><span class="k">val</span> <span class="n">upcasedCapital</span> <span class="k">=</span> <span class="n">capital</span> <span class="k">match</span> <span class="o">{</span>
-</span><span class='line'>   <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">toUpperCase</span>
-</span><span class='line'>   <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="nc">None</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then I realised lifting the <code>Option</code> type is a more idiomatic way.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">capital</span> <span class="k">=</span> <span class="n">countryCapital</span><span class="o">(</span><span class="n">countryCode</span><span class="o">)</span>
-</span><span class='line'><span class="k">val</span> <span class="n">upcasedCapital</span> <span class="k">=</span> <span class="n">capital</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">c</span> <span class="k">=&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">toUpperCase</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It is not necessary to destructure the type only to put it back again. Look how short it is, and clear its intention is. It did exactly the same things the earlier code snippet did.</p>
-
-<p>When you see a lot of destructuring using pattern matching in a Scala code, it is almost always a code smell. Always prefer lifting over destructuring.</p>
 ]]></content>
   </entry>
   

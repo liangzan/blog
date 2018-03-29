@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Liang Zan - Blog</title>
+  <title>Thoughts on dApp development - Liang Zan - Blog</title>
   <meta name="author" content="Wong Liang Zan">
 
   
-  <meta name="description" content="Coffeescript is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you &hellip;">
+  <meta name="description" content="I&#8217;ve recently got into dApp development. Having programmed for a while, here&#8217;re some thoughts on building dApps on Ethereum. Smart &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://liangzan.github.com/blog/blog/page/5/">
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,15 +78,12 @@
   <div id="body"   >
     <div id="main">
       <div id="content">
-	<div class="blog-index">
+	<div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project/">How to Use Coffeescript in Your Node.js Project</a></h1>
+      <h1 class="entry-title">Thoughts on dApp Development</h1>
     
     
       <p class="meta">
@@ -102,77 +99,44 @@
   
 
 
-<time datetime="2012-07-22T17:10:00+00:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time>
+<time datetime="2018-03-22T17:07:00+00:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2018</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http//coffeescript.org">Coffeescript</a> is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your <a href="http://nodejs.org">Node.js</a> project, you can do so easily. I&#8217;m going to write <a href="https://github.com/liangzan/use-coffeescript">a small project</a> as an example of how to use Coffeescript in your project.</p>
+<div class="entry-content"><p>I&#8217;ve recently got into <a href="https://blockgeeks.com/guides/dapps/">dApp</a> development. Having programmed for a while, here&#8217;re some thoughts on building dApps on <a href="https://www.ethereum.org/">Ethereum</a>.</p>
 
+<!-- more -->
+
+
+<h2>Smart contracts are powerful</h2>
+
+<p>Interacting with <a href="https://blockgeeks.com/guides/smart-contracts/">Smart Contracts</a> feels like interacting with an instance of an object. It feels familiar yet odd at the same time. The familiar bit comes from the interaction. You can call functions on it, you can store value on it, it is like regular programming. The weird bit is this is happening in <strong>public</strong>. Every transaction can be held to scrutiny and there is no argument whether something happened or not. That is powerful.</p>
+
+<p>Smart contracts is a novel angle of encapsulating logic and data. Immediately I can see that it solves the payment problem for the couriers. The customer can put out a smart contract, put ether in it and wait for couriers to participate. Delivery jobs can be put into a variable. Couriers can bid publicly via transactions, and get paid by the contract when the delivery is performed successfully. There would be no basis for disputes. Today, such logic is contained in monolithic applications controlled by different logistics companies, and they don&#8217;t interoperate well. I can imagine a future where developers will primarily write smart contracts, and leave the rest to the blockchain infrastructure.</p>
+
+<h2>dApps development is not hard</h2>
+
+<p>I&#8217;ve read about the shortage of blockchain developers. This led me to assume that dApp development is hard. Frankly, I don&#8217;t find its learning curve steeper than a new programming language or a new Javascript framework. In fact I find learning <a href="https://www.scala-lang.org/">Scala</a> or <a href="https://reactjs.org/">React</a>/<a href="https://redux.js.org">Redux</a> harder. It&#8217;s suffering from growing pains where documentation and tooling support are lagging behind. I also find that you need a basic understanding of how blockchains work. Otherwise many of the borrowed metaphors such as wallets, addresses, transactions would be confusing. On the whole, things do work, albeit with some rough edges.</p>
+
+<p>For example, <a href="http://truffleframework.com/ganache/">Ganache</a> would crash sometimes. For me, that happens once every other day; annoying but liveable. I was old enough to have used <a href="https://en.wikipedia.org/wiki/Windows_98">Windows 98</a>; that crashed every 2-3 hours. No doubt in 2018 we should demand higher standards. Another example - <a href="http://truffleframework.com/">Truffle</a>. Again documentation cannot catch up. I wanted to deploy contracts using Truffle and I found no documentation. In the end, I had to dig through the tests of <a href="https://github.com/trufflesuite/truffle-deployer">truffle-deployer</a> to learn how to apply it.</p>
+
+<p>Don&#8217;t get me started on <a href="https://solidity.readthedocs.io/en/v0.4.21/">Solidity</a>. I was trying to do something basic - transferring funds to an address. I thought this <em>ought</em> to be a solved problem since transactions are what Ethereum is meant for. Instead I found an intuitively named function called <code>call</code> used for that purpose. Flabbergasted, I checked the documentation, where I found two functions named <code>transfer</code> and <code>send</code> written for that purpose. Why isn&#8217;t people using that? Could programmers are trying to be clever? When the source code is often the only source of documentation, this leaves me feeling apprehensive. Luckily after digging deeper, I realised that <code>send</code> fails <em>silently</em> when the recipient runs out of gas, hardly something uncommon. If I&#8217;d like to interact with a contract, how do I know what functions are there? Sadly there is often no documentation; there is <em>only</em> Solidity code. The onus is on the developer to understand what the contract does by reading the code. Sounds like Haskell. Another annoyance is Solidity errors are often not meaningful. I was left in the dark as to what happened when the contract crashed. After much searching, I realised I have to use the <a href="http://truffleframework.com/docs/getting_started/debugging">debugger</a>. The debugger worked, thankfully. The worst bit is the bug was resulted from calling a non-existent constructor. How did a wrongly named constructor pass the compiler? One last thing - Solidity doesn&#8217;t have syntax highlighting on <em>Github</em>. Programming with the blockchain is like programming in the 80s - not for the faint of heart.</p>
+
+<p>Blockchain is like the Internet in the 90s. I do see its potential. Its effect would be similar to what containers did for shipping. This time the effect would be felt everywhere. Contrary to the norm, I don&#8217;t find the learning curve for Blockchain development steep. It reminds me of the time when mobile app development was expensive as developers were scarce. Prices came down when more developers learns the craft and enter the pool. It&#8217;s exactly the same now for blockchain development. Given time, things will improve. If you&#8217;re still on the fence, don&#8217;t hesitate anymore, it is time to get started.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to Use Exports in NodeJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
 
-<time datetime="2012-06-04T16:58:00+00:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In any substantial project, it is necessary to separate your code in different files. Node.js implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS API standard to load modules</a> from other files. Using <strong>exports</strong> can be a source of much confusion in Node.js. Let us explore how <strong>exports</strong> works.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to Behave Like Xmonad</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -184,169 +148,43 @@
   
 
 
-<time datetime="2012-06-03T05:48:00+00:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>About 3 weeks ago, my Thinkpad died. It died of a fan error. Luckily, it caught me on Sunday when I didn&#8217;t have to work. I had to get a working computer ready by the next day so that work does not get disrupted. Faced with less than a day of time, the logical choice is to get a new computer.</p>
-
-<p>For computers, I only have eyes for Thinkpads and Macs. I wanted a Thinkpad. But the <a href="http://www.seeseelooklook.com/index.php">prices of Thinkpads in Singapore</a> is ridiculously overpriced. It is about twice the <a href="http://www.lenovo.com/products/us/laptop/thinkpad/">price in the US</a>. As much as I wanted a Thinkpad, I decided on a Mac.</p>
-
-<p>No doubt the Mac desktop experience is good. But it can never compare to <a href="http://blog.liangzan.net/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">my Arch Linux setup</a> where <em>everything</em> is customized to <em>my liking</em>. I spent much effort getting my <a href="http://www.archlinux.org/">Arch Linux</a> to not only look good and to work effectively. Faced with the conclusion that the next few years of my computing life is going to be on a Mac, I decided to make life easier for myself.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2018-03-22T17:07:00+00:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2018</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized Themed Arch Linux Setup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2012-01-19T15:36:00+00:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/arch-linux-solarized-screenshot-with-emacs-urxvt-xmonad.png" title="Arch linux solarized screenshot with emacs urxvt tmux xmonad" ></p>
-
-<p>The screenshots received much interest from my friends. I am going to show you how to build it. Long story short, use the same color theme for your applications.</p>
-
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP Came Into Being</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-23T16:35:00+00:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://smugftp.com">SmugFTP</a> is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/23/how-smugftp-came-into-being/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        <a class="basic-alignment left" href="/blog/2018/03/14/joining-ef-in-their-third-batch/" title="Previous Post: Joining EF in their third batch">&laquo; Joining EF in their third batch</a>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a></h1>
-    
-    
-      <p class="meta">
-        
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-20T16:46:00+00:00" pubdate data-updated="true">Jan 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m one of those who have tried both Vim and Emacs. I&#8217;ve always wanted to write a post to share my experiences on these 2 venerable text editors. Right now, my primry editor is Emacs. Not to say Vim is not good, but for Emacs fits my setup better. I&#8217;m typing this article on Emacs if you&#8217;re curious.
-First a little history. I started with Vim first. Once I got through the steep learning curve, it felt fast. I was typing faster. Vim made me saw how inefficient I was earlier. From time to time, I will see articles or comments that mention Emacs. My curiosity grew. I started trying out Emacs. When I started learning it, I forced myself to use only emacs for a week. After that week, I was able to memorise most of the basic key strokes. So after about 2 years of using Emacs, I think its the right time to summarise my opinions.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/01/20/emacs-vs-vim/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
   <h1>About Me</h1>
-  <p>I&#8217;m a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
+  <p>I'm a computer geek living in Singapore. More on my <a href="http://liangzan.net">homepage</a>.</p>
 </section>
 <section>
   <h1>Subscribe</h1>
@@ -400,7 +238,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/liangzan">@liangzan</a> on GitHub
@@ -430,7 +268,7 @@ First a little history. I started with Vim first. Once I got through the steep l
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -450,6 +288,7 @@ First a little history. I started with Vim first. Once I got through the steep l
   
 </aside>
 
+
       </div>
     </div>
     <footer role="contentinfo"><p>
@@ -464,7 +303,10 @@ First a little history. I started with Vim first. Once I got through the steep l
       var disqus_shortname = 'liangzanblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2018/03/22/thoughts-on-dapp-development/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
