@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2018-03-29T09:37:09+00:00</updated>
+  <updated>2018-05-07T09:41:55+00:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Team formation at EF]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2018/04/02/team-formation-at-ef/"/>
+    <updated>2018-04-02T17:19:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2018/04/02/team-formation-at-ef</id>
+    <content type="html"><![CDATA[<p>This is part two of my experiences going through <a href="https://www.joinef.com/">Entrepreneur First</a>. This is also where EF is different from other accelerators - team forming. From my earlier post, EF divides the cohort into 3 groups. The technical edges, the product edges, the domain edges, and not gently, people from different edges are nudged to team up. Did that happen?</p>
+
+<!-- more -->
+
+
+<h2>Patterns</h2>
+
+<p>These are my general observations as I have no access to data. The first observation is people with similar interests tend to team up. For example, those interested in blockchain want to work together. Another example, the quantum physicists in my cohort want to work together as they can understand each other.</p>
+
+<p>The second observation is people with complementary skills tend to team up. Typically there is one person with a strong idea, and he or she finds another person who has the skills to implement it. The domain edges form teams like that. For example, we have a domain edge in sports teaming up with an augmented reality expert to build a AR solution for sports teams. My team is one. It is a domain expert in the finance space who needed someone with deep engineering skills to build infrastructure for the emerging crypto space.</p>
+
+<p>The third observation is people who like each other tend to team up. There is still a need to find a good business case to justify the team. These cases are fewer in number as they often have problems finding a business model around their skills. Typically the technical edges(from academia) like working with each other due to their similar backgrounds. Similar examples includes founders who came from the same country.</p>
+
+<h2>Breaking up</h2>
+
+<p>Breaking up is an essential part of the process. Form a team fast, break up fast - that is the advice. EF tries their best to put the stigma away - by cheering whenever a team breaks up. We are congratulated as though we have left a bad relationship. No one sets out to break up on a whim. Most are careful before committing to working together. But still, it does happens. I&#8217;ve been through one, and it is painful like any form of failure.</p>
+
+<p>Why do teams break up? When they are not making progress, they break up. Progress is loosely defined as having received validation that there is a genuine problem or making head ways towards developing new technologies. When teams are progressing slowly, EF nudges the team to break up. Breaking up is entirely the team&#8217;s choice. There are teams who have deep faith in their work and don&#8217;t want to break up. Towards Judgement Day(which is the investment panel), these teams tends to break up. As time passes, as the team talk to more customers, the invalidation becomes clear. Seeing there are no customers, there is no reason to chase a lost cause. Inevitably they break up. At that point of breakup, it can be too late to validate another idea as there are only those weeks before Judgement Day. So EF always advise us to break up quickly.</p>
+
+<p>Break ups happen when founders are not aligned. A team came together to work on an idea that both founders are keen on. Due to customer feedback, the form of the idea changes. When it becomes something that the founder is not interested in, and if that is something they cannot accept working on, the team breaks up.</p>
+
+<p>EF nudges teams to break up when the founders have poor fit to the skills required to build the business. Obviously if the founders don&#8217;t have the skills to build the business, they get nudged to break up. If the founders have a super set of skills, they get nudged to break up too. For example, an idea demands only software skills, whereas the founder has both hardware and software skills, EF encourage the team to break up. The rationale is this founder can work on another idea which can leverage the founder&#8217;s skills fully. That team will be stronger as there aren&#8217;t others with that unique set of skills who wants to start a company at this moment. What happens this creates sets of founders with strong skill alignment to the problem they are solving.</p>
+
+<p>There are also people who cannot find a co-founder. Sometimes they are deeply attached to an idea, and sadly they are unable to convince another to join their cause. Another group are those who are not committed. They continue with their existing work and hope to build a business on their spare time. Starting a business is hard. Those who don&#8217;t commit have difficulty finding others to work with them. There&#8217;re those who fail to find a viable business model. If the business case is weak, they fail to convince others to join them. Lastly, people who are hard to work with, don&#8217;t form teams and drop out.</p>
+
+<p>True to EF&#8217;s advice, breaking up does help form strong teams. It creates balanced teams going after validated ideas. When I look at the teams, it is as though they were tailor made to solve that problem. A founder has to find a co-founder, with a specific set of complementary skills, quit what they are doing at the same time to start a company. What is the probability of that happening in the wild? That is scary. I think that is an effective way to create startups. Time will show us if this model performs better. Amongst the top teams in the cohort, half of those are from broken up teams, including mine. I&#8217;ll share about what happens after during the validation phase in a separate post.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thoughts on dApp development]]></title>
@@ -63,11 +97,11 @@
 
 <p>Why is it divided into these types? EF not so gently nudges everyone to form a team of two as two is found to be the optimal founding team size. The two making the team are <em>encouraged</em> to be of different edges. The endorsed combinations are DT, DP, PT, TT. It makes sense to combine different edges where each bring different strengths and don&#8217;t step on each other&#8217;s toes. A DT and DP combination is where the Domain edge knows an industry inside out, allowing the team to get to product-market fit quickly, while the Product/Technical edge builds the product. In a PT combination, usually the Product edge fulfils the outward facing role and the Technical edge concentrates on the product. TT combination is the special case like Magic Pony, where 2 technical founders create a cutting edge technology.</p>
 
-<p>The quality and diversity of the cohort is frankly <em>amazing</em>. There are people holding doctorate degrees from various fields - quantum physics to computer science to materials to robotics to mathematics. Some even holding multiple degrees. There are entrepreneurs who ran companies of various sizes, CEOs, CTOs, robotics engineers, hardware/software engineers, musicians, artists, Heads of departments at MNCs, dentists, architects, speech therapists, ex-Googlers, ex-Facebook, ex-Netflix. There are many industries represented - Finance, Marketing, TV, Logistics, Medical, Oil &amp; Gas, Food, Retail, etc. However, most are first-time founders. Most aren&#8217;t veterans either; the median age is in the early thirties.</p>
+<p>The quality and diversity of the cohort is <em>amazing</em>. There are people holding doctorate degrees from various fields - quantum physics to computer science to materials to robotics to mathematics. Some even holding multiple degrees. There are entrepreneurs who ran companies of various sizes, CEOs, CTOs, robotics engineers, hardware/software engineers, musicians, artists, Heads of departments at MNCs, dentists, architects, speech therapists, ex-Googlers, ex-Facebook, ex-Netflix. There are many industries represented - Finance, Marketing, TV, Logistics, Medical, Oil &amp; Gas, Food, Retail, etc. However, most are first-time founders. Most aren&#8217;t veterans either; the median age is in the early thirties.</p>
 
 <h2>What does the team forming phase feels like?</h2>
 
-<p>The team forming phase feels a lot like dating. Let me address that in another post.</p>
+<p>The team forming phase is a lot like dating. It is an emotional rollercoaster, where there are high highs and low lows. Finding a co-founder is a large helping of serendipity, a dash of skill. Let me address that in another post.</p>
 ]]></content>
   </entry>
   
@@ -1969,38 +2003,6 @@
 <p>Select the network definition which represents the remote SSL users(you would have defined them when setting up the remove VPN). Select <strong>WAN</strong> as your interface, as you would like the traffic to go out. Click <strong>Save</strong>. Enable the rule by turning on the rule in the toggle button. Your rule should look like the screenshot below. You&#8217;re done. Hope this helps.</p>
 
 <p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-masquerading-rule.png" title="Sophos UTM Masquerading Rule" ></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lessons learned when working with a remote team]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team/"/>
-    <updated>2016-04-01T06:42:00+00:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2016/04/01/lessons-learned-when-working-with-a-remote-team</id>
-    <content type="html"><![CDATA[<p>I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from outsourcing. I would consider a remote team part of the company.</p>
-
-<!-- more -->
-
-
-<h2>Remote vs Local</h2>
-
-<p>As a former remote worker, I like working remotely. I understand the draw of working remotely. Less distractions. Flexible time. Work life balance. Access to larger pool of candidates. There are also advantages to working together in an office. There is no better form of communication than speaking in person.</p>
-
-<p>Both forms of working have their strengths and weaknesses. Use whichever that fits your situation.</p>
-
-<h2>Hire experienced workers</h2>
-
-<p>In a perfect world, everybody would like to hire experienced workers. For remote work, I&#8217;d see it as critical. The candidate should have the skills to perform the work needed. Not learn on the job. Why so? Learning is handicapped when a person is remote. He or she will not be able to learn as effectively because communication is degraded. Relying on instant messaging, emails or phone calls is not as effective. It takes up more of both the mentor&#8217;s time and the worker&#8217;s time.</p>
-
-<h2>Define clear tasks</h2>
-
-<p>In a perfect world you would like to know in advance the work needed to be done. That doesn&#8217;t happen in the real world. For remote workers, I&#8217;d entrust tasks which have been done before. Not open-ended projects. Why so? Because you need to be fair to the remote worker. Deny it or not, there is a mistrust of workers you don&#8217;t see at the desk. Is he working or watching Youtube at home? It helps immensely when you assign a task that you know how to do it. You would know how long it should take. If it takes too long, you know it is time to come in. If it is faster, congratulations, you have someone contributing effectively. Another factor is how independent the work is. The more independent, the better. It cuts down the need for communication. Communication is always the bottleneck for remote work.</p>
-
-<h2>Communication is a necessity</h2>
-
-<p>Communication should happen regularly at defined times. It is up to the team&#8217;s preference. I feel that there should happen at least once every 2 days or so. I find that most developers I know, don&#8217;t have the inclination to update their progress regularly without prompting. It should be the manager&#8217;s responsibility to ask for it.</p>
-
-<p>Remote working goes against many culture norms especially in Asia. If the management is not open to new ideas, it may be an uphill cause. Company culture matters when deciding if you want to do it. In conclusion, if the work is well defined and the worker have experience doing it, no harm going remote. If not, better not.</p>
 ]]></content>
   </entry>
   
