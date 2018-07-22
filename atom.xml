@@ -4,7 +4,7 @@
   <title><![CDATA[Liang Zan - Blog]]></title>
   <link href="http://liangzan.github.com/blog/atom.xml" rel="self"/>
   <link href="http://liangzan.github.com/blog/"/>
-  <updated>2018-05-07T09:41:55+00:00</updated>
+  <updated>2018-07-22T06:04:06+00:00</updated>
   <id>http://liangzan.github.com/blog/</id>
   <author>
     <name><![CDATA[Wong Liang Zan]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughts on React with Redux]]></title>
+    <link href="http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/"/>
+    <updated>2018-06-01T17:25:00+00:00</updated>
+    <id>http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux</id>
+    <content type="html"><![CDATA[<p>I have been writing <a href="https://reactjs.org/">React</a> and <a href="https://redux.js.org/">Redux</a> for the past months. React and Redux are not the first Javascript frameworks I&#8217;ve learnt; nor is it likely to be the last. We want <a href="https://blog.liangzan.net/blog/2018/01/12/things-i-would-do-at-a-new-startup/">something proven</a> and something that has a thriving eco-system surrounding it. At this moment(2018), we see 2 options - React or <a href="https://angularjs.org/">Angular</a>. We decided that React with the potential to support mobile apps would be the sensible decision. React coupled with Redux gives us the structure for a modern Javascript application. Well, nothing is perfect. Let&#8217;s visit some of those aspects where I felt it ticked and where it didn&#8217;t for React with Redux.</p>
+
+<!-- more -->
+
+
+<h2>What ticks</h2>
+
+<p>State changes in Redux follows a <a href="https://redux.js.org/basics/data-flow">unidirectional flow</a>. It is easier to reason about state when changes are standardised. The benefit becomes apparant when there are more than 20 components. State is found where they ought to be. Coupled with the Redux and React Chrome extensions, debugging is efficient. New hires knows Redux will be productive immediately. That is a hallmark of good design. Good design is intuitive. Having conventions gives productivity gains. In projects where there is no convention for how state flows, wasting time finding where the state is inevitable. Redux has achieved its original goal.</p>
+
+<p>It is obvious that Redux is heavily influenced by <a href="https://www.haskell.org/">Haskell</a>. Side effects are kept compartmentalised in actions; similar to the IO monad. Borrowing the idea of pure functions from functional programming. Actions are similar to a Haskell Type. It&#8217;s heartening to see Redux applying proven ideas from functional programming. The same techniques will serve to keep complexity at bay as the application grows.</p>
+
+<h2>What didn&#8217;t tick</h2>
+
+<p>There are caveats though. The benefits comes when developers follow <em>the Redux way</em> religiously. Redux doesn&#8217;t prevent you from mucking things up. You can add a pubsub library or a data binding library; Redux won&#8217;t complain. Staying disciplined and following the Redux way is an exercise in how well ran your team is. There are times when it felt more natural to use pubsub to handle state. In a small to medium sized code base with small teams of 1 to 3 engineers, I&#8217;d argue that it makes sense to derive the flow of the state according to what the application does, rather than forcibly fit it to a standard unidirectional flow. For a large codebase with a large team, keeping it standard prevents the application from getting too complex. It is easier for everyone to understand the codebase, helps in debugging and makes it faster to add features.</p>
+
+<p>Another caveat is Redux assumes state is a key-value structure. Often we&#8217;d have a list of options in a dropdown where the user selects different options. There are no helpers for handling state in lists. We need to manually manage state changes within the lists, which I thought a mature framework like Redux would have it covered.</p>
+
+<p>Another common grievance - <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate</a>. There are lots of boiler plate to write. We have to write the components, the containers, the actions, and the reducers for the most basic of functionalities. I thought this is a design choice. Redux could choose to generate those boilerplate(like <a href="https://rubyonrails.org/">Rails</a>), or let developers wire these parts on their own. To generate the boilerplate, Redux needs to make assumptions. For every action, which reducer should handle it? Should Redux generate a corresponding reducer for every action? In cases where you want multiple reducers to handle the same action, how do you provide an abstraction for that? How would the <a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> look? Should Redux make such decisions for you? It quickly becomes apparant that abstracting away the boiler plate reduces the flexibility. That&#8217;s why the having boilerplate is a design trade-off. You write more code but you have the flexibility to wire the components to do what you want.</p>
+
+<p>Almost like the <a href="https://en.wikipedia.org/wiki/Maslow%27s_hierarchy_of_needs">Maslow&#8217;s hierarchy of needs</a>, every library has its purpose. At the base level, the library has to first work. At the next level, the library would need to work well with others. At the highest level, you&#8217;d ask if there is a philosophy guiding its design. A library is an opinion, an opinion on how to solve the problem. Redux is one library that not only works, it is one that has a strong principles guiding it. It believed in being minimalist, in convention over configuration, in keeping side effects in control, in that you know best and in simplicity. I&#8217;m glad to have spent time learning <em>yet another</em> Javascript framework, and I hope I&#8217;ve convinced you too.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Team formation at EF]]></title>
@@ -1975,34 +2003,6 @@
 <p>Does it infringe terms of use? I don&#8217;t know. Content providers won&#8217;t be happy knowing that their content can be accessed in areas where it is not supposed to. Knowing is one thing, <strong>enforcing</strong> is another. Is it worth Netflix&#8217;s time to spend time and resources to go after FreedomVPN? Maybe not, since Viewqwest subscribers are not many enough to warrant spending the energy. I&#8217;m sure they have better things to do. As long as FreedomVPN continues to be a niche player, it should continue to stay under the radar. Perhaps that is why it never got its own landing page.</p>
 
 <p>I see some Viewqwest customers complain that FreedomVPN is not stable. It will never be. Accept that this is a cat and mouse game. This solution is a workaround, and will never work cleanly unless geo-blocking is abolished. But for the convenience of watching <strong>Sherlock</strong> with one click, I&#8217;m wiling to accept that good enough is <em>good enough</em>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to set up a remote VPN using Sophos UTM]]></title>
-    <link href="http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm/"/>
-    <updated>2016-04-10T06:49:00+00:00</updated>
-    <id>http://liangzan.github.com/blog/blog/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm</id>
-    <content type="html"><![CDATA[<p>My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don&#8217;t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction.</p>
-
-<!-- more -->
-
-
-<h2>Setting up the Remote VPN</h2>
-
-<p>To set it up, I referred to the manual from Sophos. Their <a href="https://www.sophos.com/en-us/support/knowledgebase/119209.aspx">knowledge base</a> contains the administrative guide. Download the administrative guide for your version of UTM.</p>
-
-<p>The relevant chapter is <strong>Remote Access > SSL</strong>. There also plenty of articles and videos on the web on how to set that up. I won&#8217;t repeat them so as not to bore the reader.</p>
-
-<h2>Masquerading traffic from the office</h2>
-
-<p>My aim is when I log into the VPN from a remote location, my traffic should masquerade as coming from the office. To the outside world, my requests comes from the office network&#8217;s IP address. To do that, I need to add a Masquerade rule. Go to <strong>Network Protection > NAT</strong>, create a new Masquerading rule by clicking on the button <strong>Create Masquerading Rule</strong>.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-create-new-masquerading-rule.png" title="Sophos UTM Create New Masquerading Rule" ></p>
-
-<p>Select the network definition which represents the remote SSL users(you would have defined them when setting up the remove VPN). Select <strong>WAN</strong> as your interface, as you would like the traffic to go out. Click <strong>Save</strong>. Enable the rule by turning on the rule in the toggle button. Your rule should look like the screenshot below. You&#8217;re done. Hope this helps.</p>
-
-<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-masquerading-rule.png" title="Sophos UTM Masquerading Rule" ></p>
 ]]></content>
   </entry>
   
