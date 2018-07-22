@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Thoughts on React with Redux - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="I have been writing React and Redux for the past months. React and Redux are not the first Javascript frameworks I&#8217;ve learnt; nor is it likely &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Thoughts on React With Redux</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-06-01T17:25:00+00:00" pubdate data-updated="true">Jun 1<span>st</span>, 2018</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I have been writing <a href="https://reactjs.org/">React</a> and <a href="https://redux.js.org/">Redux</a> for the past months. React and Redux are not the first Javascript frameworks I&#8217;ve learnt; nor is it likely to be the last. We want <a href="https://blog.liangzan.net/blog/2018/01/12/things-i-would-do-at-a-new-startup/">something proven</a> and something that has a thriving eco-system surrounding it. At this moment(2018), we see 2 options - React or <a href="https://angularjs.org/">Angular</a>. We decided that React with the potential to support mobile apps would be the sensible decision. React coupled with Redux gives us the structure for a modern Javascript application. Well, nothing is perfect. Let&#8217;s visit some of those aspects where I felt it ticked and where it didn&#8217;t for React with Redux.</p>
+
+<!-- more -->
+
+
+<h2>What ticks</h2>
+
+<p>State changes in Redux follows a <a href="https://redux.js.org/basics/data-flow">unidirectional flow</a>. It is easier to reason about state when changes are standardised. The benefit becomes apparant when there are more than 20 components. State is found where they ought to be. Coupled with the Redux and React Chrome extensions, debugging is efficient. New hires knows Redux will be productive immediately. That is a hallmark of good design. Good design is intuitive. Having conventions gives productivity gains. In projects where there is no convention for how state flows, wasting time finding where the state is inevitable. Redux has achieved its original goal.</p>
+
+<p>It is obvious that Redux is heavily influenced by <a href="https://www.haskell.org/">Haskell</a>. Side effects are kept compartmentalised in actions; similar to the IO monad. Borrowing the idea of pure functions from functional programming. Actions are similar to a Haskell Type. It&#8217;s heartening to see Redux applying proven ideas from functional programming. The same techniques will serve to keep complexity at bay as the application grows.</p>
+
+<h2>What didn&#8217;t tick</h2>
+
+<p>There are caveats though. The benefits comes when developers follow <em>the Redux way</em> religiously. Redux doesn&#8217;t prevent you from mucking things up. You can add a pubsub library or a data binding library; Redux won&#8217;t complain. Staying disciplined and following the Redux way is an exercise in how well ran your team is. There are times when it felt more natural to use pubsub to handle state. In a small to medium sized code base with small teams of 1 to 3 engineers, I&#8217;d argue that it makes sense to derive the flow of the state according to what the application does, rather than forcibly fit it to a standard unidirectional flow. For a large codebase with a large team, keeping it standard prevents the application from getting too complex. It is easier for everyone to understand the codebase, helps in debugging and makes it faster to add features.</p>
+
+<p>Another caveat is Redux assumes state is a key-value structure. Often we&#8217;d have a list of options in a dropdown where the user selects different options. There are no helpers for handling state in lists. We need to manually manage state changes within the lists, which I thought a mature framework like Redux would have it covered.</p>
+
+<p>Another common grievance - <a href="https://en.wikipedia.org/wiki/Boilerplate_code">boilerplate</a>. There are lots of boiler plate to write. We have to write the components, the containers, the actions, and the reducers for the most basic of functionalities. I thought this is a design choice. Redux could choose to generate those boilerplate(like <a href="https://rubyonrails.org/">Rails</a>), or let developers wire these parts on their own. To generate the boilerplate, Redux needs to make assumptions. For every action, which reducer should handle it? Should Redux generate a corresponding reducer for every action? In cases where you want multiple reducers to handle the same action, how do you provide an abstraction for that? How would the <a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> look? Should Redux make such decisions for you? It quickly becomes apparant that abstracting away the boiler plate reduces the flexibility. That&#8217;s why the having boilerplate is a design trade-off. You write more code but you have the flexibility to wire the components to do what you want.</p>
+
+<p>Almost like the <a href="https://en.wikipedia.org/wiki/Maslow%27s_hierarchy_of_needs">Maslow&#8217;s hierarchy of needs</a>, every library has its purpose. At the base level, the library has to first work. At the next level, the library would need to work well with others. At the highest level, you&#8217;d ask if there is a philosophy guiding its design. A library is an opinion, an opinion on how to solve the problem. Redux is one library that not only works, it is one that has a strong principles guiding it. It believed in being minimalist, in convention over configuration, in keeping side effects in control, in that you know best and in simplicity. I&#8217;m glad to have spent time learning <em>yet another</em> Javascript framework, and I hope I&#8217;ve convinced you too.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-06-01T17:25:00+00:00" pubdate data-updated="true">Jun 1<span>st</span>, 2018</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/04/02/team-formation-at-ef/" title="Previous Post: Team formation at EF">&laquo; Team formation at EF</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="https://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP came into being</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/liangzan">@liangzan</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'liangzan',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("liangzan", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/liangzan" class="twitter-follow-button" data-show-count="false">Follow @liangzan</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2018/06/01/thoughts-on-react-with-redux/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>
