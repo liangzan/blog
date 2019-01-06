@@ -162,130 +162,6 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2018/09/04/packaging-an-electron-app/">Packaging an Electron App</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2018-09-04T17:03:00+08:00" pubdate data-updated="true">Sep 4<span>th</span>, 2018</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The topic for this post is on packaging for Electron applications. I&#8217;m going to show you how to package an Electron application on Windows, Mac and Linux. How to sign the applications, so that your users won&#8217;t encounter security warnings. It is going to be based on <a href="https://github.com/chentsulin/electron-react-boilerplate">Electron React Boilerplate</a> and <a href="https://www.electron.build/">Electron Builder</a>. It documents on what worked and what didn&#8217;t for me. Hopefully it will help you.</p>
-
-<p>Packaging
- - note the targets
- - build on the platform you&#8217;re deploying on
- - changing the icons</p>
-
-<p>Getting the cert
- - Apple
- - Digicert</p>
-
-<p>Using the cert to package</p>
-
-<p>explain the build script in package.json
-show the output from building
-configuration options for electron builder
-Customising details like name, icons
-asar
-signing</p>
-
-<h2>What happens when you run package</h2>
-
-<p>Packaging of the Electron app starts with the command</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm run package</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We&#8217;re going to walk through a build that packages the Electron application, signs it, and publishes it to S3. Let&#8217;s investigate what happens when we hit <code>Enter</code>.</p>
-
-<p>The package command will look like the below.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>AWS_ACCESS_KEY_ID=&lt;your-aws-access-key&gt; AWS_SECRET_ACCESS_KEY=&lt;your-aws-secret-key&gt; CSC_LINK=&lt;path/to/key.p12&gt; CSC_KEY_PASSWORD=&lt;password-for-p12-keyfile&gt; npm run package</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There&#8217;re some choices I&#8217;ve made. I&#8217;m publishing to S3. I&#8217;m using a cert to sign the application. All of which are defined in the environment variables.</p>
-
-<p>When we hit <code>Enter</code>, packaging starts with webpack.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors
-</span><span class='line'>
-</span><span class='line'>cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Webpack compiles your code into 1 package. After which, the scripts packages the app into the platform specific package.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> • electron-builder version=x.y.z
-</span><span class='line'> • loaded configuration file=package.json ("build" field)
-</span><span class='line'> • writing effective config file=release/electron-builder.yaml
-</span><span class='line'> • rebuilding native production dependencies platform=darwin arch=x64
-</span><span class='line'> • packaging       platform=darwin arch=x64 electron=x.y.z appOutDir=release/mac</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> • signing         file=release/mac/Foo.app identityName=Developer ID Application: Foo Inc (&lt;your-cert-id&gt;) identityHash=&lt;some-hex&gt;
-</span><span class='line'> • building        target=macOS zip arch=x64 file=release/Foo-x.y.z-mac.zip
-</span><span class='line'> • building        target=DMG arch=x64 file=release/Foo-x.y.z.dmg
-</span><span class='line'> • building block map blockMapFile=release/Foo-x.y.z.dmg.blockmap
-</span><span class='line'> • publishing      publisher=S3 (bucket: &lt;your-s3-bucket&gt;)
-</span><span class='line'> • uploading       file=Foo-x.y.z.dmg.blockmap provider=S3
-</span><span class='line'> • uploading       file=Foo-x.y.z.dmg provider=S3
-</span><span class='line'>   [====================] 100% 0.0s | Foo-x.y.z.dmg to S3
-</span><span class='line'> • uploading       file=Foo-x.y.z-mac.zip provider=S3
-</span><span class='line'> • uploading       file=latest-mac.json provider=S3
-</span><span class='line'>   [====================] 100% 0.0s | Foo-x.y.z-mac.zip to S3
-</span><span class='line'> • uploading       file=latest-mac.yml provider=S3</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2018/07/28/launch-phase-at-ef/">Launch Phase at EF</a></h1>
     
     
@@ -605,6 +481,47 @@ signing</p>
   
     <footer>
       <a rel="full-article" href="/blog/2017/07/03/why-am-i-doing-a-math-degree/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production/">Using More Than a Hundred Stored Procedures in Production</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-04-23T06:50:00+08:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2017</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At my present company <a href="https://www.storeviva.com/">Courex</a>, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production/">Read on &rarr;</a>
     </footer>
   
 
