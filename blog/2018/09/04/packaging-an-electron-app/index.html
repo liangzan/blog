@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Packaging an Electron app - Liang Zan - Blog</title>
+  <meta name="author" content="Wong Liang Zan">
+
+  
+  <meta name="description" content="The topic for this post is on packaging for Electron applications. I&#8217;m going to show you how to package an Electron application on Windows, Mac &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://liangzan.github.com/blog/blog/2018/09/04/packaging-an-electron-app/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Liang Zan - Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic|Istok+Web:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2672768-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body>
+  <div id="header-container">
+    <div id="header">
+      <div class="wrapper">
+        <header role="banner"><hgroup>
+  <h1><a href="/">Liang Zan - Blog</a></h1>
+</hgroup>
+
+</header>
+        <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:liangzan.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+      </div>
+    </div>
+  </div>
+  <div id="body"   >
+    <div id="main">
+      <div id="content">
+	<div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Packaging an Electron App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-09-04T17:03:00+08:00" pubdate data-updated="true">Sep 4<span>th</span>, 2018</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The topic for this post is on packaging for Electron applications. I&#8217;m going to show you how to package an Electron application on Windows, Mac and Linux. How to sign the applications, so that your users won&#8217;t encounter security warnings. It is going to be based on <a href="https://github.com/chentsulin/electron-react-boilerplate">Electron React Boilerplate</a> and <a href="https://www.electron.build/">Electron Builder</a>. It documents on what worked and what didn&#8217;t for me. Hopefully it will help you.</p>
+
+<p>Packaging
+ - note the targets
+ - build on the platform you&#8217;re deploying on
+ - changing the icons</p>
+
+<p>Getting the cert
+ - Apple
+ - Digicert</p>
+
+<p>Using the cert to package</p>
+
+<p>explain the build script in package.json
+show the output from building
+configuration options for electron builder
+Customising details like name, icons
+asar
+signing</p>
+
+<h2>What happens when you run package</h2>
+
+<p>Packaging of the Electron app starts with the command</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm run package</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&#8217;re going to walk through a build that packages the Electron application, signs it, and publishes it to S3. Let&#8217;s investigate what happens when we hit <code>Enter</code>.</p>
+
+<p>The package command will look like the below.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>AWS_ACCESS_KEY_ID=&lt;your-aws-access-key&gt; AWS_SECRET_ACCESS_KEY=&lt;your-aws-secret-key&gt; CSC_LINK=&lt;path/to/key.p12&gt; CSC_KEY_PASSWORD=&lt;password-for-p12-keyfile&gt; npm run package</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There&#8217;re some choices I&#8217;ve made. I&#8217;m publishing to S3. I&#8217;m using a cert to sign the application. All of which are defined in the environment variables.</p>
+
+<p>When we hit <code>Enter</code>, packaging starts with webpack.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors
+</span><span class='line'>
+</span><span class='line'>cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Webpack compiles your code into 1 package. After which, the scripts packages the app into the platform specific package.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> • electron-builder version=x.y.z
+</span><span class='line'> • loaded configuration file=package.json ("build" field)
+</span><span class='line'> • writing effective config file=release/electron-builder.yaml
+</span><span class='line'> • rebuilding native production dependencies platform=darwin arch=x64
+</span><span class='line'> • packaging       platform=darwin arch=x64 electron=x.y.z appOutDir=release/mac</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> • signing         file=release/mac/Foo.app identityName=Developer ID Application: Foo Inc (&lt;your-cert-id&gt;) identityHash=&lt;some-hex&gt;
+</span><span class='line'> • building        target=macOS zip arch=x64 file=release/Foo-x.y.z-mac.zip
+</span><span class='line'> • building        target=DMG arch=x64 file=release/Foo-x.y.z.dmg
+</span><span class='line'> • building block map blockMapFile=release/Foo-x.y.z.dmg.blockmap
+</span><span class='line'> • publishing      publisher=S3 (bucket: &lt;your-s3-bucket&gt;)
+</span><span class='line'> • uploading       file=Foo-x.y.z.dmg.blockmap provider=S3
+</span><span class='line'> • uploading       file=Foo-x.y.z.dmg provider=S3
+</span><span class='line'>   [====================] 100% 0.0s | Foo-x.y.z.dmg to S3
+</span><span class='line'> • uploading       file=Foo-x.y.z-mac.zip provider=S3
+</span><span class='line'> • uploading       file=latest-mac.json provider=S3
+</span><span class='line'>   [====================] 100% 0.0s | Foo-x.y.z-mac.zip to S3
+</span><span class='line'> • uploading       file=latest-mac.yml provider=S3</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Wong Liang Zan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-09-04T17:03:00+08:00" pubdate data-updated="true">Sep 4<span>th</span>, 2018</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://liangzan.github.com/blog/blog/2018/09/04/packaging-an-electron-app/" data-via="liangzan" data-counturl="http://liangzan.github.com/blog/blog/2018/09/04/packaging-an-electron-app/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/07/28/launch-phase-at-ef/" title="Previous Post: Launch phase at EF">&laquo; Launch phase at EF</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/10/21/hiring-at-startups-is-not-impossible/" title="Next Post: Hiring at Startups is not impossible">Hiring at Startups is not impossible &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>I'm a computer geek living in Singapore. More on my <a href="https://liangzan.net">homepage</a>.</p>
+</section>
+<section>
+  <h1>Popular Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/01/20/emacs-vs-vim/">Emacs vs Vim</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/07/23/how-smugftp-came-into-being/">How SmugFTP came into being</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/my-solarized-themed-arch-linux-setup/">My Solarized themed Arch Linux Setup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/03/customizing-the-mac-to-behave-like-xmonad/">Customizing the Mac to behave like Xmonad</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/04/how-to-use-exports-in-nodejs/">How to use exports in NodeJS</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+
+
+      </div>
+    </div>
+    <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - Wong Liang Zan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>. Design by <a href="http://octopressthemes.com">Octopress Themes</a>.</span>
+</p>
+
+</footer>
+    
+
+<script type="text/javascript">
+      var disqus_shortname = 'liangzanblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://liangzan.github.com/blog/blog/2018/09/04/packaging-an-electron-app/';
+        var disqus_url = 'http://liangzan.github.com/blog/blog/2018/09/04/packaging-an-electron-app/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </div>
+</body>
+</html>
