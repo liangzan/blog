@@ -1,0 +1,31 @@
+---
+layout: post
+title: "Lessons learned when working with a remote team"
+date: 2016-04-01 06:42
+comments: true
+categories:
+---
+
+I have both worked and managed remotely. I would like to share what works when managing a remote engineering team. Remote working is different from outsourcing. I would consider a remote team part of the company.
+
+<!-- more -->
+
+## Remote vs Local
+
+As a former remote worker, I like working remotely. I understand the draw of working remotely. Less distractions. Flexible time. Work life balance. Access to larger pool of candidates. There are also advantages to working together in an office. There is no better form of communication than speaking in person.
+
+Both forms of working have their strengths and weaknesses. Use whichever that fits your situation.
+
+## Hire experienced workers
+
+In a perfect world, everybody would like to hire experienced workers. For remote work, I'd see it as critical. The candidate should have the skills to perform the work needed. Not learn on the job. Why so? Learning is handicapped when a person is remote. He or she will not be able to learn as effectively because communication is degraded. Relying on instant messaging, emails or phone calls is not as effective. It takes up more of both the mentor's time and the worker's time.
+
+## Define clear tasks
+
+In a perfect world you would like to know in advance the work needed to be done. That doesn't happen in the real world. For remote workers, I'd entrust tasks which have been done before. Not open-ended projects. Why so? Because you need to be fair to the remote worker. Deny it or not, there is a mistrust of workers you don't see at the desk. Is he working or watching Youtube at home? It helps immensely when you assign a task that you know how to do it. You would know how long it should take. If it takes too long, you know it is time to come in. If it is faster, congratulations, you have someone contributing effectively. Another factor is how independent the work is. The more independent, the better. It cuts down the need for communication. Communication is always the bottleneck for remote work.
+
+## Communication is a necessity
+
+Communication should happen regularly at defined times. It is up to the team's preference. I feel that there should happen at least once every 2 days or so. I find that most developers I know, don't have the inclination to update their progress regularly without prompting. It should be the manager's responsibility to ask for it.
+
+Remote working goes against many culture norms especially in Asia. If the management is not open to new ideas, it may be an uphill cause. Company culture matters when deciding if you want to do it. In conclusion, if the work is well defined and the worker have experience doing it, no harm going remote. If not, better not.

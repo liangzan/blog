@@ -1,0 +1,29 @@
+---
+layout: post
+title: "A firing"
+date: 2016-06-05 16:37
+comments: true
+categories:
+---
+
+I was hooked by the documentary series: [Chef's table](https://en.wikipedia.org/wiki/Chef%27s_Table). Each episode is about a famous chef. What hooked me was how human each of them was. They are not famous by default. Everyone of them had their struggles. Each of their journey to the zenith was hard. Perhaps it is cultural. We are taught to portray ourselves as successful, taught to hide our own imperfections. If __Chef's table__ is angled to show how good the chef was, how talented they are, I wonder, would the viewer relate personally to the chef? It is because they are imperfect and everyone is, that they connect.
+
+Likewise, I am hardly perfect. I'd like to share a story of one of my failures. I'm seeing some of the people around me making the same mistakes. In my naive thinking, my stories might prevent the reader from falling in the same pothole. We should learn to celebrate failures. What failure is worse than being fired?
+
+<!-- more -->
+
+## Being fired
+
+It is taboo to say that you were fired. Being fired hints of incompetence. It was my second stint in web development. That was many years ago when I just started working. I was brought in as a consultant. The company did not have offices and everybody worked remotely. I was tasked to build a CRUD app with a good friend who did the user interface. We had weekly meet ups with the boss at Starbucks, where we showed the boss our progress and obtained feedback.
+
+It was smooth in the beginning. At that time I had my own side projects. I was working on my side projects and doing consulting at the same time. I didn't spend as much time as I should on consulting work as I felt I can make it up later. As a result, the consulting work did not move as fast as expected. I thought, as long as it gets done in the end, it should be OK.
+
+The boss met me alone one day. His feedback was I wasn't taking the deadlines seriously enough. During meetings, sometimes I would give frivolous answers to serious questions. And my deadlines kept slipping. I need to take the work more seriously. In a small company like his, he cannot afford to keep people who cannot perform consistently. I listened.
+
+I was asked to develop a feature that allows the user to send Facebook messages to their Facebook contact list. Then, I was new to Facebook API. What we were trying to do is not common. There were a few things I weren't sure. There was another developer within the company who built a Facebook app. I started asking the developer questions on the intricacies of Facebook API.
+
+A couple of weeks later, the boss asked to meet me alone again. I knew it was bad news. The reason is I was brought in as the expert, not that developer. I should be the one digging deep. He felt that I wasn't performing as well as he expected. And taking up his other resources at the same time. I had to go.
+
+## Conclusion
+
+It struck deeply. The lesson I took away is I have to be professional in my work. When it is time to work, be serious and make the effort. Be professional in every interation you have with others. People are constantly evaluating you. In small companies, there is no room for poor performers as resources are tight. The bar for performance gets higher as you get older. I've had the misfortune of letting go of people whom made the same mistakes as I did. Don't let that happen to you.
