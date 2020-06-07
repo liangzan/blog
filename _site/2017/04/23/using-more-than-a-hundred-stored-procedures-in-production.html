@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Using more than a hundred stored procedures in production</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Using more than a hundred stored procedures in production - Liang Zan - Blog</title>
+<meta property="og:title" content="Using more than a hundred stored procedures in production" />
+<meta name="description" content="At my present company Courex, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes." />
+<meta property="og:description" content="At my present company Courex, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes." />
+<link rel="canonical" href="/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production.html" />
+<meta property="og:url" content="/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-04-23T06:50:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Using more than a hundred stored procedures in production",
+"datePublished": "2017-04-23T06:50:00+08:00",
+"description": "At my present company Courex, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.",
+"url": "/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2017/04/23/using-more-than-a-hundred-stored-procedures-in-production.html">
+    <h2 class="post-title">Using more than a hundred stored procedures in production</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Apr 23, 2017</div>
+  </div>
+  <div class="post">
+    <p>At my present company <a href="https://www.storeviva.com/">Courex</a>, we make heavy use of stored procedures, triggers and functions to run our production applications for over 2 years. At present, we have 258 stored procedures, 107 functions and triggers. Few companies use this many stored procedures. Would we recommend it? Yes.</p>
+
+<!-- more -->
+
+<p>Life started as a conventional PHP-MySQL web application built by an outsourced team. Obviously with outsourced teams hired on a shoestring budget, it was plagued with performance issues and bugs.</p>
+
+<h2 id="good-abstraction">Good: Abstraction</h2>
+
+<p>The PHP code was taking input from a form, constructing SQL queries, running them, finally rendering the results. There were a series of different queries to run. This pattern repeated in most parts of the application. Thus the idea of using stored procedures was mooted. What stored procedures did was it abstracted over the series of queries as one procedure call, simplifying the code.</p>
+
+<p>In the past the code did this</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="k">FROM</span> <span class="n">foo</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="k">c</span> <span class="k">FROM</span> <span class="n">bar</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="n">foo</span> <span class="k">SET</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="k">WHERE</span> <span class="n">baz</span> <span class="o">=</span> <span class="n">boo</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Now we do this</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CALL</span> <span class="n">update_foo</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>They are no different from functions. All the usual engineering best practices apply. For example, we are able to name the stored procedure. Now we can use a meaningful name called <code class="highlighter-rouge">create_delivery</code> and it does what we expect - insert a delivery row. Instead of updating the same query repeated across 10 files, we update the one stored procedure. That’s a maintenance win.</p>
+
+<h2 id="good-code-reuse">Good: Code reuse</h2>
+
+<p>We have code bases in different programming languages, but 1 database. All code bases have access to those same functions and procedures on the database. We have procedures that converts types, procedures that does validations, triggers that updates time stamps. All that comes free as long as you can make a MySQL query.</p>
+
+<p>In fact, we implemented our message queue purely in stored procedures. All our applications were able to <em>just</em> use it without much fanfare since it is just a sql query.</p>
+
+<h2 id="good-well-understood">Good: Well understood</h2>
+
+<p>SQL along with Javascript are basic skills that we came to expect from every developer. From our experience, introducing them to our team and learning to use them is a non-issue. Jumping in to maintain them is also trivial. That’s a win.</p>
+
+<h2 id="good-no-extra-dependencies-stability-and-performance">Good: No extra dependencies, stability and performance</h2>
+
+<p>The best thing is there are no extra dependencies. I’ve came to appreciate projects with less moving parts. The less dependencies there are, the easier it is to setup and maintain.</p>
+
+<p>MySQL also does not introduce major versions with breaking changes every few years. Using a mature relational database, we enjoy a level of stability and performance we don’t usually experience from other software. We enjoy the peace of mind it brings.</p>
+
+<p>Of course there is a flip side.</p>
+
+<h2 id="bad-sql-has-its-warts">Bad: SQL has its warts</h2>
+
+<p>SQL is not a good language for writing complex logic. Its warts slows down development time. Take error messages for example.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SQL Error (1064): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foo' at line 1 */
+</code></pre></div></div>
+
+<p>We frequently encounter error messages that does not help. Non-helpful error messages slow down development.</p>
+
+<p>Which brings me to our next point - readability. SQL is hardly readable when queries gets long. Being free-format led to a Cambrian explosion of indentation styles in the wild. I do not relish debugging a three hundred line query with non-helpful error messages.</p>
+
+<p>I firmly belong to the camp where the more restrictive the language is, the easier it is to write correct code. SQL, without the strict mode, is too forgiving.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT "1" + "1" // returns 2
+SELECT 1 + "1"   // returns 2
+SELECT "a" + "a" // returns 0
+SELECT 1 + NULL  // returns NUL
+</code></pre></div></div>
+
+<p>Even when expressions does not make sense, it returns something. It should not be type casting automatically, worse, not even showing a warning, giving a false sense of security. This can lead to dangerous bugs. Imagine the query is trying to add a sum of money to a bank account, and somehow one of the parameter is <code class="highlighter-rouge">NULL</code> or an alphabet, nothing will get added. As SQL deals directly with data, the impact of mistakes gets magnified.</p>
+
+<h2 id="bad-it-needs-powerful-hardware">Bad: It needs powerful hardware</h2>
+
+<p>As we use hundreds of stored procedures and functions, it is highly demanding on resources. Our database server has to be powerful. We’re forced to use dedicated hardware. In fact we tried using AWS RDS’s <code class="highlighter-rouge">db.m4.4xlarge</code> which is a 16-core 64GB RAM virtual machine with the max IOPS allocated. It didn’t work. We encountered table locks every few hours. We’ve tried various ways to tune it, but the locks did not go away. Mysteriously, once we were on dedicated hardware, it went away. Granted there could be ways to solve it on RDS(we aren’t professional DBAs), but it showed us that we need to invest on powerful servers for this approach to work.</p>
+
+<p>There is obviously the problem of vendor lock in. SQL is not portable between the different databases. But isn’t that the same for your <code class="highlighter-rouge">&lt;insert your language&gt;</code> code base? To me this is a non-issue. I’ve also heard cases against stored procedures because of deployment or versioning. I’m not even sure they are problems to begin with. Treat stored procedures like normal code. Use a version control system. There is a tool <a href="https://flywaydb.org/">Flyway</a> which helps. Things you expect in modern deployment such as versioning, rolling back are all taken care of by Flyway.</p>
+
+<p>Why wasn’t stored procedures more popular? I suspect it is because it is not <em>new</em> and not <em>marketed</em> much if at all. Most times, it is a short chapter on a SQL book. There are always shiny new things to adopt. Stored procedures does not have the <em>cool</em> factor. But it is <a href="http://mcfunley.com/choose-boring-technology">stable, boring and it works</a>. I got to thank my colleague <a href="https://github.com/prenaux">Pierre</a> who instigated this move. Hopefully more people would come to appreciate this feature of relational databases that almost no one talks about.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

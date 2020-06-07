@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Everday XPath - The Expression</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Everday XPath - The Expression - Liang Zan - Blog</title>
+<meta property="og:title" content="Everday XPath - The Expression" />
+<meta name="description" content="This blog post is part of a series on XPath. The content comes from my ebook EverydayXPath. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression." />
+<meta property="og:description" content="This blog post is part of a series on XPath. The content comes from my ebook EverydayXPath. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression." />
+<link rel="canonical" href="/2016/09/11/everday-xpath-the-expression.html" />
+<meta property="og:url" content="/2016/09/11/everday-xpath-the-expression.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-09-11T05:53:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Everday XPath - The Expression",
+"datePublished": "2016-09-11T05:53:00+08:00",
+"description": "This blog post is part of a series on XPath. The content comes from my ebook EverydayXPath. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.",
+"url": "/2016/09/11/everday-xpath-the-expression.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2016/09/11/everday-xpath-the-expression.html">
+    <h2 class="post-title">Everday XPath - The Expression</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Sep 11, 2016</div>
+  </div>
+  <div class="post">
+    <p>This blog post is part of a series on XPath. The content comes from my ebook <a href="http://www.everydayxpath.com">EverydayXPath</a>. Part of the content from the book will be released to the public as blog posts. In this post, we explain what XPath does. We disect the components of an XPath expression. And why the context is the key to forming the expression.</p>
+
+<!-- more -->
+
+<h2 id="the-expression">The Expression</h2>
+
+<p>When we travel to a foreign country, we rely on directions to get to the place that we want. Similarly, an XPath expression is like us giving the computer directions to find a particular node in the document.</p>
+
+<p>An XPath expression is made up of steps, evaluated from left to right. Each step moves closer to the target element. They are separated by the forward slash <code class="highlighter-rouge">/</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>step/step/step
+</code></pre></div></div>
+
+<p>We define a step as a <em>location path</em>. A location path selects a set of nodes relative to the preceding step. When a location path starts with a forward slash, it starts from the root node.</p>
+
+<p>A location path can be broken up into 3 distinct parts. An axis, a node test and a predicate. It follows the format below. Only the node test is required in an expression. The rest are optional.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>axis::node-test[predicate]
+</code></pre></div></div>
+
+<p>The <strong>axis</strong> makes use of the relationship between the nodes selected to the context node to act as a filter. For example, the ancestor axis selects the ancestors of the current context. While the descendant axis selects the descendants of the current context. The axis is optional.</p>
+
+<p>The <strong>node test</strong> can be thought of as a pattern used for matching the desired nodes. We make use of the properties of the node to form the pattern. For example, a valid node test would be <code class="highlighter-rouge">table</code> which means we want table nodes. The node test is required.</p>
+
+<p>The <strong>predicate</strong> is a filter expression. It filters against the nodes selected in the axis and node test. It evaluates to return either a number or a Boolean value. If it is a number, it selects the node in that position. If it is a Boolean, it selects nodes that satisfies the predicate. The predicate is optional.</p>
+
+<h2 id="context">Context</h2>
+
+<p>Writing an XPath expression starts with knowing the context. Assuming there is a robot whose job is to fetch you things in the house. The robot understands XPath. I’m in my living room, sitting on the couch.</p>
+
+<blockquote>
+  <p>From the living room, go to the second room, find the first shelve, bring me the first book.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./room[2]/shelve[1]/book[1]
+</code></pre></div></div>
+
+<p>The living room was the context from which the expression started.</p>
+
+<p>Assuming the root of the house starts from the door.</p>
+
+<blockquote>
+  <p>From the door, find the first room, find the first shelve, find the first book</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/door/room[1]/shelve/book[1]
+</code></pre></div></div>
+
+<p>The context was from the root. That is like searching the document from the start.</p>
+
+<p>Since I want a book, if I know the title, I can do this</p>
+
+<blockquote>
+  <p>Find a book with the title “Infinite Jest”</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//books[title="Infinite Jest"]
+</code></pre></div></div>
+
+<p>The expression changes according to the context. The context sets the basis for the XPath expression. Think of how to choose your context - the expression will turn out differently.</p>
+
+<p>Naturally, the next question is how should we choose the context? While they all work, there are differences in maintainability.</p>
+
+<p>Consider these two factors:</p>
+
+<ul>
+  <li>Does the page change often? Will your expression break when there are changes?</li>
+  <li>Do you understand what the expression means at first glance?</li>
+</ul>
+
+<p>Avoid using a context which has a high chance of changing. You don’t want your expression to break. When writing expressions, always prefer short to long, simple to complex, less syntax to more. Readability helps. Hopefully, these factors will clarify the approach you take when forming the XPath expression.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

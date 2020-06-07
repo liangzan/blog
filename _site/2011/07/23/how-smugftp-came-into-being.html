@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>How SmugFTP came into being</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How SmugFTP came into being - Liang Zan - Blog</title>
+<meta property="og:title" content="How SmugFTP came into being" />
+<meta name="description" content="SmugFTP is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch." />
+<meta property="og:description" content="SmugFTP is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch." />
+<link rel="canonical" href="/2011/07/23/how-smugftp-came-into-being.html" />
+<meta property="og:url" content="/2011/07/23/how-smugftp-came-into-being.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2011-07-23T16:35:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How SmugFTP came into being",
+"datePublished": "2011-07-23T16:35:00+08:00",
+"description": "SmugFTP is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.",
+"url": "/2011/07/23/how-smugftp-came-into-being.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2011/07/23/how-smugftp-came-into-being.html">
+    <h2 class="post-title">How SmugFTP came into being</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Jul 23, 2011</div>
+  </div>
+  <div class="post">
+    <p><a href="http://smugftp.com">SmugFTP</a> is my side project. It has been out in the wild since this January. Why did I build it? The reason is I find uploading painful. I wanted to scratch my own itch.</p>
+
+<!-- more -->
+
+<p>I signed up for <a href="http://www.smugmug.com">Smugmug</a> after my wedding. My wedding photos were precious. My wife and I wanted to share it with our friends and family. We wanted to back our photos up. We chose Smugmug. Everything was good. Except the uploading. An upload usually take many hours. It’s common to leave you computer running overnight to complete the upload. The thing is, uploads fail. When it fails, it stops. So you have to check it periodically. If it fails, restart it. I actually felt a sense of relief and accomplishement once the uploads are complete. I wasn’t happy with the web uploaders. The default uploader doesn’t work. I chose the Java one. It felt clunky. The engineer in me knew that there’e got to be a better way to do this. So I went to the Smugmug wiki to find uploaders that others have written. Unfortunately there’s none that look good. Feeling disappointed, I went to the Smugmug user voice page. And there it was, a suggestion for FTP uploading. I wanted FTP. I voted. That was when I thought to myself, FTP is not too hard to build, why can’t I build it?</p>
+
+<p>And so I started building it. Smugmug had an API. After doing a little research, I knew FTP to Smugmug is possible. And not too hard too. The first beta release was out in a month. Immediately, there’s interest from other users. Slowly, word spreaded and the project grew. It was until after 6 months or so that I felt that SmugFTP is finally stable.</p>
+
+<p>There’re several things I learnt</p>
+
+<ol>
+  <li>Testing is very important. Try to make the tests as similar as the actual environment</li>
+  <li>Don’t be ashamed to release a buggy product. SmugFTP was buggy for a good 6 months. It caused many users inconveniences. But they still forgave me.</li>
+  <li>Be nice to your users. If you’re nice, people reciprocate. I always apologised for failed uploads in the early days. And I went out of the way to fix the mess that the bugs created. All of them appreaciate it. And I had a fantastic relationship with some of my users as a result of that.</li>
+  <li>Solve a real problem. If you’re solving a painful problem, users will find you. They will stick with you, forgive you and spread word for you. I find too many people are building stuff that do not solve actual problems.</li>
+  <li>Development always take longer than you think. The production environment always have surprises for you.</li>
+</ol>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

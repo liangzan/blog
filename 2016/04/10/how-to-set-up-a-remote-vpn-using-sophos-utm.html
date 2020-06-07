@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>How to set up a remote VPN using Sophos UTM</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How to set up a remote VPN using Sophos UTM - Liang Zan - Blog</title>
+<meta property="og:title" content="How to set up a remote VPN using Sophos UTM" />
+<meta name="description" content="My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don’t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction." />
+<meta property="og:description" content="My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don’t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction." />
+<link rel="canonical" href="/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm.html" />
+<meta property="og:url" content="/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-04-10T06:49:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How to set up a remote VPN using Sophos UTM",
+"datePublished": "2016-04-10T06:49:00+08:00",
+"description": "My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don’t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction.",
+"url": "/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2016/04/10/how-to-set-up-a-remote-vpn-using-sophos-utm.html">
+    <h2 class="post-title">How to set up a remote VPN using Sophos UTM</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Apr 10, 2016</div>
+  </div>
+  <div class="post">
+    <p>My office has a Sophos UTM. It acts as a firewall for the office network. We also use it as a VPN server. It allows us to access the machines in the office network. More importantly, it allows remote users to access the servers. Our servers have access restricted to a white listed list of IP addresses. This way, we only open up the white list to the office network. This allows our people to work from anywhere. We don’t have to keep updating the white list of IP addresses. When I tried setting it up, I could not find articles documenting how to do it. Hopefully it will point you in the right direction.</p>
+
+<!-- more -->
+
+<h2 id="setting-up-the-remote-vpn">Setting up the Remote VPN</h2>
+
+<p>To set it up, I referred to the manual from Sophos. Their <a href="https://www.sophos.com/en-us/support/knowledgebase/119209.aspx">knowledge base</a> contains the administrative guide. Download the administrative guide for your version of UTM.</p>
+
+<p>The relevant chapter is <strong>Remote Access &gt; SSL</strong>. There also plenty of articles and videos on the web on how to set that up. I won’t repeat them so as not to bore the reader.</p>
+
+<h2 id="masquerading-traffic-from-the-office">Masquerading traffic from the office</h2>
+
+<p>My aim is when I log into the VPN from a remote location, my traffic should masquerade as coming from the office. To the outside world, my requests comes from the office network’s IP address. To do that, I need to add a Masquerade rule. Go to <strong>Network Protection &gt; NAT</strong>, create a new Masquerading rule by clicking on the button <strong>Create Masquerading Rule</strong>.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-create-new-masquerading-rule.png" alt="Sophos UTM Create New Masquerading Rule" /></p>
+
+<p>Select the network definition which represents the remote SSL users(you would have defined them when setting up the remove VPN). Select <strong>WAN</strong> as your interface, as you would like the traffic to go out. Click <strong>Save</strong>. Enable the rule by turning on the rule in the toggle button. Your rule should look like the screenshot below. You’re done. Hope this helps.</p>
+
+<p><img src="https://s3.amazonaws.com/static.liangzan.net/blog/sophos-utm-masquerading-rule.png" alt="Sophos UTM Masquerading Rule" /></p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

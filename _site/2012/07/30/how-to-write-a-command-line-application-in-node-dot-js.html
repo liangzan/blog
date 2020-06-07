@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>How to write a command line application in Node.js</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How to write a command line application in Node.js - Liang Zan - Blog</title>
+<meta property="og:title" content="How to write a command line application in Node.js" />
+<meta name="description" content="What is a command line application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are mutt, irssi, htop." />
+<meta property="og:description" content="What is a command line application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are mutt, irssi, htop." />
+<link rel="canonical" href="/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js.html" />
+<meta property="og:url" content="/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-07-30T06:44:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How to write a command line application in Node.js",
+"datePublished": "2012-07-30T06:44:00+08:00",
+"description": "What is a command line application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are mutt, irssi, htop.",
+"url": "/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2012/07/30/how-to-write-a-command-line-application-in-node-dot-js.html">
+    <h2 class="post-title">How to write a command line application in Node.js</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Jul 30, 2012</div>
+  </div>
+  <div class="post">
+    <p>What is a <a href="http://en.wikipedia.org/wiki/Command-line_interface">command line</a> application? Usually it means a program that is ran via the command line. It can be a simple script that changes your working directory. Or it can be a complicated program that has a multitude of options and arguments. Examples of command line applications are <a href="http://www.mutt.org">mutt</a>, <a href="http://irssi.org">irssi</a>, <a href="htop.sourceforge.net">htop</a>.</p>
+
+<!-- more -->
+
+<p>You can write a command line application using most programming languages. Today, <a href="http://en.wikipedia.org/wiki/Type_system">dynamically typed</a> programming languagues are popular choices for writing such scripts. Reason being they tend to be shorter to write and easy to learn. A short startup time is also important. If a script only takes a fraction of a second to run, and startup time takes 5s, it makes the script feels slow. Examples are the <a href="http://stackoverflow.com/questions/844143/why-is-the-jvm-slow-to-start">JVM</a> languages. <a href="http://nodejs.org">Node.js</a> fits the bill for all these cases. Let’s take a look to see how we can write a command line application using <a href="http://nodejs.org">Node.js</a>.</p>
+
+<h3 id="library-shopping">Library shopping</h3>
+
+<p>In <a href="http://nodejs.org">Node.js</a>, there are many libraries that can help you to write a command line application. Which to choose? There are a few main features that all these libraries provide:</p>
+
+<ul>
+  <li>Option parsing</li>
+  <li>Interactive prompt</li>
+  <li>Usage/help message helpers</li>
+  <li>Interface elements(progress bars, coloring, password input, spinners, etc)</li>
+</ul>
+
+<p>Let us classify the libraries.</p>
+
+<h4 id="all-in-one">All in one</h4>
+
+<p>These libraries provides all the major features. <a href="https://github.com/chriso/cli">CLI</a> provides input parsing as well.</p>
+
+<ul>
+  <li><a href="https://github.com/crcn/celeri">Celeri</a></li>
+  <li><a href="https://github.com/chriso/cli">CLI</a></li>
+  <li><a href="https://github.com/visionmedia/commander.js">Commander.js</a></li>
+  <li><a href="https://github.com/harthur/nomnom">Nomnom</a></li>
+</ul>
+
+<h4 id="specialist-option-parsers">Specialist option parsers</h4>
+
+<p>These libraries only do option parsing</p>
+
+<ul>
+  <li><a href="https://github.com/isaacs/nopt">Nopt</a></li>
+  <li><a href="https://github.com/substack/node-optimist">Optimist</a></li>
+</ul>
+
+<h4 id="interactive-prompt">Interactive prompt</h4>
+
+<p>Interactive prompt is like a sub shell. You can run custom commands in it. Good examples are node interactive shell and <a href="http://en.wikipedia.org/wiki/Interactive_Ruby_Shell">irb</a>.</p>
+
+<ul>
+  <li><a href="https://github.com/flatiron/prompt">Prompt</a></li>
+</ul>
+
+<h4 id="interface-elements">Interface elements</h4>
+
+<ul>
+  <li><a href="https://github.com/TooTallNate/ansi.js">Ansi</a></li>
+  <li><a href="https://github.com/substack/node-charm">Charm</a></li>
+  <li><a href="https://github.com/Marak/colors.js">Colors</a></li>
+  <li><a href="https://github.com/visionmedia/node-term-css">Term-CSS</a></li>
+</ul>
+
+<h2 id="components-of-a-command-line-application">Components of a command line application</h2>
+
+<p>We can break a command line application into separate components. Namely, the entry point, arguments and options, output, documentation, configuration and distribution. I’ll be using the <a href="https://github.com/liangzan/cli-app">twitter search app</a> as an example for illustrating the components.</p>
+
+<h3 id="entry-point">Entry point</h3>
+
+<p>Entry point is the executable script which starts the program. Typically there’re 3 ways to run a command line application.</p>
+
+<p>One way is to indicate both the program loader and the path to the script. Assuming you have installed the example application and is now on the project root.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node bin/birdie
+</code></pre></div></div>
+
+<p>A shorter way is to indicate just the path to the script. Don’t forget to make the script executabe by changing the permissions. Another caveat is, if the path to the program loader is wrong, the program won’t run correctly.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bin/birdie
+</code></pre></div></div>
+
+<p>It is possible to do that because of the <a href="http://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> line present on the first line of the script. The shebang line hints to the operating system which program loader to use. You are encouraged to use it in your own scripts.</p>
+
+<p>Here is an example of the shebang line used in the example application</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/local/bin/node</span>
+</code></pre></div></div>
+
+<p>It can be even shorter if the script is placed in the [PATH](http://en.wikipedia.org/wiki/PATH_(variable) directories.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>birdie
+</code></pre></div></div>
+
+<p>The operating system will find the script and run it. The only caveat is you have to install the script there.</p>
+
+<p>If your program affects the whole system, install it in the <a href="http://en.wikipedia.org/wiki/PATH_(variable)">PATH</a>. A good example is <a href="http://npmjs.org">NPM</a> and <a href="http://coffeescript.org">Coffeescript</a>.</p>
+
+<p>By convention, scripts meant to be executed are placed in the <strong>bin</strong> directory of your project.</p>
+
+<h3 id="arguments-and-options">Arguments and options</h3>
+
+<p>A complex command line application usually takes in arguments and options. An option(or flag or switch) is used by the program to modify the operation. In Unix like systems, it is usually indicated by a hyphen-minus followed by a letter or word. Using <strong>node</strong> as an example.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p><strong>node</strong> is the command and <strong>-v</strong> is the option.</p>
+
+<p>For the example application, I chose <a href="https://github.com/substack/node-optimist">Optimst</a> because of its simplicity. Accessing the options is very easy as illustrated below</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">resultTypeOpt</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">r</span> <span class="o">||</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">resulttype</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">mixed</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the option and makes it accessible via the <strong>argv</strong> object. For example when running the command</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node bin/birdie <span class="nt">-r</span> foo bar
+</code></pre></div></div>
+
+<p><a href="https://github.com/substack/node-optimist">Optimist</a> parses the arguments and options and returns <strong>argv</strong> in an object like this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nl">_</span><span class="p">:</span> <span class="p">[</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span> <span class="p">],</span>
+  <span class="dl">'</span><span class="s1">$0</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/path/to/bin/birdie</span><span class="dl">'</span><span class="p">,</span>
+  <span class="nx">r</span><span class="p">:</span> <span class="dl">'</span><span class="s1">foo</span><span class="dl">'</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The <strong>r</strong> option value is placed under the <strong>r</strong> property and the rest of the arguments are in the underscore array.</p>
+
+<h3 id="output">Output</h3>
+
+<p>If your command line application need to show output, you can do so using plain old <a href="http://nodejs.org/docs/latest/api/stdio.html">console.log</a>.</p>
+
+<p>Another option is to use <a href="https://github.com/flatiron/winston">Winston</a>. <a href="https://github.com/flatiron/winston">Winston</a> is a logging libarary that can be used to log to <a href="http://en.wikipedia.org/wiki/Standard_streams">STDOUT</a>. It is almost the same as <strong>console.log</strong>.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">winston</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">foo</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>It comes with logging levels like <strong>info</strong>, <strong>warn</strong> and <strong>error</strong> which also comes in color. Applying them is as easy as</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">winston</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>There’re plenty of other features to <a href="https://github.com/flatiron/winston">Winston</a>. Feel free to explore the library.</p>
+
+<p>If you want to add colors to your text output, you can make use of <a href="https://github.com/Marak/colors.js">Colors.js</a>. Applying colors is very easy.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">foo</span><span class="dl">"</span><span class="p">.</span><span class="nx">green</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>That will output the text in green. <a href="https://github.com/Marak/colors.js">Colors.js</a> does that by overriding the <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/">Javascript String</a> <a href="http://stackoverflow.com/questions/572897/how-does-javascript-prototype-work">prototype</a>. So if you are also <a href="http://stackoverflow.com/questions/892595/javascript-prototypal-inheritance">overriding the String prototype</a>, be careful when using <a href="https://github.com/Marak/colors.js">Colors.js</a>.</p>
+
+<h3 id="documentation">Documentation</h3>
+
+<p>Typically a command line application comes with documentation in the form of <a href="http://en.wikipedia.org/wiki/Man_page">man pages</a>. In fact <a href="http://npmjs.org">NPM</a> does comes with man pages. <a href="http://npmjs.org">NPM</a> generates its man pages via the <a href="https://github.com/isaacs/ronnjs">RonnJS</a> package. It generates man pages from a <a href="http://daringfireball.net/projects/markdown/">Markdown</a> file. You can also use the <a href="https://github.com/rtomayko/ronn">Ronn</a> ruby gem directly. <a href="http://dailyjs.com">DailyJS</a> did a good <a href="http://dailyjs.com/2012/02/16/unix-node-community/">write up</a> on generating man pages in <a href="http://nodejs.org">Node.js</a>.</p>
+
+<p>Your application should also come with HTML documentation.</p>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>If your command line application has a lot of options, a configuration file could help. Let’s take a look at <a href="https://github.com/visionmedia/mocha">Mocha</a>. Mocha has a <strong>mocha.opts</strong> file which you can state the common options that you want included.</p>
+
+<p>Adding a configuration file feature is as easy as reading from file. But do note that by convention, the option stated on the command line has higher precendence. Which means if I stated an option to print the output in green, but the option in the configuration file says it should be red, you should render it in green. Here’s the conventional order of precedence in overriding configurations.</p>
+
+<ol>
+  <li>Command line options</li>
+  <li>Configuration file options</li>
+  <li>Application default options</li>
+</ol>
+
+<h3 id="distribution">Distribution</h3>
+
+<p>If you want to distribute your command line application, using <a href="http://npmjs.org">NPM</a> is the best option. <a href="http://npmjs.org">NPM</a> helps to install your executable script if you <a href="http://npmjs.org/doc/json.html#bin">add the bin option</a> in your package.json manifest.</p>
+
+<p>If the user installs the package locally like this</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>foo
+</code></pre></div></div>
+
+<p>The program’s executable script would be found in 2 places:</p>
+
+<ol>
+  <li>./node_modules/.bin</li>
+  <li>./node_modules/foo/bin</li>
+</ol>
+
+<p>NPM adds a symbolic link from the <strong>.bin</strong> directory to your script.</p>
+
+<p>If the user chose to install your package globally like this:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">-g</span> foo
+</code></pre></div></div>
+
+<p>The package will install your executable script under the [PATH](http://en.wikipedia.org/wiki/PATH_(variable) directories. More information can be found in the <a href="http://blog.nodejs.org/2011/03/23/npm-1-0-global-vs-local-installation/">global vs local</a> npm blog article.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Despite the relative youth of the <a href="http://nodejs.org">Node.js</a> eco-system, all the pieces required for building a command line application are already there. Feel free to give the <a href="https://github.com/liangzan/cli-app">example application</a> a run to see how easy it is to build one in <a href="http://nodejs.org">Node.js</a>.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

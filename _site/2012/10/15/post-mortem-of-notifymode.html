@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Post mortem of Notifymode</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Post mortem of Notifymode - Liang Zan - Blog</title>
+<meta property="og:title" content="Post mortem of Notifymode" />
+<meta name="description" content="In early 2012, I started Notifymode. Notifymode does application monitoring for Node.js apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn’t take any money. So why did I choose to build Notifymode?" />
+<meta property="og:description" content="In early 2012, I started Notifymode. Notifymode does application monitoring for Node.js apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn’t take any money. So why did I choose to build Notifymode?" />
+<link rel="canonical" href="/2012/10/15/post-mortem-of-notifymode.html" />
+<meta property="og:url" content="/2012/10/15/post-mortem-of-notifymode.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-10-15T06:31:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Post mortem of Notifymode",
+"datePublished": "2012-10-15T06:31:00+08:00",
+"description": "In early 2012, I started Notifymode. Notifymode does application monitoring for Node.js apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn’t take any money. So why did I choose to build Notifymode?",
+"url": "/2012/10/15/post-mortem-of-notifymode.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2012/10/15/post-mortem-of-notifymode.html">
+    <h2 class="post-title">Post mortem of Notifymode</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Oct 15, 2012</div>
+  </div>
+  <div class="post">
+    <p>In early 2012, I started Notifymode. Notifymode does application monitoring for <a href="http://nodejs.org">Node.js</a> apps. Notifymode could profile the functions and track CPU and memory usage. It provides a high level overview of how the Node.js app is doing. It was a bootstrapped project. I didn’t take any money. So why did I choose to build Notifymode?</p>
+
+<!-- more -->
+
+<h2 id="motivation-behind-notifymode">Motivation behind Notifymode</h2>
+
+<p>I had a Node.js app: <a href="http://smugftp.com">SmugFTP</a>. I had performance problems. There were few tools to help me diagnose where the problem was. The best I could find was the V8 profiler. V8 profiler gave me a <a href="https://gist.github.com/833370">profiled report</a> which made no sense to me. I wanted a tool like <a href="http://newrelic.com">New Relic</a> for my Node.js apps. New Relic did not support Node.js. Why not build it for fun and profit?</p>
+
+<h2 id="i-was-sure-it-would-be-useful">I was <em>sure</em> it would be useful</h2>
+
+<p>How could analytics not be useful? How could Node.js not be gaining traction? In fact Node.js is gaining traction at a frightening pace. <a href="http://google.com/trends">Google Trends</a> shows the number of searches for Node.js outpacing <a href="http://rubyonrails.org">Rails</a>.</p>
+
+<script type="text/javascript" src="http://www.google.com.sg/trends/embed.js?hl=en-US&amp;q=node.js,+ruby+on+rails&amp;cmpt=q&amp;content=1&amp;cid=TIMESERIES_GRAPH_0&amp;export=5&amp;w=500&amp;h=330"></script>
+
+<p>I’m sure there would be more Node.js apps released to production in time to come. Analytics for an up-and-coming platform? How could this idea be wrong?</p>
+
+<p>I was confident that I am right. I don’t need to do any of that <a href="http://steveblank.com/category/customer-development/">customer development mumbo jumbo</a>. I should just build it. For the next 3 months, I poured time and energy into building Notifymode.</p>
+
+<p>You just need to add one line to your existing Node.js module to hook up to Notifymode’s agent.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">io</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">socket.io</span><span class="dl">'</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">profiler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">notifymode-client</span><span class="dl">'</span><span class="p">).</span><span class="nx">Profiler</span><span class="p">;</span>
+
+<span class="c1">// one line here to hook up</span>
+<span class="kd">var</span> <span class="nx">profiledSocketIO</span> <span class="o">=</span> <span class="nx">profiler</span><span class="p">.</span><span class="nx">profile</span><span class="p">(</span><span class="nx">io</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The agent pushes data to the server. Notifymode then shows the time each function took, memory and cpu load.</p>
+
+<h2 id="build-it-and-they-will-come">Build it and they will come</h2>
+
+<p>I submitted to <a href="http://news.ycombinator.com">Hacker News</a> and <a href="http://reddit.com">Reddit</a>, though it did not make either’s front page. I tweeted about it. My friends retweeted about it. I gave talks about it at the local Javascript meetup not once, but a few times. I wrote blog posts about using it with <a href="http://socket.io">Socket.io</a> and <a href="http://expressjs.com">Express</a>.</p>
+
+<p>The first few months was bad. I thought Notifymode was useful. I’m sure once people know about it, they will sign up. That was my first conjecture. So I started a <a href="http://node.jsreadme.com">technical blog</a> on Node.js. Ideally that will funnel users in. In the process I realized putting out quality articles regularly demands significant effort. Blogging is very hard. I could not capture enough organic traffic. It was discouraging.</p>
+
+<p>My next conjecture was: Notifymode is too general. Users probably wanted a specific agent which can push out app specific information. For example, Express users want to know the request time. Running times for individual functions is too granular to be useful. So I wrote customized agents for Express. I released it, blogged about it, and talked about it at the local Javascript meetup. Submitted to Hacker News and Reddit, and did not make either’s front page again. And I waited for the flood of users to wash me away.</p>
+
+<p>I kept Notifymode running for 6 months. At the last count, Notifymode had 20++ users. Some of them were spam bots(I did not put up a captcha). Some of them were friends. I couldn’t bear to count how many real users there were. It was discouraging.</p>
+
+<h2 id="experience-is-merely-the-name-men-gave-to-their-mistakes">Experience is merely the name men gave to their mistakes</h2>
+
+<blockquote>
+  <p>Tell me again was it love at first sight.
+When I walked by and you caught my eye.
+Didn’t you know love could shine this bright?</p>
+</blockquote>
+
+<p><img src="http://farm4.staticflickr.com/3254/2408535634_f9953a5dbf_m.jpg" alt="By Millzero Photography" /></p>
+
+<p>Do you believe in love at first sight? We fall so deep in love with our ideas that we have this unwavering faith that it will work out. Despite numerous warnings from <a href="http://www.startuplessonslearned.com">Dear Aunt Agony</a> that you should go out on a <a href="http://theleanstartup.com">few dates</a> first, you insist that this is The Idea that you are going to marry. Well if you don’t listen to Auntie Agony, you are most likely to end up in agony. Like me.</p>
+
+<p>I was lazy to arrange first dates with my Idea. We got married too hastily. Now I’m divorced. At least I don’t have to pay alimony. Don’t be like me. Here are some <a href="http://blog.asmartbear.com/">links</a> for <a href="http://www.bothsidesofthetable.com/">marriage</a> <a href="http://www.avc.com/a_vc/">advice</a>.</p>
+
+<p>Another thing I realized is: marketing is harder than coding. We geeks tend to view a product as 90% coding. The other 10% is the mumbo jumbo <a href="http://en.wikipedia.org/wiki/Search_engine_optimization">marketing</a> <a href="http://en.wikipedia.org/wiki/Search_engine_marketing">stuff</a>. In reality, coding is the 10% while the other mumbo jumbo stuff takes 90%. Why? Coding yet another <a href="http://pinterest.com">Pinterest</a> clone is easy. You know if you write this code in that logic, it will work. Getting 100 users? Where do you start finding them? It is hard because it is not definite. We geeks tend to dismiss anything non-intellectually stimulating as easy. Marketing, though technically easy, in reality is a lot of grunt work. No matter how useful your product is, nobody is going to use it if they have not heard of it. Notifymode taught me that I should have put in <a href="http://www.kalzumeus.com/2009/12/31/engineering-your-way-to-marketing-success/">more effort on marketing</a> early on.</p>
+
+<p>Granted, I’ve read this advice so many times from other <a href="http://blog.asmartbear.com/quotes-startup-founders.html">experienced</a> <a href="http://brooklynhacker.com/post/29901112213/what-a-hacker-learns-after-a-year-in-marketing">people</a>. Why do people still make the same mistakes? It’s like asking <a href="en.wikipedia.org/wiki/Marco_Polo">Marco Polo</a>, “How does Beijing looked like?”. Marco Polo could tell you stories about festivals or paint you nice pictures of the palace. It is an approximation. You have to experience the real thing to get it.</p>
+
+<h2 id="youre-supposed-to-fail-sometimes">You’re supposed to fail sometimes</h2>
+
+<p>At least I tried. I picked up a host <a href="http://www.opscode.com/chef/">of</a> <a href="http://backbonejs.org/">technologies</a> along the way. I made mistakes, and I learned. The only thing which I thought I did right was not to seek funding. I’m not sure if I closed Notifymode too early. Could things have turned out better if I persisted? You never know.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>How to use Coffeescript in your Node.js project</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>How to use Coffeescript in your Node.js project - Liang Zan - Blog</title>
+<meta property="og:title" content="How to use Coffeescript in your Node.js project" />
+<meta name="description" content="Coffeescript is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your Node.js project, you can do so easily. I’m going to write a small project as an example of how to use Coffeescript in your project." />
+<meta property="og:description" content="Coffeescript is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your Node.js project, you can do so easily. I’m going to write a small project as an example of how to use Coffeescript in your project." />
+<link rel="canonical" href="/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project.html" />
+<meta property="og:url" content="/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-07-22T17:10:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "How to use Coffeescript in your Node.js project",
+"datePublished": "2012-07-22T17:10:00+08:00",
+"description": "Coffeescript is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your Node.js project, you can do so easily. I’m going to write a small project as an example of how to use Coffeescript in your project.",
+"url": "/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2012/07/22/how-to-use-coffeescript-in-your-node-dot-js-project.html">
+    <h2 class="post-title">How to use Coffeescript in your Node.js project</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Jul 22, 2012</div>
+  </div>
+  <div class="post">
+    <p><a href="http//coffeescript.org">Coffeescript</a> is a popular language that compiles to Javascript. Many developers prefer to write in Coffeescript due to its elegant syntax. If you want to use Coffeescript to write your <a href="http://nodejs.org">Node.js</a> project, you can do so easily. I’m going to write <a href="https://github.com/liangzan/use-coffeescript">a small project</a> as an example of how to use Coffeescript in your project.</p>
+
+<!-- more -->
+
+<h2 id="querying-for-the-weather">Querying for the weather</h2>
+<p>We will make use of Node.js to query for the weather information using Google’s unofficial weather API. It will be a simple command line script.</p>
+
+<h2 id="installing-coffeescript">Installing Coffeescript</h2>
+
+<p>There are a variety of ways to install Coffeescript. Let’s make use of <strong>package.json</strong> to install our packages. You could add Coffeescript to your list of dependencies in <strong>package.json</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">dependencies</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">coffee-script</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">~1.3.3</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And run</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>to install it. If not you can install it directly with <strong>npm</strong>.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>coffee-script
+</code></pre></div></div>
+
+<p>You can also install it via your package manager. Most of them should provide a Coffeescript package.</p>
+
+<h2 id="compiling-coffeescript">Compiling Coffeescript</h2>
+
+<p>When you are done writing your code, you have to compile the Coffeescript file to Javascript. Compiling is as simple as running the following command</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>coffee <span class="nt">-c</span> foo.coffee
+</code></pre></div></div>
+
+<p>That will output a <strong>foo.js</strong>.</p>
+
+<p>Once you have a lot of Coffeescript files, compiling by hand becomes tedious. Currently many open source Node.js projects prefer to use <a href="http://www.gnu.org/software/make/">GNU Make</a>. You can make use of <strong>make</strong> to compile your Coffeescript files into Javacript. Below is an example.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>compile:
+	@find src <span class="nt">-name</span> <span class="s1">'*.coffee'</span> | xargs ./node_modules/.bin/coffee <span class="nt">-c</span> <span class="nt">-o</span> bin
+</code></pre></div></div>
+
+<p>Save the script as <strong>Makefile</strong>. This <strong>compile</strong> taget assumes three things. One, your Coffeescript files are under the <strong>src</strong> directory. Two, your <strong>coffee</strong> executable is found under <strong>node_modules</strong>. Three, you want your compiled Javscript files to be saved under the <strong>bin</strong> directory. Do replace if otherwise. Currently the convention is to put the Coffeescript files under the <strong>src</strong> directory. And then compile to the <strong>lib</strong> or <strong>bin</strong> directory. You can compile all your Coffeescript files by running the command below.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make compile
+</code></pre></div></div>
+
+<p>The compiled files can be found under the <strong>bin</strong> directory.</p>
+
+<h2 id="automating-the-compilation">Automating the compilation</h2>
+
+<p>As you develop the code, you will find the process of compilation tedious. There are ways to automate the compilation.</p>
+
+<h3 id="guard">Guard</h3>
+
+<p><a href="https://github.com/guard/guard">Guard</a> is a <a href="http://ruby-lang.org/">Ruby</a> <a href="http://rubygems.org">gem</a> that can run scripts on file changes.</p>
+
+<p>Below is a sample Guardfile that watches Coffeescript files for changes and compiles them.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">guard</span> <span class="ss">:compile</span><span class="o">-</span><span class="n">coffeescript</span> <span class="k">do</span>
+  <span class="n">watch</span><span class="p">(</span><span class="sr">%r{^src/*.coffee$}</span><span class="p">)</span> <span class="p">{</span> <span class="sb">`make compile`</span> <span class="p">}</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="compile-on-run">Compile on run</h3>
+
+<p>Another way is to compile before running the script. We can add a run target in the <strong>Makefile</strong> with a <strong>compile</strong> dependency. You can add the below to your <strong>Makefile</strong> to compile to Javascript before running the script.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>run: compile
+	node ./bin/index.js singapore
+</code></pre></div></div>
+
+<p>You can run the following to see the results.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make run
+</code></pre></div></div>
+
+<p>The only caveat is you cannot pass arguments to the script elegantly. There is a <a href="http://stackoverflow.com/questions/2214575/passing-arguments-to-make-run">workaround</a> though.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Using Coffeescript to develop your Node.js project is simple. Simply setup your project to compile your source and that is it.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>
