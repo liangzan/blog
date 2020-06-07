@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Thoughts on dApp development</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Thoughts on dApp development - Liang Zan - Blog</title>
+<meta property="og:title" content="Thoughts on dApp development" />
+<meta name="description" content="I’ve recently got into dApp development. Having programmed for a while, here’re some thoughts on building dApps on Ethereum." />
+<meta property="og:description" content="I’ve recently got into dApp development. Having programmed for a while, here’re some thoughts on building dApps on Ethereum." />
+<link rel="canonical" href="/2018/03/22/thoughts-on-dapp-development.html" />
+<meta property="og:url" content="/2018/03/22/thoughts-on-dapp-development.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-22T17:07:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Thoughts on dApp development",
+"datePublished": "2018-03-22T17:07:00+08:00",
+"description": "I’ve recently got into dApp development. Having programmed for a while, here’re some thoughts on building dApps on Ethereum.",
+"url": "/2018/03/22/thoughts-on-dapp-development.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2018/03/22/thoughts-on-dapp-development.html">
+    <h2 class="post-title">Thoughts on dApp development</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Mar 22, 2018</div>
+  </div>
+  <div class="post">
+    <p>I’ve recently got into <a href="https://blockgeeks.com/guides/dapps/">dApp</a> development. Having programmed for a while, here’re some thoughts on building dApps on <a href="https://www.ethereum.org/">Ethereum</a>.</p>
+
+<!-- more -->
+
+<h2 id="smart-contracts-are-powerful">Smart contracts are powerful</h2>
+
+<p>Interacting with <a href="https://blockgeeks.com/guides/smart-contracts/">Smart Contracts</a> feels like interacting with an instance of an object. It feels familiar yet odd at the same time. The familiar bit comes from the interaction. You can call functions on it, you can store value on it, it is like regular programming. The weird bit is this is happening in <strong>public</strong>. Every transaction can be held to scrutiny and there is no argument whether something happened or not. That is powerful.</p>
+
+<p>Smart contracts is a novel angle of encapsulating logic and data. Immediately I can see that it solves the payment problem for the couriers. The customer can put out a smart contract, put ether in it and wait for couriers to participate. Place delivery jobs in a variable, let couriers can bid publicly via transactions, and pay them by the contract after they perform the delivery successfully. There would be no basis for disputes. Today, such logic is contained in monolithic applications controlled by different logistics companies, and they don’t inter-operate well. I can imagine a future where developers will primarily write smart contracts, and leave the rest to the blockchain infrastructure.</p>
+
+<h2 id="dapps-development-is-not-hard">dApps development is not hard</h2>
+
+<p>I’ve read about the shortage of blockchain developers. This led me to assume that dApp development is hard. Frankly, I don’t find its learning curve steeper than a new programming language or a new Javascript framework. In fact I find learning <a href="https://www.scala-lang.org/">Scala</a> or <a href="https://reactjs.org/">React</a>/<a href="https://redux.js.org">Redux</a> harder. It’s suffering from growing pains where documentation and tooling support are lagging behind. I also find that you need a basic understanding of how blockchains work. Otherwise the borrowed metaphors such as wallets, addresses, transactions would be confusing. On the whole, things do work, albeit with some rough edges.</p>
+
+<p>For example, <a href="http://truffleframework.com/ganache/">Ganache</a> would crash sometimes. For me, that happens once every other day; annoying but livable. I was old enough to have used <a href="https://en.wikipedia.org/wiki/Windows_98">Windows 98</a>; that crashed every 2-3 hours. No doubt in 2018 we should demand higher standards. Another example - <a href="http://truffleframework.com/">Truffle</a>. Again documentation cannot catch up. I wanted to deploy contracts using Truffle and I found no documentation. In the end, I had to dig through the tests of <a href="https://github.com/trufflesuite/truffle-deployer">truffle-deployer</a> to learn how to apply it.</p>
+
+<p>Don’t get me started on <a href="https://solidity.readthedocs.io/en/v0.4.21/">Solidity</a>. I was trying to do something basic - transferring funds to an address. I thought this <em>ought</em> to be a solved problem since transactions are what Ethereum is meant for. Instead I found an intuitively named function called <code class="highlighter-rouge">call</code> used for that purpose. Flabbergasted, I checked the documentation, where I found two functions named <code class="highlighter-rouge">transfer</code> and <code class="highlighter-rouge">send</code> written for that purpose. Why isn’t people using that? Could programmers are trying to be clever? When the source code is often the only source of documentation, this leaves me feeling apprehensive. Luckily after digging deeper, I realised that <code class="highlighter-rouge">send</code> fails <em>silently</em> when the recipient runs out of gas, hardly something uncommon. If I’d like to interact with a contract, how do I know what functions are there? Sadly there is often no documentation; there is <em>only</em> Solidity code. The onus is on the developer to understand what the contract does by reading the code. Sounds like Haskell. Another annoyance is Solidity errors are often not meaningful. I was in the dark as to what happened when the contract crashed. After much searching, I realised I have to use the <a href="http://truffleframework.com/docs/getting\_started/debugging">debugger</a>. The debugger worked, thankfully. The worst bit is the bug came from calling a non-existent constructor. How did a wrongly named constructor pass the compiler? One last thing - Solidity doesn’t have syntax highlighting on <em>Github</em>. Programming with the blockchain is like programming in the 80s - not for the faint of heart.</p>
+
+<p>Blockchain is like the Internet in the 90s. I do see its potential. Its effect would be similar to what containers did for shipping. This time the impact would reach everywhere. Contrary to the norm, I don’t find the learning curve for Blockchain development steep. It reminds me of the time when mobile app development was expensive as developers were scarce. Prices came down when more developers learns the craft and enter the pool. It’s exactly the same now for blockchain development. Given time, things will improve. If you’re still on the fence, don’t hesitate anymore, it is time to get started.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

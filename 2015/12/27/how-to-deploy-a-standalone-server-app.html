@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>how to deploy a standalone server app</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>how to deploy a standalone server app - Liang Zan - Blog</title>
+<meta property="og:title" content="how to deploy a standalone server app" />
+<meta name="description" content="This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is Ansible and a dash of shell scripts. The process is very much influenced by Capistrano, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back." />
+<meta property="og:description" content="This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is Ansible and a dash of shell scripts. The process is very much influenced by Capistrano, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back." />
+<link rel="canonical" href="/2015/12/27/how-to-deploy-a-standalone-server-app.html" />
+<meta property="og:url" content="/2015/12/27/how-to-deploy-a-standalone-server-app.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-12-27T16:34:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "how to deploy a standalone server app",
+"datePublished": "2015-12-27T16:34:00+08:00",
+"description": "This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is Ansible and a dash of shell scripts. The process is very much influenced by Capistrano, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back.",
+"url": "/2015/12/27/how-to-deploy-a-standalone-server-app.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2015/12/27/how-to-deploy-a-standalone-server-app.html">
+    <h2 class="post-title">how to deploy a standalone server app</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Dec 27, 2015</div>
+  </div>
+  <div class="post">
+    <p>This post shares my experiences deploying a standalone application on a remote Linux server. By standalone application, I mean that the application is packaged as a single file. It could be a jar file or an executable packaged from Java/Scala/C/Haskell/etc. In my case, it was a jar file. My server is Ubuntu 14.04. My automation tool is <a href="http://www.ansible.com/">Ansible</a> and a dash of shell scripts. The process is very much influenced by <a href="http://capistranorb.com/">Capistrano</a>, a tool that is very popular for deploying Ruby web applications. There are three aims. One, I want to deploy in one step. Two, I want to version my deployment. Three, it should cater for easy rolling back.</p>
+
+<!-- more -->
+
+<h2 id="deploying-in-one-step">Deploying in one step</h2>
+
+<p>I want to run one command to deploy my application on a remote server. It would have to be a script that can run a series of commands on a remote server. There are plenty of tools available. I chose Ansible. I like Ansible as it is easy to understand. It is like C, close enough to the metal, but gives a light enough abstraction to make it productive.</p>
+
+<p>What the script does is, it transfers the file over(assuming you built it locally). A symbolic link to the new file is created. And then the application is started.</p>
+
+<p>Here is the Ansible script.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="c1"># connector deployment</span>
+
+<span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">deploys the application</span>
+  <span class="na">hosts</span><span class="pi">:</span> <span class="s">all</span>
+  <span class="na">remote_user</span><span class="pi">:</span> <span class="s">ubuntu</span>
+  <span class="na">vars</span><span class="pi">:</span>
+    <span class="na">timestamp</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+
+  <span class="na">tasks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">copies the jar file over</span>
+      <span class="na">copy</span><span class="pi">:</span> <span class="s">src=../build/app.jar dest=/home/ubuntu/app-.jar</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">unlink the current app</span>
+      <span class="na">file</span><span class="pi">:</span> <span class="s">path=/home/ubuntu/app.jar state=absent</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">link to the newly deployed app</span>
+      <span class="na">file</span><span class="pi">:</span> <span class="s">path=/home/ubuntu/app.jar src=/home/ubuntu/app-.jar state=link</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">stops running app</span>
+      <span class="na">sudo</span><span class="pi">:</span> <span class="s">yes</span>
+      <span class="na">service</span><span class="pi">:</span> <span class="s">name=app state=stopped</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">starts the app</span>
+      <span class="na">sudo</span><span class="pi">:</span> <span class="s">yes</span>
+      <span class="na">service</span><span class="pi">:</span> <span class="s">name=app state=started</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">send notification message via slack</span>
+      <span class="na">local_action</span><span class="pi">:</span>
+        <span class="na">module</span><span class="pi">:</span> <span class="s">slack</span>
+        <span class="na">token</span><span class="pi">:</span> <span class="s">&lt;your slack token&gt;</span>
+        <span class="na">msg</span><span class="pi">:</span> <span class="s2">"</span><span class="s">app</span><span class="nv"> </span><span class="s">completed</span><span class="nv"> </span><span class="s">deployment."</span>
+</code></pre></div></div>
+
+<h2 id="versioning-your-deployments">Versioning your deployments</h2>
+
+<p>I want a way to version my deployments. Versioning gives you the option to roll back. There are 2 mechanism which I used. The symbolic link and the timestamp. I stole the ideas unashamedly from Capistrano.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Symbolic_link">Symbolic links</a> is used to point to the desired version of the app to run. This allows you to run whichever version of the app. Timestamp tells you when this file is deployed. I find it good enough for differentiating.</p>
+
+<p>The relevant commands are all found in the Ansible script above. The <code class="highlighter-rouge">timestamp</code> variable captures the time of the deployment. We then append the timestamp to the newly deployed file. The symbolic linking are done using Ansible.</p>
+
+<p>As you deploy more often, you need to clear the old files which are unused. For that, I wrote a shell script.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="c"># leaves 5 copies of the standalone app</span>
+<span class="nv">total_files</span><span class="o">=</span><span class="si">$(</span>find <span class="nt">-name</span> <span class="s1">'*.jar'</span> <span class="nt">-type</span> f <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">ls</span> <span class="nt">-t</span> | <span class="nb">wc</span> <span class="nt">-l</span><span class="si">)</span>
+<span class="nv">file_num_to_remove</span><span class="o">=</span><span class="sb">`</span><span class="nb">expr</span> <span class="nv">$total_files</span> - 5<span class="sb">`</span>
+find <span class="nt">-name</span> <span class="s1">'*.jar'</span> <span class="nt">-type</span> f <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">ls</span> <span class="nt">-t</span> | <span class="nb">tail</span> <span class="nt">-n</span> <span class="nv">$file_num_to_remove</span> | xargs <span class="nb">rm</span>
+</code></pre></div></div>
+
+<p>It first finds all the jar files in the current directory. Next it sorts them by date modified with the most recent first. We want to keep the last five deployments. So it finds how many files it should remove by subtracting the total by five. Once we know how many files to remove, we can find them using <code class="highlighter-rouge">tail</code> and remove them by passing the file name into <code class="highlighter-rouge">xargs</code>. 5 is an arbitrary number that you can change.</p>
+
+<p>After deployment, the application is deployed as an <a href="http://upstart.ubuntu.com/">Upstart</a> service and monitored via <a href="https://www.librato.com/">Librato</a>.</p>
+
+<h2 id="room-for-improvement">Room for improvement</h2>
+
+<p>I see a few ways it can be improved.</p>
+
+<p>The versioning makes use of timestamp. It can be richer. If there is semantic tagging, we could also use that in addition to timestamps. We will be able to tell which version this file contains.</p>
+
+<p>The transfer time over the network is the bottleneck of the process. If you have a build server like <a href="https://jenkins-ci.org/">Jenkins</a>, it would be faster to deploy from it.</p>
+
+<p>I do hope this is helpful to whoever who reads this. Do share your thoughts on how this can be improved.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

@@ -2,6 +2,13 @@ deploy_dir      = "/tmp/_deploy"   # deploy directory (for Github pages deployme
 public_dir      = "_site"    # compiled site directory
 deploy_branch  = "gh-pages"
 
+desc "copy dot files for deployment"
+task :copydot, :source, :dest do |t, args|
+  FileList["#{args.source}/**/.*"].exclude("**/.", "**/..", "**/.DS_Store", "**/._*").each do |file|
+    cp_r file, file.gsub(/#{args.source}/, "#{args.dest}") unless File.directory?(file)
+  end
+end
+
 desc "deploy to github pages"
 multitask :deploy do
   puts "## Deploying branch to Github Pages "

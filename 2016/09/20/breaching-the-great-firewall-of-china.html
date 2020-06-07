@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Breaching the great firewall of china</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Breaching the great firewall of china - Liang Zan - Blog</title>
+<meta property="og:title" content="Breaching the great firewall of china" />
+<meta name="description" content="It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the great firewall meant for the technically inclined. This guide is accurate as of 2016." />
+<meta property="og:description" content="It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the great firewall meant for the technically inclined. This guide is accurate as of 2016." />
+<link rel="canonical" href="/2016/09/20/breaching-the-great-firewall-of-china.html" />
+<meta property="og:url" content="/2016/09/20/breaching-the-great-firewall-of-china.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-09-20T06:15:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Breaching the great firewall of china",
+"datePublished": "2016-09-20T06:15:00+08:00",
+"description": "It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the great firewall meant for the technically inclined. This guide is accurate as of 2016.",
+"url": "/2016/09/20/breaching-the-great-firewall-of-china.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2016/09/20/breaching-the-great-firewall-of-china.html">
+    <h2 class="post-title">Breaching the great firewall of china</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Sep 20, 2016</div>
+  </div>
+  <div class="post">
+    <p>It has been some time since I stepped into China. The great firewall has since advanced. This is a short guide to how to breach the <a href="https://en.wikipedia.org/wiki/Great_Firewall">great firewall</a> meant for the technically inclined. This guide is accurate as of 2016.</p>
+
+<!-- more -->
+
+<h2 id="use-openconnect">Use OpenConnect</h2>
+
+<p>In short, <a href="http://www.infradead.org/ocserv/index.html">OpenConnect</a> works. I’ve tried OpenVPN and ShadowSocks. Only OpenConnect works.</p>
+
+<p>I used an open source project, <a href="https://github.com/jlund/streisand">Streisand</a> to set it up. Streisand needs a server to set up from. Any of the major cloud providers or any webhost providing Ubuntu 16.04 server will do. I used <a href="https://www.vultr.com/">Vultr</a>.</p>
+
+<p>Streisand runs on <a href="https://www.ansible.com/">Ansible</a>, which I’m familiar with. First, you need to <code class="highlighter-rouge">git clone</code> the project to your local machine. I updated the IP address under the <strong>inventory</strong> file of the Streisand project to my Vultr server. Next, run the script. It took about 20 minutes for it to complete.</p>
+
+<p>Once completed, a folder of HTML documents is generated on the local machine. The documents outlines the steps to connect to the remote server using the various protocols. The instructions were clear, and even included links to the binaries. Each document is unique to the server. The certs, passwords are all unique to the server. Most importantly, it worked. I was able to access Google, and the various blocked sites from China.</p>
+
+<p>I hope this helps. For the non-technically inclined, unfortunately I wasn’t able to find a company that provides OpenConnect commercially. Perhaps this would get better in future. I’m sure there is a market for such a service.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

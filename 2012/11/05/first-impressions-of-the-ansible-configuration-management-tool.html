@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>First impressions of the Ansible configuration management tool</title>
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>First impressions of the Ansible configuration management tool - Liang Zan - Blog</title>
+<meta property="og:title" content="First impressions of the Ansible configuration management tool" />
+<meta name="description" content="While working at Action.io, we decided to use Ansible for managing our deployments. Previously we were using Opscode Chef. We felt that Ansible suited our needs better. Let me illustrate why." />
+<meta property="og:description" content="While working at Action.io, we decided to use Ansible for managing our deployments. Previously we were using Opscode Chef. We felt that Ansible suited our needs better. Let me illustrate why." />
+<link rel="canonical" href="/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool.html" />
+<meta property="og:url" content="/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool.html" />
+<meta property="og:site_name" content="Liang Zan - Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-11-05T06:56:00+08:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "First impressions of the Ansible configuration management tool",
+"datePublished": "2012-11-05T06:56:00+08:00",
+"description": "While working at Action.io, we decided to use Ansible for managing our deployments. Previously we were using Opscode Chef. We felt that Ansible suited our needs better. Let me illustrate why.",
+"url": "/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool.html"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img src="/assets/portfolio.png" alt="Wong Liang Zan">
+			<h2>Wong Liang Zan</h2>
+			<p class="tagline"></p>
+			<ul class="social"><a href="https://github.com/liangzan"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/liangzan"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/liangzan"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2020</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/2012/11/05/first-impressions-of-the-ansible-configuration-management-tool.html">
+    <h2 class="post-title">First impressions of the Ansible configuration management tool</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Nov 5, 2012</div>
+  </div>
+  <div class="post">
+    <p>While working at <a href="http://www.action.io">Action.io</a>, we decided to use <a href="http://ansible.cc">Ansible</a> for managing our deployments. Previously we were using <a href="http://www.opscode.com/chef/">Opscode Chef</a>. We felt that Ansible suited our needs better. Let me illustrate why.</p>
+
+<!-- more -->
+
+<h2 id="what-is-ansible">What is Ansible?</h2>
+
+<p>Ansible is a <a href="http://en.wikipedia.org/wiki/Configuration_management">configuration management</a> tool. Like Opscode Chef or <a href="http://puppetlabs.com">PuppetLabs Puppet</a>, Ansible helps you to manage the configuration on your servers. Without a configuration tool, system administrators would install, configure and update server software by hand. Configuration management tools help to automate that.</p>
+
+<p>At the start, since all of us at Action.io were fluent in <a href="http://www.ruby-lang.org/">Ruby</a> and Chef, our natural choice was Chef. We written <a href="http://wiki.opscode.com/display/chef/Cookbooks">cookbooks</a> and <a href="http://wiki.opscode.com/display/chef/Recipes">recipes</a>, got hosted Chef running and were deploying with <a href="http://wiki.opscode.com/display/chef/Knife">Knife</a>. Happy days! But something didn’t feel right.</p>
+
+<h2 id="chef-did-not-suit-us">Chef did not suit us</h2>
+
+<p>Perhaps I am a Chef noob. I was never convinced on the pull workflow. After an update to the cookbooks on the Chef server, we had to wait for the Chef clients to poll for updates, to <em>pull</em> changes from the Chef server and update itself. It is The Wait that feels wrong. Why do I have to wait? I want my servers to get updated <em>now</em>. Not 5 minutes later. What I did everytime is to ssh in to the servers and run <code class="highlighter-rouge">sudo chef-client</code> to make the server pull changes immediately. I asked some of my peers who also use Chef. Remarkably, they did the same too.</p>
+
+<p>If me and my friends did that, it does not mean everyone does that. My point is the pull workflow does not feel intuitive. I’m not a veteran with 10 years of experience running hundreds of servers. Maybe there is a good reason to adopt a pull workflow. But for a small setup with less than 20 servers, it felt out of place.</p>
+
+<p>Our next pain point is: Chef is resource hungry. Running a chef client process takes up precious memory and CPU cycles. For Action.io’s case, those memory and CPU cycles could be better utilized for the users. Not waiting for an update that arrives Once In A While.</p>
+
+<h2 id="arrives-ansible">Arrives Ansible</h2>
+
+<p>Here is my sales pitch for Ansible. Ansible pushes updates(like <a href="https://github.com/capistrano/capistrano">Capistrano</a>). You need not wait for updates to happen. It cuts total deployment time. Especially in misson critical situations like An Outage. You’d prefer to be up in 5 minutes rather than 50 where 45 is spent waiting for the Chef client to poll(exaggeration of course). Sold?</p>
+
+<p>Ansible installs <em>nothing</em> on your servers. No idle client that does nothing but sit there and polls every hour. Think of the memory that Nginx could have used for serving requests. How about those CPU cycles that could be available for Postgresql to do indexing? Why keep that lazy bum around? Nginx and Postgresql will harbour resentment over time. Keep your star workers happy. Ansible keeps no such lazy bums. Sold?</p>
+
+<p>Ansible is easy to grasp. Reading an Ansible playbook is like reading your Bash history. Your playbooks are completely written in <a href="www.yaml.org">YAML</a>. YAML comes with less markup noise. It is a wise choice. The choice of using YAML allows Ansible to be language agnostic. Ansible does not need fluency in a particular programming language. Which means the learning curve is low and it is easy to get proficient quickly. Furthermore, the Ansible paradigm is “I ssh in and run command Foo”. That is exactly the same as hand building a server. Which means it should be dead easy to grasp. Another Big Plus is you know exactly what is going on. Ansible is running shell commands over ssh. The commands are not hidden under some abstract concept of knifes and puppets and flying saucers. Error messages will be clearer(hint: easy to debug -&gt; less downtime -&gt; more money). Being easy to learn means anybody could learn to deploy(hint: no need to hire a dedicated sys admin -&gt; make your existing engineers work harder -&gt; more money). Sold?</p>
+
+<h2 id="being-young-is-not-always-good">Being young is not always good</h2>
+
+<p>A sales pitch had to make you believe elephants could fly, wash your laundry and perhaps deploy your server as well. Being that I am not actually doing Sales, I can be honest with Ansible’s warts. And so the anti-sales pitch. Being a young project Ansible suffers from the common ailments of Poor Documentation and Non Existent Eco System. If I were using Chef, there are usually cookbooks available for common software. Not for Ansible. At Action.io, we hand wrote all of them. The mailing list is still the best chance where you can get your questions answered. Let’s be fair, it’s all part of growing pain. The Ansible eco system is not mature yet.</p>
+
+<p>So what do you think of Ansible? Would you use it? Ansible as a tool is mature, but the eco system is not. It wasn’t hard to hand write our playbooks. Nor did it take much time. A better eco system may bring ready made playbooks. We still have to customise it. To us, it is the other advantages that Ansible brought that made us decide to use it. I hope you are sold.</p>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>
